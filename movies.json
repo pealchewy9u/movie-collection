@@ -6004,22 +6004,88 @@
     "isBoxSet": true,
     "includedMovies": [
       {
-        "title": "• Iron Man 3 (2013)"
+        "title": "• Iron Man 3 (2013)",
+        "tmdbId": 68721,
+        "tmdbTitle": "Iron Man 3",
+        "year": "2013",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/qhPtAc1TKbMPqNvcdXSOn9Bn7hZ.jpg",
+        "language": "en",
+        "genre": "Action, Adventure, Science Fiction",
+        "overview": "When Tony Stark's world is torn apart by a formidable terrorist called the Mandarin, he starts an odyssey of rebuilding and retribution.",
+        "imdbId": "tt1300854",
+        "matchNote": null,
+        "imdbRating": "7.1",
+        "omdbNote": null
       },
       {
-        "title": "• Thor: The Dark World (2013)"
+        "title": "• Thor: The Dark World (2013)",
+        "tmdbId": 76338,
+        "tmdbTitle": "Thor: The Dark World",
+        "year": "2013",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/wp6OxE4poJ4G7c0U2ZIXasTSMR7.jpg",
+        "language": "en",
+        "genre": "Action, Adventure, Fantasy",
+        "overview": "Thor fights to restore order across the cosmos… but an ancient race led by the vengeful Malekith returns to plunge the universe back into darkness. Faced with an enemy that even Odin and Asgard cannot withstand, Thor must embark on his most perilous and personal journey yet, one that will reunite him with Jane Foster and force him to sacrifice everything to save us all.",
+        "imdbId": "tt1981115",
+        "matchNote": null,
+        "imdbRating": "6.7",
+        "omdbNote": null
       },
       {
-        "title": "• Captain America: The Winter Soldier (2014)"
+        "title": "• Captain America: The Winter Soldier (2014)",
+        "tmdbId": 100402,
+        "tmdbTitle": "Captain America: The Winter Soldier",
+        "year": "2014",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/tVFRpFw3xTedgPGqxW0AOI8Qhh0.jpg",
+        "language": "en",
+        "genre": "Action, Adventure, Science Fiction",
+        "overview": "After the cataclysmic events in New York with The Avengers, Steve Rogers, aka Captain America is living quietly in Washington, D.C. and trying to adjust to the modern world. But when a S.H.I.E.L.D. colleague comes under attack, Steve becomes embroiled in a web of intrigue that threatens to put the world at risk. Joining forces with the Black Widow, Captain America struggles to expose the ever-widening conspiracy while fighting off professional assassins sent to silence him at every turn. When the full scope of the villainous plot is revealed, Captain America and the Black Widow enlist the help of a new ally, the Falcon. However, they soon find themselves up against an unexpected and formidable enemy—the Winter Soldier.",
+        "imdbId": "tt1843866",
+        "matchNote": null,
+        "imdbRating": "7.7",
+        "omdbNote": null
       },
       {
-        "title": "• Guardians of the Galaxy (2014)"
+        "title": "• Guardians of the Galaxy (2014)",
+        "tmdbId": 118340,
+        "tmdbTitle": "Guardians of the Galaxy",
+        "year": "2014",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/r7vmZjiyZw9rpJMQJdXpjgiCOk9.jpg",
+        "language": "en",
+        "genre": "Action, Science Fiction, Adventure",
+        "overview": "Light years from Earth, 26 years after being abducted, Peter Quill finds himself the prime target of a manhunt after discovering an orb wanted by Ronan the Accuser.",
+        "imdbId": "tt2015381",
+        "matchNote": null,
+        "imdbRating": "8.0",
+        "omdbNote": null
       },
       {
-        "title": "• Avengers: Age of Ultron (2015)"
+        "title": "• Avengers: Age of Ultron (2015)",
+        "tmdbId": 99861,
+        "tmdbTitle": "Avengers: Age of Ultron",
+        "year": "2015",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/4ssDuvEDkSArWEdyBl2X5EHvYKU.jpg",
+        "language": "en",
+        "genre": "Action, Adventure, Science Fiction",
+        "overview": "When Tony Stark tries to jumpstart a dormant peacekeeping program, things go awry and Earth’s Mightiest Heroes are put to the ultimate test as the fate of the planet hangs in the balance. As the villainous Ultron emerges, it is up to The Avengers to stop him from enacting his terrible plans, and soon uneasy alliances and unexpected action pave the way for an epic and unique global adventure.",
+        "imdbId": "tt2395427",
+        "matchNote": null,
+        "imdbRating": "7.3",
+        "omdbNote": null
       },
       {
-        "title": "• Ant-Man (2015)"
+        "title": "• Ant-Man (2015)",
+        "tmdbId": 102899,
+        "tmdbTitle": "Ant-Man",
+        "year": "2015",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/rQRnQfUl3kfp78nCWq8Ks04vnq1.jpg",
+        "language": "en",
+        "genre": "Science Fiction, Adventure, Action",
+        "overview": "Armed with the astonishing ability to shrink in scale but increase in strength, master thief Scott Lang must embrace his inner-hero and help his mentor, Doctor Hank Pym, protect the secret behind his spectacular Ant-Man suit from a new generation of towering threats. Against seemingly insurmountable obstacles, Pym and Lang must plan and pull off a heist that will save the world.",
+        "imdbId": "tt0478970",
+        "matchNote": null,
+        "imdbRating": "7.2",
+        "omdbNote": null
       }
     ],
     "reviewStatus": "collection",
