@@ -1526,7 +1526,17 @@
       },
       {
         "title": "Mr. & Mrs. Smith",
-        "matchNote": "Multiple movies share this title — choose manually"
+        "matchNote": null,
+        "tmdbId": 787,
+        "posterUrl": "https://image.tmdb.org/t/p/w500/kjD700RtyhveN3ZbOnSvUSne0Qj.jpg",
+        "imdbRating": "6.5",
+        "imdbId": "tt0356910",
+        "tmdbTitle": "Mr. & Mrs. Smith",
+        "year": "2005",
+        "language": "en",
+        "genre": "Action, Comedy, Drama, Thriller",
+        "overview": "A husband and wife struggle to keep their marriage alive until they realize they are both secretly working as assassins. Now, their respective assignments require them to kill each other.",
+        "omdbNote": null
       }
     ],
     "reviewStatus": "collection",
