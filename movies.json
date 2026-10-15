@@ -128,7 +128,17 @@
     "includedMovies": [
       {
         "title": "300",
-        "matchNote": "Multiple movies share this title — choose manually"
+        "matchNote": null,
+        "tmdbId": 1271,
+        "posterUrl": "https://image.tmdb.org/t/p/w500/h7Lcio0c9ohxPhSZg42eTlKIVVY.jpg",
+        "tmdbTitle": "300",
+        "year": "2007",
+        "language": "en",
+        "genre": "Action, Adventure, War",
+        "overview": "A story very loosely based the 480 B.C. Battle of Thermopylae, where the King of Sparta led his army against the advancing Persians.",
+        "imdbId": "tt0416449",
+        "imdbRating": "7.6",
+        "omdbNote": null
       },
       {
         "title": "300: Rise of an Empire",
