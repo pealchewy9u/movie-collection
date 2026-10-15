@@ -69,6 +69,7 @@
   .format-tv { color: #fff; background: #2D6A8F; }
   .imdb-badge { color: #fff; background: #F5A623; }
   .imdb-missing { color: var(--text-muted); background: var(--groove); }
+  .collection-badge { color: #fff; background: #6B4F8C; }
   .badge-stack { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
   .empty-state { padding: 60px 24px; text-align: center; color: var(--text-muted); }
 
@@ -262,6 +263,14 @@ function isUHD(movie) {
 // Before TMDB enrichment confirms it, guess movie vs TV from obvious title patterns
 // (e.g. "...: The Complete Series", "Seasons 1-3") so the filter/badge has something
 // to go on immediately rather than showing everything as "Movie" until enriched.
+// Box sets bundling several films together (trilogies, "X-Film Collection", multiple
+// titles joined with "/") don't correspond to one single IMDB entry -- rating them
+// as if OMDb "failed" is misleading when there was never a single film to rate.
+function isCollection(item) {
+  const t = item.title || '';
+  return /\b(trilogy|collection|\d+[\s-]*(film|movie)s?\b)/i.test(t) || t.includes(' / ');
+}
+
 function effectiveMediaType(item) {
   if (item.mediaType) return item.mediaType;
   if (/\b(complete series|season|seasons)\b/i.test(item.title || '')) return 'tv';
@@ -316,7 +325,8 @@ function renderList() {
         <div class="format-badge ${isUHD(m) ? 'format-4k' : 'format-bluray'}">${isUHD(m) ? '4K UHD' : 'BLU-RAY'}</div>
         ${m.imdbRating
           ? `<div class="format-badge imdb-badge">★ ${escapeHtml(m.imdbRating)}</div>`
-          : (m.genre ? `<div class="format-badge imdb-missing">No IMDB</div>` : '')}
+          : (isCollection(m) ? `<div class="format-badge collection-badge">COLLECTION</div>`
+             : (m.genre ? `<div class="format-badge imdb-missing">No IMDB</div>` : ''))}
       </div>
     </div>
   `).join('');
@@ -421,7 +431,7 @@ function openDetail(id) {
       <div><div class="field-label">Format</div><div class="field-value">${isUHD(m) ? '4K UHD' : 'Blu-ray'}</div></div>
       <div><div class="field-label">Genre</div><div class="field-value">${escapeHtml(m.genre || '—')}</div></div>
       <div><div class="field-label">Year</div><div class="field-value">${escapeHtml(m.year || '—')}</div></div>
-      <div><div class="field-label">IMDB Rating</div><div class="field-value">${m.imdbRating ? '★ ' + escapeHtml(m.imdbRating) : (m.omdbNote ? escapeHtml(m.omdbNote) : '—')}</div></div>
+      <div><div class="field-label">IMDB Rating</div><div class="field-value">${m.imdbRating ? '★ ' + escapeHtml(m.imdbRating) : (isCollection(m) ? 'Multi-film set -- no single rating applies' : (m.omdbNote ? escapeHtml(m.omdbNote) : '—'))}</div></div>
       <div><div class="field-label">Language</div><div class="field-value">${escapeHtml(m.language || '—')}</div></div>
       <div><div class="field-label">Release Date</div><div class="field-value">${escapeHtml(m.releaseDate || '—')}</div></div>
       <div><div class="field-label">Country</div><div class="field-value">${escapeHtml(m.countryCode || '—')}</div></div>
@@ -430,10 +440,58 @@ function openDetail(id) {
       <div><div class="field-label">Date Added</div><div class="field-value">${escapeHtml(m.dateAdded || '—')}</div></div>
     </div>
     ${m.overview ? `<div style="margin-top:16px; font-size:13px; line-height:1.5;">${escapeHtml(m.overview)}</div>` : ''}
+    <button onclick="rematchOne('${m.id}')" id="rematch-btn" style="margin-top:16px; padding:9px 14px; border-radius:8px; border:none; background:var(--maroon); color:#fff; font-weight:600; font-size:13px;">Re-match on TMDB</button>
+    <p id="rematch-status" style="font-size:12px; color:var(--text-muted); margin-top:8px;"></p>
   `;
   document.getElementById('detail-overlay').style.display = 'flex';
 }
 function closeDetail() { document.getElementById('detail-overlay').style.display = 'none'; }
+
+// For when the automatic match was wrong (generic titles like "Blood Money" get
+// reused across many unrelated films) -- clears this one movie's enrichment and
+// redoes it, without needing a full "Enrich All" pass which skips anything that
+// already has a genre set, right or wrong.
+async function rematchOne(id) {
+  const tmdbKey = localStorage.getItem('tmdbKey');
+  const omdbKey = localStorage.getItem('omdbKey');
+  const statusEl = document.getElementById('rematch-status');
+  const btn = document.getElementById('rematch-btn');
+  if (!tmdbKey) { statusEl.textContent = 'Add your TMDB key in Settings first.'; return; }
+
+  const idx = movies.findIndex(m => m.id === id);
+  if (idx === -1) return;
+
+  btn.disabled = true;
+  statusEl.textContent = 'Re-matching…';
+  try {
+    const reset = { ...movies[idx], genre: null, posterUrl: null, year: null, overview: null,
+                     language: null, imdbId: null, imdbRating: null, omdbNote: null, mediaType: null };
+    const enriched = await enrichOne(reset, tmdbKey, omdbKey);
+    movies[idx] = enriched;
+    localStorage.setItem('movie-cache', JSON.stringify(movies));
+    buildGenreFilter();
+    render();
+
+    const ghOwner = localStorage.getItem('ghOwner');
+    const ghRepo = localStorage.getItem('ghRepo');
+    const ghToken = localStorage.getItem('ghToken');
+    const matchMsg = enriched.genre
+      ? `Re-matched: now "${enriched.tmdbTitle || enriched.title}" (${enriched.year || '?'}).`
+      : 'Still no match found.';
+
+    if (ghOwner && ghRepo && ghToken) {
+      statusEl.textContent = `${matchMsg} Saving to GitHub…`;
+      await saveToGitHub(ghOwner, ghRepo, ghToken, movies);
+      statusEl.textContent = `${matchMsg} Saved.`;
+    } else {
+      statusEl.textContent = `${matchMsg} Add GitHub details in Settings to make this stick -- otherwise the next refresh will undo it.`;
+    }
+    openDetail(id); // refresh the sheet with the new data
+  } catch (e) {
+    statusEl.textContent = `Re-match failed: ${e.message}`;
+  }
+  btn.disabled = false;
+}
 
 function escapeHtml(str) {
   return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
@@ -532,8 +590,24 @@ async function enrichOne(item, tmdbKey, omdbKey) {
   // alone was why things like "Friends: The Complete Series" never matched.
   const searchRes = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${tmdbKey}&query=${encodeURIComponent(searchTitle)}`, { cache: 'no-store' });
   const searchData = await searchRes.json();
-  const match = (searchData.results || []).find(r => r.media_type === 'movie' || r.media_type === 'tv');
-  if (!match) return { ...item, enrichNote: 'No TMDB match found' };
+  const candidates = (searchData.results || []).filter(r => r.media_type === 'movie' || r.media_type === 'tv');
+  if (candidates.length === 0) return { ...item, enrichNote: 'No TMDB match found' };
+
+  // Generic titles get reused constantly across decades (there are at least three
+  // different movies called "Blood Money" from 2012 alone) -- just taking TMDB's
+  // first/most-popular result risks matching a completely different film than the
+  // one actually on your shelf. Since the CSV export already has a real release
+  // date for every title, use it to prefer whichever candidate's year actually
+  // matches, rather than trusting result order alone.
+  const knownYear = (item.releaseDate || '').match(/\b(19|20)\d{2}\b/);
+  let match = candidates[0];
+  if (knownYear) {
+    const yearMatch = candidates.find(c => {
+      const candidateDate = c.media_type === 'tv' ? c.first_air_date : c.release_date;
+      return (candidateDate || '').startsWith(knownYear[0]);
+    });
+    if (yearMatch) match = yearMatch;
+  }
 
   const mediaType = match.media_type; // 'movie' or 'tv'
   const genres = await getGenreMap(tmdbKey, mediaType);
@@ -647,7 +721,7 @@ async function enrichAll() {
   // never got a rating -- this is what actually lets fixing an API key (like
   // the activation issue) retroactively fix everything that failed before,
   // instead of those movies being silently skipped forever.
-  const needsOmdbRetry = movies.filter(m => m.genre && !m.imdbRating && m.imdbId);
+  const needsOmdbRetry = movies.filter(m => m.genre && !m.imdbRating && m.imdbId && !isCollection(m));
   let imdbRetrySuccessCount = 0;
 
   if (omdbKey) {
