@@ -1298,7 +1298,18 @@
     "includedMovies": [
       {
         "title": "The Conjuring (2013)",
-        "matchNote": "No exact title match on TMDB — review manually"
+        "matchNote": null,
+        "tmdbId": 138843,
+        "tmdbTitle": "The Conjuring",
+        "year": "2013",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/wVYREutTvI2tmxr6ujrHT704wGF.jpg",
+        "language": "en",
+        "genre": "Horror, Thriller",
+        "overview": "Paranormal investigators Ed and Lorraine Warren work to help a family terrorized by a dark presence in their farmhouse. Forced to confront a powerful entity, the Warrens find themselves caught in the most terrifying case of their lives.",
+        "imdbId": "tt1457767",
+        "imdbRating": "7.5",
+        "omdbNote": null,
+        "matchedVia": "tmdb-manual"
       },
       {
         "title": "Annabelle (2014)",
