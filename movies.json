@@ -6202,7 +6202,20 @@
     "imdbId": "tt0234215",
     "imdbRating": null,
     "omdbNote": "UPCMDB had no rating for this title",
-    "matchedVia": "upcmdb"
+    "matchedVia": "upcmdb",
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "The Matrix"
+      },
+      {
+        "title": "The Matrix Reloaded"
+      },
+      {
+        "title": "The Matrix Revolutions"
+      }
+    ],
+    "reviewStatus": "collection"
   },
   {
     "id": "MOV-0207",
