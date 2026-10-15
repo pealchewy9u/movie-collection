@@ -6551,16 +6551,60 @@
     "isBoxSet": true,
     "includedMovies": [
       {
-        "title": "The Purge"
+        "title": "The Purge",
+        "tmdbId": 158015,
+        "tmdbTitle": "The Purge",
+        "year": "2013",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/46X1ei9uf13nkkr0OhWldGyr5Uh.jpg",
+        "language": "en",
+        "genre": "Science Fiction, Horror, Thriller",
+        "overview": "Given the country's overcrowded prisons, the U.S. government begins to allow 12-hour periods of time in which all illegal activity is legal. During one of these free-for-alls, a family must protect themselves from a home invasion.",
+        "imdbId": "tt2184339",
+        "matchNote": null,
+        "imdbRating": "5.8",
+        "omdbNote": null
       },
       {
-        "title": "The Purge: Anarchy"
+        "title": "The Purge: Anarchy",
+        "tmdbId": 238636,
+        "tmdbTitle": "The Purge: Anarchy",
+        "year": "2014",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/qwqHHZLZSUvMkAMQ47ymtfjEifY.jpg",
+        "language": "en",
+        "genre": "Horror, Thriller",
+        "overview": "One night per year, the government sanctions a 12-hour period in which citizens can commit any crime they wish -- including murder -- without fear of punishment or imprisonment. Leo, a sergeant who lost his son, plans a vigilante mission of revenge during the mayhem. However, instead of a death-dealing avenger, he becomes the unexpected protector of four innocent strangers who desperately need his help if they are to survive the night.",
+        "imdbId": "tt2975578",
+        "matchNote": null,
+        "imdbRating": "6.4",
+        "omdbNote": null
       },
       {
-        "title": "The Purge: Election Year"
+        "title": "The Purge: Election Year",
+        "tmdbId": 316727,
+        "tmdbTitle": "The Purge: Election Year",
+        "year": "2016",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/gg7tlp45xqGWMra0sqQVPvybje2.jpg",
+        "language": "en",
+        "genre": "Action, Horror, Thriller",
+        "overview": "Two years after choosing not to kill the man who killed his son, former police sergeant Leo Barnes has become head of security for Senator Charlene Roan, the front runner in the next Presidential election due to her vow to eliminate the Purge. On the night of what should be the final Purge, a betrayal from within the government forces Barnes and Roan out onto the street where they must fight to survive the night.",
+        "imdbId": "tt4094724",
+        "matchNote": null,
+        "imdbRating": "6.0",
+        "omdbNote": null
       },
       {
-        "title": "The First Purge"
+        "title": "The First Purge",
+        "tmdbId": 442249,
+        "tmdbTitle": "The First Purge",
+        "year": "2018",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/litjsBoiydO6JlO70uOX4N3WnNL.jpg",
+        "language": "en",
+        "genre": "Action, Horror, Thriller",
+        "overview": "To push the crime rate below one percent for the rest of the year, the New Founding Fathers of America test a sociological theory that vents aggression for one night in one isolated community. But when the violence of oppressors meets the rage of the others, the contagion will explode from the trial-city borders and spread across the nation.",
+        "imdbId": "tt6133466",
+        "matchNote": null,
+        "imdbRating": "5.2",
+        "omdbNote": null
       }
     ],
     "reviewStatus": "collection",
