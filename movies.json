@@ -8416,7 +8416,18 @@
       },
       {
         "title": "X-Men Origins: Wolverine (2009)",
-        "matchNote": "No exact title match on TMDB — review manually"
+        "matchNote": null,
+        "tmdbId": 2080,
+        "tmdbTitle": "X-Men Origins: Wolverine",
+        "year": "2009",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/yj8LbTju1p7CUJg7US2unSBk33s.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Science Fiction",
+        "overview": "After seeking to live a normal life after 200 years, Logan sets out to avenge a death by undergoing the mutant Weapon X program and becoming Wolverine.",
+        "imdbId": "tt0458525",
+        "imdbRating": "6.5",
+        "omdbNote": null,
+        "matchedVia": "tmdb-manual"
       },
       {
         "title": "X-Men: First Class (2011)",
