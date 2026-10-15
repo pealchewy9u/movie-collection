@@ -66,6 +66,10 @@
   .watched-badge { font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
   .watched-yes { color: #1B5E20; background: #C8E6C9; }
   .watched-no { color: #4A1B0C; background: var(--surface-raised); }
+  .format-badge { font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; letter-spacing: 0.02em; }
+  .format-4k { color: #fff; background: var(--maroon); }
+  .format-bluray { color: var(--text-muted); background: var(--groove); }
+  .badge-stack { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
   .empty-state { padding: 60px 24px; text-align: center; color: var(--text-muted); }
 
   /* ---- Cover Flow view (poster aspect, taller than square) ---- */
@@ -143,6 +147,13 @@
         <option value="no">Unwatched</option>
       </select>
     </div>
+    <div class="filter-row" style="margin-top:8px;">
+      <select id="origin-select">
+        <option value="">English & Hindi</option>
+        <option value="hindi">Hindi / Indian</option>
+        <option value="english">English</option>
+      </select>
+    </div>
   </header>
 
   <div class="tabs">
@@ -206,13 +217,27 @@ function buildGenreFilter() {
     genres.map(g => `<option value="${g}">${g}</option>`).join('');
 }
 
+// Blu-ray.com encodes 4K releases right in the title itself (e.g. "Dunkirk 4K") --
+// there's no separate format field, so this is the reliable way to detect it.
+function isUHD(movie) {
+  return /\b4K\b/i.test(movie.title || '');
+}
+
+// No explicit language field in the data, but Country code is a solid proxy here --
+// IN almost always means a Hindi/Indian release in this particular collection.
+function isIndianOrigin(movie) {
+  return movie.countryCode === 'IN';
+}
+
 function filteredMovies() {
   const q = document.getElementById('search-input').value.trim().toLowerCase();
   const genre = document.getElementById('genre-select').value;
   const watched = document.getElementById('watched-select').value;
+  const origin = document.getElementById('origin-select').value;
   return movies
     .filter(m => !genre || m.genre === genre)
     .filter(m => !watched || (watched === 'yes' ? m.watched : !m.watched))
+    .filter(m => !origin || (origin === 'hindi' ? isIndianOrigin(m) : !isIndianOrigin(m)))
     .filter(m => {
       if (!q) return true;
       const hay = [m.title, m.studio].join(' ').toLowerCase();
@@ -249,7 +274,10 @@ function renderList() {
         <div class="movie-title">${escapeHtml(m.title || 'Untitled')}</div>
         <div class="movie-studio">${escapeHtml(m.studio || '')}</div>
       </div>
-      <div class="watched-badge ${m.watched ? 'watched-yes' : 'watched-no'}">${m.watched ? 'Watched' : 'Unwatched'}</div>
+      <div class="badge-stack">
+        <div class="format-badge ${isUHD(m) ? 'format-4k' : 'format-bluray'}">${isUHD(m) ? '4K UHD' : 'BLU-RAY'}</div>
+        <div class="watched-badge ${m.watched ? 'watched-yes' : 'watched-no'}">${m.watched ? 'Watched' : 'Unwatched'}</div>
+      </div>
     </div>
   `).join('');
   list.querySelectorAll('.movie-row').forEach(el => {
@@ -348,6 +376,7 @@ function openDetail(id) {
     <div class="sheet-title">${escapeHtml(m.title || 'Untitled')}</div>
     <div class="sheet-studio">${escapeHtml(m.studio || '')}</div>
     <div class="sheet-fields">
+      <div><div class="field-label">Format</div><div class="field-value">${isUHD(m) ? '4K UHD' : 'Blu-ray'}</div></div>
       <div><div class="field-label">Genre</div><div class="field-value">${escapeHtml(m.genre || '—')}</div></div>
       <div><div class="field-label">Year</div><div class="field-value">${escapeHtml(m.year || '—')}</div></div>
       <div><div class="field-label">Release Date</div><div class="field-value">${escapeHtml(m.releaseDate || '—')}</div></div>
