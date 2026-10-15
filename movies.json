@@ -123,7 +123,20 @@
     "imdbRating": null,
     "omdbNote": "UPCMDB had no rating for this title",
     "matchedVia": "tmdb",
-    "enrichNote": "No TMDB match found"
+    "enrichNote": "No TMDB match found",
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "300"
+      },
+      {
+        "title": "300: Rise of an Empire"
+      },
+      {
+        "title": "Troy"
+      }
+    ],
+    "reviewStatus": "collection"
   },
   {
     "id": "MOV-0006",
