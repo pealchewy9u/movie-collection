@@ -7357,7 +7357,20 @@
     "imdbRating": null,
     "omdbNote": "UPCMDB had no rating for this title",
     "matchedVia": "tmdb",
-    "enrichNote": "No TMDB match found"
+    "enrichNote": "No TMDB match found",
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "The Smurfs"
+      },
+      {
+        "title": "The Smurfs 2"
+      },
+      {
+        "title": "Smurfs: The Lost Village"
+      }
+    ],
+    "reviewStatus": "collection"
   },
   {
     "id": "MOV-0279",
