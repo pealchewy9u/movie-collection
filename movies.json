@@ -6293,7 +6293,8 @@
       }
     ],
     "reviewStatus": "collection",
-    "imdbRating": null
+    "imdbRating": null,
+    "boxCoverUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/box-covers/MOV-0201.jpg?v=5740f28823ea7d3ebf310483f260b736aee61b6f"
   },
   {
     "id": "MOV-0202",
