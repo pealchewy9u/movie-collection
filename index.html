@@ -66,6 +66,7 @@
   .format-badge { font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; letter-spacing: 0.02em; }
   .format-4k { color: #fff; background: var(--maroon); }
   .format-bluray { color: var(--text-muted); background: var(--groove); }
+  .format-tv { color: #fff; background: #2D6A8F; }
   .badge-stack { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
   .empty-state { padding: 60px 24px; text-align: center; color: var(--text-muted); }
 
@@ -138,6 +139,11 @@
     </div>
     <div class="filter-row">
       <select id="genre-select"><option value="">All Genres</option></select>
+      <select id="type-select">
+        <option value="">Movies & TV</option>
+        <option value="movie">Movies</option>
+        <option value="tv">TV Shows</option>
+      </select>
     </div>
 
   </header>
@@ -250,11 +256,22 @@ function isUHD(movie) {
   return /\b4K\b/i.test(movie.title || '');
 }
 
+// Before TMDB enrichment confirms it, guess movie vs TV from obvious title patterns
+// (e.g. "...: The Complete Series", "Seasons 1-3") so the filter/badge has something
+// to go on immediately rather than showing everything as "Movie" until enriched.
+function effectiveMediaType(item) {
+  if (item.mediaType) return item.mediaType;
+  if (/\b(complete series|season|seasons)\b/i.test(item.title || '')) return 'tv';
+  return 'movie';
+}
+
 function filteredMovies() {
   const q = document.getElementById('search-input').value.trim().toLowerCase();
   const genre = document.getElementById('genre-select').value;
+  const type = document.getElementById('type-select').value;
   return movies
     .filter(m => !genre || m.genre === genre)
+    .filter(m => !type || effectiveMediaType(m) === type)
     .filter(m => {
       if (!q) return true;
       const hay = [m.title, m.studio].join(' ').toLowerCase();
@@ -291,7 +308,10 @@ function renderList() {
         <div class="movie-title">${escapeHtml(m.title || 'Untitled')}</div>
         <div class="movie-studio">${escapeHtml(m.studio || '')}</div>
       </div>
-      <div class="format-badge ${isUHD(m) ? 'format-4k' : 'format-bluray'}">${isUHD(m) ? '4K UHD' : 'BLU-RAY'}</div>
+      <div class="badge-stack">
+        ${effectiveMediaType(m) === 'tv' ? '<div class="format-badge format-tv">TV</div>' : ''}
+        <div class="format-badge ${isUHD(m) ? 'format-4k' : 'format-bluray'}">${isUHD(m) ? '4K UHD' : 'BLU-RAY'}</div>
+      </div>
     </div>
   `).join('');
   list.querySelectorAll('.movie-row').forEach(el => {
@@ -391,6 +411,7 @@ function openDetail(id) {
     <div class="sheet-title">${escapeHtml(m.title || 'Untitled')}</div>
     <div class="sheet-studio">${escapeHtml(m.studio || '')}</div>
     <div class="sheet-fields">
+      <div><div class="field-label">Type</div><div class="field-value">${effectiveMediaType(m) === 'tv' ? 'TV Show' : 'Movie'}</div></div>
       <div><div class="field-label">Format</div><div class="field-value">${isUHD(m) ? '4K UHD' : 'Blu-ray'}</div></div>
       <div><div class="field-label">Genre</div><div class="field-value">${escapeHtml(m.genre || '—')}</div></div>
       <div><div class="field-label">Year</div><div class="field-value">${escapeHtml(m.year || '—')}</div></div>
@@ -426,6 +447,7 @@ document.querySelectorAll('.tab').forEach(tab => {
 
 document.getElementById('search-input').addEventListener('input', render);
 document.getElementById('genre-select').addEventListener('change', render);
+document.getElementById('type-select').addEventListener('change', render);
 document.getElementById('refresh-btn').addEventListener('click', loadData);
 document.getElementById('detail-overlay').addEventListener('click', e => {
   if (e.target.id === 'detail-overlay') closeDetail();
@@ -454,56 +476,87 @@ function saveSettings() {
   setTimeout(() => { msg.style.display = 'none'; }, 2000);
 }
 
-// ---- TMDB genre list (fetched once, cached) ----
-let genreMap = null;
-async function getGenreMap(tmdbKey) {
-  if (genreMap) return genreMap;
-  const cached = localStorage.getItem('tmdbGenreMap');
-  if (cached) { genreMap = JSON.parse(cached); return genreMap; }
-  const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${tmdbKey}`);
-  const data = await res.json();
-  genreMap = {};
-  (data.genres || []).forEach(g => { genreMap[g.id] = g.name; });
-  localStorage.setItem('tmdbGenreMap', JSON.stringify(genreMap));
-  return genreMap;
+// ---- TMDB genre lists -- movies and TV shows use separate genre ID sets ----
+let movieGenreMap = null;
+let tvGenreMap = null;
+async function getGenreMap(tmdbKey, mediaType) {
+  const cacheKey = mediaType === 'tv' ? 'tmdbTvGenreMap' : 'tmdbMovieGenreMap';
+  let map = mediaType === 'tv' ? tvGenreMap : movieGenreMap;
+  if (map) return map;
+  const cached = localStorage.getItem(cacheKey);
+  if (cached) {
+    map = JSON.parse(cached);
+  } else {
+    const res = await fetch(`https://api.themoviedb.org/3/genre/${mediaType}/list?api_key=${tmdbKey}`);
+    const data = await res.json();
+    map = {};
+    (data.genres || []).forEach(g => { map[g.id] = g.name; });
+    localStorage.setItem(cacheKey, JSON.stringify(map));
+  }
+  if (mediaType === 'tv') tvGenreMap = map; else movieGenreMap = map;
+  return map;
 }
 
 // Blu-ray.com titles often have "4K" or a trailing collection/edition note that
-// won't match TMDB's actual movie title -- strip the obvious ones before searching.
+// won't match TMDB's actual title -- strip the obvious ones before searching.
 function cleanTitleForSearch(title) {
-  return title.replace(/\s*4K\s*$/i, '').replace(/\s*\(.*?\)\s*$/, '').trim();
+  return title
+    .replace(/\s*4K\s*$/i, '')
+    .replace(/:\s*(The )?Complete (First |Second |Third |Fourth |Fifth )?Series?$/i, '')
+    .replace(/:\s*(The )?Complete (First |Second |Third |Fourth |Fifth )?Seasons?$/i, '')
+    .replace(/\s*-\s*Seasons?\s*[\d\-]+$/i, '')
+    .replace(/\s*\(.*?\)\s*$/, '')
+    .trim();
 }
 
-async function enrichOne(movie, tmdbKey, omdbKey) {
-  const searchTitle = cleanTitleForSearch(movie.title);
-  const searchRes = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${tmdbKey}&query=${encodeURIComponent(searchTitle)}`);
+async function enrichOne(item, tmdbKey, omdbKey) {
+  const searchTitle = cleanTitleForSearch(item.title);
+  // multi-search covers both movies and TV shows in one call, and tells us
+  // which one each result actually is via media_type -- searching /search/movie
+  // alone was why things like "Friends: The Complete Series" never matched.
+  const searchRes = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${tmdbKey}&query=${encodeURIComponent(searchTitle)}`);
   const searchData = await searchRes.json();
-  const match = (searchData.results || [])[0];
-  if (!match) return { ...movie, enrichNote: 'No TMDB match found' };
+  const match = (searchData.results || []).find(r => r.media_type === 'movie' || r.media_type === 'tv');
+  if (!match) return { ...item, enrichNote: 'No TMDB match found' };
 
-  const genres = await getGenreMap(tmdbKey);
+  const mediaType = match.media_type; // 'movie' or 'tv'
+  const genres = await getGenreMap(tmdbKey, mediaType);
   const genreName = (match.genre_ids || []).map(id => genres[id]).filter(Boolean)[0] || null;
+  const displayTitle = mediaType === 'tv' ? match.name : match.title;
+  const dateField = mediaType === 'tv' ? match.first_air_date : match.release_date;
 
-  const detailRes = await fetch(`https://api.themoviedb.org/3/movie/${match.id}?api_key=${tmdbKey}`);
-  const detail = await detailRes.json();
+  // TV shows need a separate call for their IMDB id -- the main /tv/{id} endpoint
+  // doesn't include it the way /movie/{id} does for movies.
+  let imdbId = null;
+  if (mediaType === 'movie') {
+    const detailRes = await fetch(`https://api.themoviedb.org/3/movie/${match.id}?api_key=${tmdbKey}`);
+    const detail = await detailRes.json();
+    imdbId = detail.imdb_id || null;
+  } else {
+    const extRes = await fetch(`https://api.themoviedb.org/3/tv/${match.id}/external_ids?api_key=${tmdbKey}`);
+    const extData = await extRes.json();
+    imdbId = extData.imdb_id || null;
+  }
 
   let imdbRating = null;
-  if (detail.imdb_id && omdbKey) {
+  if (imdbId && omdbKey) {
     try {
-      const omdbRes = await fetch(`https://www.omdbapi.com/?i=${detail.imdb_id}&apikey=${omdbKey}`);
+      const omdbRes = await fetch(`https://www.omdbapi.com/?i=${imdbId}&apikey=${omdbKey}`);
       const omdbData = await omdbRes.json();
       if (omdbData.imdbRating && omdbData.imdbRating !== 'N/A') imdbRating = omdbData.imdbRating;
     } catch (e) { /* OMDb miss shouldn't block the rest of the enrichment */ }
   }
 
   return {
-    ...movie,
+    ...item,
+    mediaType: mediaType,
+    tmdbTitle: displayTitle || null,
     genre: genreName,
     posterUrl: match.poster_path ? `https://image.tmdb.org/t/p/w500${match.poster_path}` : null,
-    year: (match.release_date || '').slice(0, 4) || null,
+    year: (dateField || '').slice(0, 4) || null,
     overview: match.overview || null,
     language: match.original_language || null,
-    imdbId: detail.imdb_id || null,
+    imdbId: imdbId,
     imdbRating: imdbRating
   };
 }
