@@ -4163,10 +4163,12 @@
     "isBoxSet": true,
     "includedMovies": [
       {
-        "title": "How To Train Your Dragon"
+        "title": "How To Train Your Dragon",
+        "matchNote": "Multiple possible movies — choose manually"
       },
       {
-        "title": "How To Train Your Dragon 2"
+        "title": "How To Train Your Dragon 2",
+        "matchNote": "Multiple possible movies — choose manually"
       }
     ],
     "reviewStatus": "collection"
