@@ -207,6 +207,7 @@
 
     <hr style="margin:24px 0; border:none; border-top:1px solid var(--groove);">
 
+    <p id="pending-count" style="font-size:13px; font-weight:600; margin-bottom:8px;"></p>
     <button onclick="enrichAll()" id="enrich-btn" style="padding:10px 16px; border-radius:8px; border:none; background:var(--maroon); color:#fff; font-weight:600;">Enrich All Movies</button>
     <p id="enrich-status" style="font-size:12px; color:var(--text-muted); margin-top:10px;"></p>
   </div>
@@ -415,7 +416,7 @@ function openDetail(id) {
       <div><div class="field-label">Format</div><div class="field-value">${isUHD(m) ? '4K UHD' : 'Blu-ray'}</div></div>
       <div><div class="field-label">Genre</div><div class="field-value">${escapeHtml(m.genre || '—')}</div></div>
       <div><div class="field-label">Year</div><div class="field-value">${escapeHtml(m.year || '—')}</div></div>
-      <div><div class="field-label">IMDB Rating</div><div class="field-value">${m.imdbRating ? '★ ' + escapeHtml(m.imdbRating) : '—'}</div></div>
+      <div><div class="field-label">IMDB Rating</div><div class="field-value">${m.imdbRating ? '★ ' + escapeHtml(m.imdbRating) : (m.omdbNote ? escapeHtml(m.omdbNote) : '—')}</div></div>
       <div><div class="field-label">Language</div><div class="field-value">${escapeHtml(m.language || '—')}</div></div>
       <div><div class="field-label">Release Date</div><div class="field-value">${escapeHtml(m.releaseDate || '—')}</div></div>
       <div><div class="field-label">Country</div><div class="field-value">${escapeHtml(m.countryCode || '—')}</div></div>
@@ -461,7 +462,15 @@ function openSettings() {
   document.getElementById('gh-owner-input').value = localStorage.getItem('ghOwner') || '';
   document.getElementById('gh-repo-input').value = localStorage.getItem('ghRepo') || '';
   document.getElementById('gh-token-input').value = localStorage.getItem('ghToken') || '';
+  updatePendingCount();
   document.getElementById('settings-overlay').style.display = 'flex';
+}
+
+function updatePendingCount() {
+  const done = movies.filter(m => m.genre).length;
+  const withImdb = movies.filter(m => m.imdbRating).length;
+  document.getElementById('pending-count').textContent =
+    `${done} of ${movies.length} enriched so far (${withImdb} have an IMDB rating) -- ${movies.length - done} still pending.`;
 }
 function closeSettings() { document.getElementById('settings-overlay').style.display = 'none'; }
 
@@ -539,12 +548,25 @@ async function enrichOne(item, tmdbKey, omdbKey) {
   }
 
   let imdbRating = null;
-  if (imdbId && omdbKey) {
+  let omdbNote = null;
+  if (!omdbKey) {
+    omdbNote = 'No OMDb key set';
+  } else if (!imdbId) {
+    omdbNote = 'TMDB had no IMDB id for this title';
+  } else {
     try {
       const omdbRes = await fetch(`https://www.omdbapi.com/?i=${imdbId}&apikey=${omdbKey}`);
       const omdbData = await omdbRes.json();
-      if (omdbData.imdbRating && omdbData.imdbRating !== 'N/A') imdbRating = omdbData.imdbRating;
-    } catch (e) { /* OMDb miss shouldn't block the rest of the enrichment */ }
+      if (omdbData.Response === 'False') {
+        omdbNote = `OMDb: ${omdbData.Error || 'unknown error'}`;
+      } else if (!omdbData.imdbRating || omdbData.imdbRating === 'N/A') {
+        omdbNote = 'OMDb had no rating for this title';
+      } else {
+        imdbRating = omdbData.imdbRating;
+      }
+    } catch (e) {
+      omdbNote = `OMDb request failed: ${e.message}`;
+    }
   }
 
   return {
@@ -557,7 +579,8 @@ async function enrichOne(item, tmdbKey, omdbKey) {
     overview: match.overview || null,
     language: match.original_language || null,
     imdbId: imdbId,
-    imdbRating: imdbRating
+    imdbRating: imdbRating,
+    omdbNote: omdbNote
   };
 }
 
@@ -575,6 +598,7 @@ async function enrichAll() {
   btn.disabled = true;
   const targets = movies.filter(m => !m.genre); // only enrich what's not already done
   let successCount = 0;
+  let imdbSuccessCount = 0;
 
   for (let i = 0; i < targets.length; i++) {
     statusEl.textContent = `Enriching ${i + 1} of ${targets.length}: ${targets[i].title}…`;
@@ -583,6 +607,7 @@ async function enrichAll() {
       const idx = movies.findIndex(m => m.id === targets[i].id);
       if (idx !== -1) movies[idx] = enriched;
       if (enriched.genre) successCount++;
+      if (enriched.imdbRating) imdbSuccessCount++;
     } catch (e) {
       console.error('Enrich failed for', targets[i].title, e);
     }
@@ -594,7 +619,8 @@ async function enrichAll() {
   render();
   localStorage.setItem('movie-cache', JSON.stringify(movies));
 
-  statusEl.textContent = `Done locally: ${successCount} of ${targets.length} matched. Saving to GitHub…`;
+  const summaryLine = `${successCount} of ${targets.length} matched on TMDB -- ${imdbSuccessCount} of those got an IMDB rating.`;
+  statusEl.textContent = `${summaryLine} Saving to GitHub…`;
 
   const ghOwner = localStorage.getItem('ghOwner');
   const ghRepo = localStorage.getItem('ghRepo');
@@ -602,13 +628,14 @@ async function enrichAll() {
   if (ghOwner && ghRepo && ghToken) {
     try {
       await saveToGitHub(ghOwner, ghRepo, ghToken, movies);
-      statusEl.textContent = `Done: ${successCount} of ${targets.length} matched, and saved to GitHub.`;
+      statusEl.textContent = `${summaryLine} Saved to GitHub.`;
     } catch (e) {
-      statusEl.textContent = `Enriched locally, but GitHub save failed: ${e.message}`;
+      statusEl.textContent = `${summaryLine} GitHub save failed: ${e.message}`;
     }
   } else {
-    statusEl.textContent = `Done locally: ${successCount} of ${targets.length} matched. Add GitHub details above to save this for next time.`;
+    statusEl.textContent = `${summaryLine} Add GitHub details above to save this for next time.`;
   }
+  updatePendingCount();
 
   btn.disabled = false;
 }
