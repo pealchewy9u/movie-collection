@@ -767,9 +767,20 @@ async function correctIncludedFilm(id,index) {
         const c=candidates[Number(btn.dataset.filmPick)];
         out.textContent='Fetching details and saving…';
         try {
+          // A manually chosen result is authoritative: fetch its TMDB ID directly.
           const old=typeof film==='string'?{title:film}:film;
-          const updated=await enrichIncludedFilm({...old,title:original,tmdbId:c.id,posterUrl:null,imdbRating:null,imdbId:null,matchNote:null},key,localStorage.getItem('omdbKey'));
-          if(!updated.tmdbId||updated.matchNote)throw new Error(updated.matchNote||'Movie details unavailable');
+          const detailRes=await fetch(`https://api.themoviedb.org/3/movie/${c.id}?api_key=${encodeURIComponent(key)}`,{cache:'no-store'});
+          if(!detailRes.ok)throw new Error('TMDB detail HTTP '+detailRes.status);
+          const detail=await detailRes.json();
+          let updated={...old,title:original,tmdbId:c.id,tmdbTitle:detail.title||c.title,
+            year:(detail.release_date||c.release_date||'').slice(0,4)||null,
+            posterUrl:detail.poster_path?'https://image.tmdb.org/t/p/w500'+detail.poster_path:null,
+            language:detail.original_language||c.original_language||null,
+            genre:(detail.genres||[]).map(g=>g.name).join(', ')||null,
+            overview:detail.overview||null,imdbId:detail.imdb_id||null,
+            imdbRating:null,omdbNote:null,matchNote:null,matchedVia:'tmdb-manual'};
+          const omdbKey=localStorage.getItem('omdbKey');
+          if(omdbKey && updated.imdbId)updated=await retryOmdbOnly(updated,omdbKey);
           m.includedMovies[index]=updated;
           markPending(m);
           const result=await syncPendingEdits().catch(e=>'Saved locally, NOT on GitHub: '+e.message);
