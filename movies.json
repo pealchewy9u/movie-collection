@@ -8373,7 +8373,29 @@
     "imdbId": null,
     "imdbRating": null,
     "omdbNote": null,
-    "mediaType": null
+    "mediaType": null,
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "• X-Men (2000)"
+      },
+      {
+        "title": "• X2: X-Men United (2003)"
+      },
+      {
+        "title": "• X-Men: The Last Stand (2006)"
+      },
+      {
+        "title": "• X-Men Origins: Wolverine (2009)"
+      },
+      {
+        "title": "• X-Men: First Class (2011)"
+      },
+      {
+        "title": "• The Wolverine"
+      }
+    ],
+    "reviewStatus": "collection"
   },
   {
     "id": "MOV-0316",
