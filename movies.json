@@ -5307,7 +5307,18 @@
       },
       {
         "title": "Thor: Ragnarok (2017)",
-        "matchNote": "No exact title match on TMDB — review manually"
+        "matchNote": null,
+        "tmdbId": 284053,
+        "tmdbTitle": "Thor: Ragnarok",
+        "year": "2017",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/rzRwTcFvttcN1ZpX2xv4j3tSdJu.jpg",
+        "language": "en",
+        "genre": "Action, Adventure, Comedy, Science Fiction",
+        "overview": "Thor is imprisoned on the other side of the universe and finds himself in a race against time to get back to Asgard to stop Ragnarok, the destruction of his home-world and the end of Asgardian civilization, at the hands of a powerful new threat, the ruthless Hela.",
+        "imdbId": "tt3501632",
+        "imdbRating": "7.9",
+        "omdbNote": null,
+        "matchedVia": "tmdb-manual"
       }
     ],
     "reviewStatus": "collection",
