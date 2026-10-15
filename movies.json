@@ -3010,7 +3010,17 @@
     "imdbRating": null,
     "omdbNote": "UPCMDB had no rating for this title",
     "matchedVia": "tmdb",
-    "enrichNote": "No TMDB match found"
+    "enrichNote": "No TMDB match found",
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "Ghost Rider"
+      },
+      {
+        "title": "Ghost Rider: Spirit of Vengeance"
+      }
+    ],
+    "reviewStatus": "collection"
   },
   {
     "id": "MOV-0114",
