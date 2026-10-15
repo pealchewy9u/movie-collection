@@ -3015,7 +3015,17 @@
     "includedMovies": [
       {
         "title": "Ghost Rider",
-        "matchNote": "Multiple movies share this title — choose manually"
+        "matchNote": null,
+        "tmdbId": 1250,
+        "posterUrl": "https://image.tmdb.org/t/p/w500/4quwR1VwZouD0YF9AaD72kQAjxH.jpg",
+        "imdbRating": "5.3",
+        "imdbId": "tt0259324",
+        "tmdbTitle": "Ghost Rider",
+        "year": "2007",
+        "language": "en",
+        "genre": "Thriller, Action, Fantasy",
+        "overview": "In order to save his dying father, young stunt cyclist Johnny Blaze sells his soul to Mephistopheles and sadly parts from the pure-hearted Roxanne Simpson, the love of his life. Years later, Johnny's path crosses again with Roxanne, now a go-getting reporter, and also with Mephistopheles, who offers to release Johnny's soul if Johnny becomes the fabled, fiery 'Ghost Rider'.",
+        "omdbNote": null
       },
       {
         "title": "Ghost Rider: Spirit of Vengeance",
