@@ -112,18 +112,18 @@
     "blurayDiscs": 3,
     "dvdDiscs": 0,
     "digitalCopy": false,
-    "genre": null,
-    "posterUrl": null,
-    "year": null,
-    "overview": null,
-    "mediaType": null,
-    "tmdbTitle": "300/ 300: Roe/ Troy",
-    "language": null,
-    "imdbId": null,
+    "genre": "Action",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/h7Lcio0c9ohxPhSZg42eTlKIVVY.jpg",
+    "year": "2007",
+    "overview": "A story very loosely based the 480 B.C. Battle of Thermopylae, where the King of Sparta led his army against the advancing Persians.",
+    "mediaType": "movie",
+    "tmdbTitle": "300",
+    "language": "en",
+    "imdbId": "tt0416449",
     "imdbRating": null,
     "omdbNote": null,
-    "matchedVia": "tmdb",
-    "enrichNote": "No TMDB match found",
+    "matchedVia": "tmdb-manual",
+    "enrichNote": null,
     "isBoxSet": true,
     "includedMovies": [
       {
@@ -137,7 +137,8 @@
       }
     ],
     "reviewStatus": "confirmed",
-    "reviewedAt": "2026-10-15T19:41:31.975Z"
+    "reviewedAt": "2026-10-15T19:42:48.016Z",
+    "tmdbId": 1271
   },
   {
     "id": "MOV-0006",
