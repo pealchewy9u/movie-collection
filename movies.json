@@ -670,7 +670,9 @@
     "imdbRating": "8.1",
     "omdbNote": null,
     "tmdbId": 60389,
-    "matchedVia": "tmdb"
+    "matchedVia": "tmdb",
+    "reviewStatus": "confirmed",
+    "reviewedAt": "2026-10-15T19:31:07.580Z"
   },
   {
     "id": "MOV-0027",
