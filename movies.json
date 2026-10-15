@@ -5291,7 +5291,18 @@
     "includedMovies": [
       {
         "title": "Captain America: Civil War (2016)",
-        "matchNote": "No exact title match on TMDB — review manually"
+        "matchNote": null,
+        "tmdbId": 271110,
+        "tmdbTitle": "Captain America: Civil War",
+        "year": "2016",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/rAGiXaUfPzY7CDEyNKUofk3Kw2e.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Science Fiction",
+        "overview": "Following the events of Age of Ultron, the collective governments of the world pass an act designed to regulate all superhuman activity. This polarizes opinion amongst the Avengers, causing two factions to side with Iron Man or Captain America, which causes an epic battle between former allies.",
+        "imdbId": "tt3498820",
+        "imdbRating": "7.8",
+        "omdbNote": null,
+        "matchedVia": "tmdb-manual"
       },
       {
         "title": "Doctor Strange (2016)",
