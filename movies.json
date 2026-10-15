@@ -1055,8 +1055,11 @@
     "tmdbTitle": "Chak De! India",
     "language": "hi",
     "imdbId": "tt0871510",
-    "imdbRating": null,
-    "omdbNote": null
+    "imdbRating": "8.1",
+    "omdbNote": null,
+    "tmdbId": 14163,
+    "matchedVia": "tmdb",
+    "enrichNote": null
   },
   {
     "id": "MOV-0042",
