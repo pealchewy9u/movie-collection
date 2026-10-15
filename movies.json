@@ -1876,13 +1876,15 @@
     "posterUrl": "https://image.tmdb.org/t/p/w500/b1BT309QWjtFUlJPLmXmrcHOWEL.jpg",
     "year": "2010",
     "overview": "Determined to prove he's the world's greatest supervillain, Gru hatches an audacious plan to steal the Moon. To pull it off, he adopts three orphaned girls—Margo, Edith, and Agnes—intending to use them as pawns in his scheme. But the unexpected bond they form forces him to question the criminal life he's always known.",
-    "enrichNote": "UPCMDB HTTP 404: {\"error\":\"Not Found\",\"message\":\"No record found for UPC: 025192092060\"}",
+    "enrichNote": null,
     "mediaType": "movie",
     "tmdbTitle": "Despicable Me",
     "language": "en",
     "imdbId": "tt1323594",
     "imdbRating": "7.6",
-    "omdbNote": null
+    "omdbNote": null,
+    "tmdbId": 20352,
+    "matchedVia": "tmdb"
   },
   {
     "id": "MOV-0066",
