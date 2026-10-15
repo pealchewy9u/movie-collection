@@ -3116,13 +3116,16 @@
     "isBoxSet": true,
     "includedMovies": [
       {
-        "title": "Clueless"
+        "title": "Clueless",
+        "matchNote": "Multiple movies share this title — choose manually"
       },
       {
-        "title": "Mean Girls"
+        "title": "Mean Girls",
+        "matchNote": "Multiple movies share this title — choose manually"
       },
       {
-        "title": "She's the Man"
+        "title": "She's the Man",
+        "matchNote": "Multiple movies share this title — choose manually"
       }
     ],
     "reviewStatus": "collection",
