@@ -9107,13 +9107,15 @@
     "posterUrl": "https://image.tmdb.org/t/p/w500/yj8LbTju1p7CUJg7US2unSBk33s.jpg",
     "year": "2009",
     "overview": "After seeking to live a normal life after 200 years, Logan sets out to avenge a death by undergoing the mutant Weapon X program and becoming Wolverine.",
-    "enrichNote": "UPCMDB HTTP 404: {\"error\":\"Not Found\",\"message\":\"No record found for UPC: 024543602804\"}",
+    "enrichNote": null,
     "mediaType": "movie",
     "tmdbTitle": "X-Men Origins: Wolverine",
     "language": "en",
     "imdbId": "tt0458525",
     "imdbRating": "6.5",
-    "omdbNote": null
+    "omdbNote": null,
+    "tmdbId": 2080,
+    "matchedVia": "tmdb"
   },
   {
     "id": "MOV-0317",
