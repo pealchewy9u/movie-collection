@@ -459,7 +459,7 @@ function renderList() {
       <div class="badge-stack">
         ${effectiveMediaType(m) === 'tv' ? '<div class="format-badge format-tv">TV</div>' : ''}
         <div class="format-badge ${isUHD(m) ? 'format-4k' : 'format-bluray'}">${isUHD(m) ? '4K UHD' : 'BLU-RAY'}</div>
-        ${m.enrichNote && !m.isBoxSet ? `<div class="format-badge no-match-badge">NO MATCH</div>` : ''}
+        ${m.enrichNote && !isHistoricalLookupError(m) && !hasUsableMovieMatch(m) && !m.isBoxSet ? `<div class="format-badge no-match-badge">NO MATCH</div>` : ''}
         ${m.imdbRating
           ? `<div class="format-badge imdb-badge">★ ${escapeHtml(m.imdbRating)}</div>`
           : (isCollection(m) ? `<div class="format-badge collection-badge">COLLECTION</div>`
@@ -567,6 +567,40 @@ function renderSummary() {
   `;
 }
 
+// Old provider failures are historical once usable metadata has been matched.
+// Do not remove errors from genuinely unmatched entries.
+function hasUsableMovieMatch(m) {
+  return !m.isBoxSet && Boolean(m.tmdbId || m.imdbId || (m.genre && m.posterUrl && m.year));
+}
+function isHistoricalLookupError(m) {
+  return hasUsableMovieMatch(m) && typeof m.enrichNote === 'string' &&
+    /^(?:UPCMDB(?:\s|:)|No TMDB match found|No exact title match on TMDB|TMDB (?:HTTP|request|lookup))/i.test(m.enrichNote.trim());
+}
+let cleanupMessage = '';
+async function cleanHistoricalLookupErrors() {
+  const button = document.getElementById('cleanup-old-errors');
+  if (button) button.disabled = true;
+  const targets = movies.filter(isHistoricalLookupError);
+  if (!targets.length) {
+    cleanupMessage = 'No historical lookup errors need clearing.';
+    renderManager();
+    return;
+  }
+  // Save only the affected entries, without searching APIs or replacing metadata.
+  for (const m of targets) {
+    delete m.enrichNote;
+    markPending(m);
+  }
+  cleanupMessage = `Cleared ${targets.length} outdated lookup message(s) locally; verifying GitHub save...`;
+  renderManager();
+  try {
+    const result = await syncPendingEdits();
+    cleanupMessage = `Cleaned ${targets.length} historical error message(s). ${result}`;
+  } catch (err) {
+    cleanupMessage = `Cleaned ${targets.length} locally, but GitHub sync failed: ${err.message}. Use Sync with GitHub to retry.`;
+  }
+  renderManager();
+}
 // Dashboard separates inventory counts from actionable data-quality issues.
 let managerFilter='attention', managerSearch='';
 function dataIssues(m){
@@ -580,7 +614,7 @@ function dataIssues(m){
   if(m.language && !['en','hi'].includes(m.language) && !m.languageOverride)issues.push('Check language: '+languageName(m.language));
   if(m.genre&&!m.posterUrl)issues.push('Missing poster');
   if(!m.imdbRating)issues.push('Missing IMDb rating');
-  if(m.enrichNote&&!m.genre)issues.push('Match lookup failed');
+  if(m.enrichNote&&!hasUsableMovieMatch(m))issues.push('Match lookup failed');
   return issues;
 }
 function matchStatus(m){
@@ -608,6 +642,7 @@ function renderManager(){
     <p class="manager-small" style="margin-bottom:14px">Physical collection entries are counted once. Movies inside box sets are not counted as separate entries.</p>
     <div class="manager-stats">${stats.map(([label,n])=>`<div class="manager-stat"><strong>${n}</strong><span>${label}</span></div>`).join('')}</div>
     <div class="manager-sync" id="sync-status">${Object.keys(pendingEdits()).length} local edits pending · <button class="manager-btn secondary" id="sync-now">Sync with GitHub</button></div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0"><button class="manager-btn secondary" id="cleanup-old-errors" style="margin:0">Clear outdated lookup errors (${movies.filter(isHistoricalLookupError).length})</button><span class="manager-small" id="cleanup-status" role="status">${escapeHtml(cleanupMessage)}</span></div>
     <h3 style="font-size:17px;margin:24px 0 6px">Needs attention</h3>
     <p class="manager-small">Only items with missing or suspicious information appear here. An API match does not automatically mean a verified match.</p>
     <div class="manager-controls"><select id="manager-filter">${[['attention','Needs attention'],['movie','Individual movies'],['tv','TV shows'],['collection','Box sets'],['confirmed','Manually confirmed'],['all','All entries']].map(([v,l])=>`<option value="${v}" ${managerFilter===v?'selected':''}>${l}</option>`).join('')}</select></div>
@@ -618,6 +653,7 @@ function renderManager(){
       return `<div class="manager-item manager-clean"><div class="manager-item-head"><div style="min-width:0;flex:1"><div class="manager-item-title">${escapeHtml(m.title||'Untitled')}</div><div class="manager-small">${escapeHtml(m.tmdbTitle||'No matched title')} · ${escapeHtml(m.year||'Year unknown')} · ${escapeHtml(m.language?languageName(m.language):'Language unknown')}</div>
       ${issues.length?`<div class="issue-list">${issues.map(x=>`<span>${escapeHtml(x)}</span>`).join('')}</div>`:'<div class="manager-small">No current data-quality warnings</div>'}</div><button class="manager-btn" data-fix="${escapeHtml(m.id)}">${issues.length?'Fix':'View'}</button></div></div>`;
     }).join('')||'<p class="empty-state">Nothing needs attention in this view.</p>'}</div>`;
+  el.querySelector('#cleanup-old-errors').onclick=cleanHistoricalLookupErrors;
   el.querySelector('#sync-now').onclick=async()=>{const e=el.querySelector('#sync-status');e.textContent='Syncing…';try{e.textContent=await syncPendingEdits();}catch(err){e.textContent='Not synced: '+err.message;}};
   el.querySelector('#manager-filter').onchange=e=>{managerFilter=e.target.value;renderManager();};
   el.querySelector('#manager-search').oninput=e=>{managerSearch=e.target.value;const pos=e.target.selectionStart;renderManager();const input=document.getElementById('manager-search');input.focus();input.setSelectionRange(pos,pos);};
@@ -1023,7 +1059,7 @@ function openDetail(id) {
       <div><div class="field-label">Date Added</div><div class="field-value">${escapeHtml(m.dateAdded || '—')}</div></div>
     </div>
     ${m.overview ? `<div style="margin-top:16px; font-size:13px; line-height:1.5;">${escapeHtml(m.overview)}</div>` : ''}
-    ${m.enrichNote ? `<div style="margin-top:14px; padding:8px 10px; background:var(--surface-raised); border-radius:8px; font-size:12px;">⚠ ${escapeHtml(m.enrichNote)}. If Blu-ray.com's title doesn't match how TMDB lists it, try typing the correct title below.</div>` : ''}
+    ${m.enrichNote && !isHistoricalLookupError(m) ? `<div style="margin-top:14px; padding:8px 10px; background:var(--surface-raised); border-radius:8px; font-size:12px;">⚠ ${escapeHtml(m.enrichNote)}. If Blu-ray.com's title doesn't match how TMDB lists it, try typing the correct title below.</div>` : ''}
     <details class="collection-editor" ${m.isBoxSet?'open':''}><summary>${m.isBoxSet?'Manage collection / box set':'Is this a multi-movie box set?'}</summary><div style="margin-top:12px;padding:12px;background:var(--surface);border-radius:10px;border:1px solid var(--groove)"><b>Collection / Box Set</b><p class="manager-small">Automatically detects movies separated by / in the title. For franchise box sets, searches TMDB collections. Review suggestions before saving.</p><input id="boxset-search" type="text" value="${escapeHtml(m.title||'')}" placeholder="Collection or franchise name" style="width:100%;padding:8px;border:1px solid var(--groove);border-radius:7px;margin-bottom:8px"><button class="manager-btn secondary" onclick="suggestBoxSet('${m.id}')">Find included movies automatically</button><div id="boxset-suggestions" style="margin-top:8px"></div><label style="font-size:12px"><input type="checkbox" id="boxset-check" ${m.isBoxSet?'checked':''}> This is a multi-movie collection</label><textarea id="boxset-films" rows="3" placeholder="One film per line" style="width:100%;margin-top:8px;border:1px solid var(--groove);border-radius:7px;padding:8px">${escapeHtml((m.includedMovies||[]).map(f=>typeof f==='string'?f:f.title).join('\n'))}</textarea><button class="manager-btn" onclick="saveBoxSet('${m.id}')">Save collection</button><p id="boxset-status" class="manager-small"></p></div></details>
     <div style="margin-top:12px;">
       <label style="font-size:11px; color:var(--text-muted); display:block; margin-bottom:4px;">Search TMDB with a different title (optional)</label>
@@ -1206,14 +1242,14 @@ async function matchViaUpcmdb(item, upcmdbKey) {
 
     if (!res.ok) {
       const errText = await res.text();
-      return { ...item, enrichNote: `UPCMDB HTTP ${res.status}: ${errText.slice(0, 150)}` };
+      return hasUsableMovieMatch(item) ? item : { ...item, enrichNote: `UPCMDB HTTP ${res.status}: ${errText.slice(0, 150)}` };
     }
 
     const raw = await res.json();
     const data = raw.data || raw; // response shape varies between their examples -- handle both
 
     if (!data.title) {
-      return { ...item, enrichNote: `UPCMDB: no match for barcode ${barcode}` };
+      return hasUsableMovieMatch(item) ? item : { ...item, enrichNote: `UPCMDB: no match for barcode ${barcode}` };
     }
 
     return {
@@ -1228,10 +1264,11 @@ async function matchViaUpcmdb(item, upcmdbKey) {
       imdbId: data.imdbID || null,
       imdbRating: data.imdbRating ? String(data.imdbRating) : null,
       omdbNote: data.imdbRating ? null : 'UPCMDB had no rating for this title',
-      matchedVia: 'upcmdb'
+      matchedVia: 'upcmdb',
+      enrichNote: null
     };
   } catch (e) {
-    return { ...item, enrichNote: `UPCMDB request failed: ${e.message}` };
+    return hasUsableMovieMatch(item) ? item : { ...item, enrichNote: `UPCMDB request failed: ${e.message}` };
   }
 }
 
