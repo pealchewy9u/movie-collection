@@ -2540,7 +2540,29 @@
     "imdbRating": null,
     "omdbNote": null,
     "matchedVia": "tmdb",
-    "enrichNote": "No TMDB match found"
+    "enrichNote": "No TMDB match found",
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "Final Destination"
+      },
+      {
+        "title": "Final Destination 2"
+      },
+      {
+        "title": "Final Destination 3"
+      },
+      {
+        "title": "The Final Destination"
+      },
+      {
+        "title": "Final Destination 5"
+      },
+      {
+        "title": "Final Destination Bloodlines"
+      }
+    ],
+    "reviewStatus": "collection"
   },
   {
     "id": "MOV-0099",
