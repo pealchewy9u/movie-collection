@@ -688,7 +688,16 @@ async function matchViaUpcmdb(item, upcmdbKey) {
   if (!barcode) return { ...item, enrichNote: 'No barcode available for UPCMDB' };
 
   try {
-    const res = await fetch(`https://upcmdb.com/api/v1/lookup/${barcode}?api_key=${upcmdbKey}`, { cache: 'no-store' });
+    const res = await fetch(`https://us-central1-upcmdb-cbae5.cloudfunctions.net/api/v1/lookup/${barcode}`, {
+      cache: 'no-store',
+      headers: { 'x-api-key': upcmdbKey }
+    });
+
+    if (!res.ok) {
+      const errText = await res.text();
+      return { ...item, enrichNote: `UPCMDB HTTP ${res.status}: ${errText.slice(0, 150)}` };
+    }
+
     const raw = await res.json();
     const data = raw.data || raw; // response shape varies between their examples -- handle both
 
