@@ -127,13 +127,26 @@
     "isBoxSet": true,
     "includedMovies": [
       {
-        "title": "300"
+        "title": "300",
+        "matchNote": "Multiple movies share this title — choose manually"
       },
       {
-        "title": "300: Rise of an Empire"
+        "title": "300: Rise of an Empire",
+        "tmdbId": 53182,
+        "tmdbTitle": "300: Rise of an Empire",
+        "year": "2014",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/wYDdWN1McB1Sio4z1dPSkb40Z78.jpg",
+        "language": "en",
+        "genre": "Action, Drama, War",
+        "overview": "Greek general Themistocles attempts to unite all of Greece by leading the charge that will change the course of the war. Themistocles faces the massive invading Persian forces led by mortal-turned-god, Xerxes and Artemesia, the vengeful commander of the Persian navy.",
+        "imdbId": "tt1253863",
+        "matchNote": null,
+        "imdbRating": "6.2",
+        "omdbNote": null
       },
       {
-        "title": "Troy"
+        "title": "Troy",
+        "matchNote": "Multiple movies share this title — choose manually"
       }
     ],
     "reviewStatus": "confirmed",
