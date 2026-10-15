@@ -5286,7 +5286,27 @@
     "year": null,
     "overview": null,
     "enrichNote": "No TMDB match found",
-    "matchedVia": "tmdb"
+    "matchedVia": "tmdb",
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "Captain America: Civil War (2016)"
+      },
+      {
+        "title": "Doctor Strange (2016)"
+      },
+      {
+        "title": "Guardians of the Galaxy Vol. 2 (2017)"
+      },
+      {
+        "title": "Spider-Man: Homecoming (2017)"
+      },
+      {
+        "title": "Thor: Ragnarok (2017)"
+      }
+    ],
+    "reviewStatus": "collection",
+    "imdbRating": null
   },
   {
     "id": "MOV-0201",
