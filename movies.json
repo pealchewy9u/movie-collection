@@ -5947,7 +5947,20 @@
     "imdbRating": null,
     "omdbNote": "UPCMDB had no rating for this title",
     "matchedVia": "tmdb",
-    "enrichNote": "No TMDB match found"
+    "enrichNote": "No TMDB match found",
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "The Mummy"
+      },
+      {
+        "title": "The Mummy Returns"
+      },
+      {
+        "title": "The Mummy: Tomb of the Dragon Emperor"
+      }
+    ],
+    "reviewStatus": "collection"
   },
   {
     "id": "MOV-0221",
