@@ -5545,7 +5545,29 @@
     "imdbRating": null,
     "omdbNote": "UPCMDB had no rating for this title",
     "matchedVia": "tmdb",
-    "enrichNote": "No TMDB match found"
+    "enrichNote": "No TMDB match found",
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "Mission: Impossible"
+      },
+      {
+        "title": "Mission: Impossible II"
+      },
+      {
+        "title": "Mission: Impossible III"
+      },
+      {
+        "title": "Mission: Impossible - Ghost Protocol"
+      },
+      {
+        "title": "Mission: Impossible - Rogue Nation"
+      },
+      {
+        "title": "Mission: Impossible - Fallout"
+      }
+    ],
+    "reviewStatus": "collection"
   },
   {
     "id": "MOV-0214",
