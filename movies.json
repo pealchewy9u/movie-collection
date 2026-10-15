@@ -2535,7 +2535,7 @@
     "language": "en",
     "imdbId": null,
     "imdbRating": null,
-    "omdbNote": null,
+    "omdbNote": "No IMDB id on file -- needs a full re-enrich, not just a retry",
     "enrichNote": null,
     "tmdbId": 88924,
     "matchedVia": "tmdb"
