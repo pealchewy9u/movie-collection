@@ -5615,9 +5615,25 @@
     "tmdbTitle": "Madagascar: The Ultimate Collection",
     "language": null,
     "imdbId": "tt0351283",
-    "imdbRating": "6.9",
+    "imdbRating": null,
     "omdbNote": null,
-    "matchedVia": "upcmdb"
+    "matchedVia": "upcmdb",
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "Madagascar"
+      },
+      {
+        "title": "Madagascar: Escape 2 Africa"
+      },
+      {
+        "title": "Madagascar 3: Europe's Most Wanted"
+      },
+      {
+        "title": "Penguins of Madagascar"
+      }
+    ],
+    "reviewStatus": "collection"
   },
   {
     "id": "MOV-0193",
