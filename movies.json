@@ -5550,7 +5550,17 @@
     "includedMovies": [
       {
         "title": "Mission: Impossible",
-        "matchNote": "Multiple movies share this title — choose manually"
+        "matchNote": null,
+        "tmdbId": 954,
+        "posterUrl": "https://image.tmdb.org/t/p/w500/l5uxY5m5OInWpcExIpKG6AR3rgL.jpg",
+        "imdbRating": "7.2",
+        "imdbId": "tt0117060",
+        "tmdbTitle": "Mission: Impossible",
+        "year": "1996",
+        "language": "en",
+        "genre": "Adventure, Action, Thriller",
+        "overview": "When Ethan Hunt, the leader of a crack espionage team whose perilous operation has gone awry with no explanation, discovers that a mole has penetrated the CIA, he's surprised to learn that he's the prime suspect. To clear his name, Hunt now must ferret out the real double agent and, in the process, even the score.",
+        "omdbNote": null
       },
       {
         "title": "Mission: Impossible II",
