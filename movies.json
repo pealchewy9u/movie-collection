@@ -3537,7 +3537,8 @@
       }
     ],
     "reviewStatus": "collection",
-    "imdbRating": null
+    "imdbRating": null,
+    "boxCoverUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/box-covers/MOV-0116.jpg?v=41c739706a7165d3f54639528ac64daac1f4ef1e"
   },
   {
     "id": "MOV-0117",
