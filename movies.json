@@ -300,13 +300,17 @@
     "posterUrl": "https://image.tmdb.org/t/p/w500/i1U46OwMc6vlm7OoSUKfqUH615e.jpg",
     "year": "2014",
     "overview": "U.S. Navy SEAL Chris Kyle takes his sole mission—protect his comrades—to heart and becomes one of the most lethal snipers in American history. His pinpoint accuracy not only saves countless lives but also makes him a prime target of insurgents. Despite grave danger and his struggle to be a good husband and father to his family back in the States, Kyle serves four tours of duty in Iraq. However, when he finally returns home, he finds that he cannot leave the war behind.",
-    "enrichNote": "UPCMDB HTTP 404: {\"error\":\"Not Found\",\"message\":\"No record found for UPC: 883929450350\"}",
+    "enrichNote": null,
     "mediaType": "movie",
     "tmdbTitle": "American Sniper",
     "language": "en",
     "imdbId": "tt2179136",
-    "imdbRating": null,
-    "omdbNote": null
+    "imdbRating": "7.3",
+    "omdbNote": null,
+    "tmdbId": 190859,
+    "matchedVia": "tmdb-manual",
+    "reviewStatus": "confirmed",
+    "reviewedAt": "2026-10-15T19:20:04.697Z"
   },
   {
     "id": "MOV-0013",
