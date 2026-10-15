@@ -281,6 +281,9 @@ async function loadData() {
     const res = await fetch(DATA_URL, { cache: 'no-store' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     movies = await res.json();
+    // Keep unsynced manual edits when refreshing; never silently discard them.
+    const pending = JSON.parse(localStorage.getItem('movie-pending-edits') || '{}');
+    movies = movies.map(m => pending[m.id] ? {...m, ...pending[m.id]} : m);
     localStorage.setItem('movie-cache', JSON.stringify(movies));
     const now = new Date();
     localStorage.setItem('movie-cache-time', now.toISOString());
@@ -348,7 +351,7 @@ function isUHD(movie) {
 // as if OMDb "failed" is misleading when there was never a single film to rate.
 function isCollection(item) {
   const t = item.title || '';
-  return /\b(trilogy|collection|\d+[\s-]*(film|movie)s?\b)/i.test(t) || t.includes(' / ');
+  return item.isBoxSet === true || /\b(trilogy|collection|\d+[\s-]*(film|movie)s?\b)/i.test(t) || t.includes(' / ');
 }
 
 function effectiveMediaType(item) {
@@ -519,6 +522,7 @@ let managerFilter = 'review';
 let managerSearch = '';
 function dataIssues(m) {
   const issues = [];
+  if (m.isBoxSet) return m.includedMovies?.length ? [] : ['Add included films'];
   if (!m.genre && !m.imdbId && !m.posterUrl) issues.push('No successful match');
   if (m.language && !['en','hi'].includes(m.language)) issues.push('Unexpected language: ' + languageName(m.language));
   if (m.enrichNote && !m.genre) issues.push('Match error');
@@ -527,6 +531,7 @@ function dataIssues(m) {
   return issues;
 }
 function matchStatus(m) {
+  if (m.isBoxSet) return 'collection';
   if (m.reviewStatus === 'confirmed') return 'confirmed';
   if (!m.genre && !m.imdbId && !m.posterUrl) return 'unmatched';
   if (dataIssues(m).length) return 'review';
@@ -534,7 +539,7 @@ function matchStatus(m) {
 }
 function renderManager() {
   const el = document.getElementById('manager-view');
-  const counts = {confirmed:0, matched:0, review:0, unmatched:0};
+  const counts = {confirmed:0, matched:0, review:0, unmatched:0, collection:0};
   movies.forEach(m => counts[matchStatus(m)]++);
   const shown = movies.filter(m => (managerFilter === 'all' || matchStatus(m) === managerFilter) &&
     (!managerSearch || [m.title,m.studio,m.tmdbTitle].join(' ').toLowerCase().includes(managerSearch.toLowerCase())));
@@ -545,33 +550,78 @@ function renderManager() {
       <div class="manager-stat"><strong>${movies.length}</strong><span>Total movies</span></div>
       <div class="manager-stat"><strong>${counts.confirmed}</strong><span>Manually confirmed</span></div>
       <div class="manager-stat"><strong>${counts.review}</strong><span>Needs review / incomplete</span></div>
-      <div class="manager-stat"><strong>${counts.unmatched}</strong><span>Unmatched</span></div>
+      <div class="manager-stat"><strong>${counts.unmatched}</strong><span>Unmatched</span></div><div class="manager-stat"><strong>${counts.collection}</strong><span>Box sets / collections</span></div>
     </div>
-    <p class="manager-small">${movies.filter(m=>m.matchedVia==='upcmdb').length} barcode-sourced · ${movies.filter(m=>m.genre && m.matchedVia!=='upcmdb').length} other matches · ${movies.filter(m=>m.imdbRating).length} with IMDb ratings</p>
+    <p class="manager-small" id="sync-status">${Object.keys(JSON.parse(localStorage.getItem('movie-pending-edits')||'{}')).length} local changes waiting for GitHub sync. <button class="manager-btn secondary" onclick="syncPendingEdits()">Sync pending changes</button></p><p class="manager-small">${movies.filter(m=>m.matchedVia==='upcmdb').length} barcode-sourced · ${movies.filter(m=>m.genre && m.matchedVia!=='upcmdb').length} other matches · ${movies.filter(m=>m.imdbRating).length} with IMDb ratings</p>
     <div class="manager-controls"><select id="manager-filter">
-      ${[['review','Needs review'],['unmatched','Unmatched'],['matched','Provisional matches'],['confirmed','Confirmed'],['all','All movies']].map(([v,l])=>`<option value="${v}" ${managerFilter===v?'selected':''}>${l}</option>`).join('')}
+      ${[['review','Needs review'],['unmatched','Unmatched'],['collection','Collections'],['matched','Provisional matches'],['confirmed','Confirmed'],['all','All movies']].map(([v,l])=>`<option value="${v}" ${managerFilter===v?'selected':''}>${l}</option>`).join('')}
     </select></div>
     <div class="search-row"><span>🔍</span><input id="manager-search" placeholder="Find a movie…" value="${escapeHtml(managerSearch)}"></div>
     <p class="manager-small">Showing ${shown.length} movies. Check the original title against the matched title, language and artwork.</p>
     <div id="manager-items">${shown.map(m=>{
       const status=matchStatus(m), issues=dataIssues(m);
-      const label={confirmed:'Confirmed',matched:'Provisional',review:'Review',unmatched:'No match'}[status];
+      const label={confirmed:'Confirmed',matched:'Provisional',review:'Review',unmatched:'No match',collection:'Collection'}[status];
       const tone=status==='confirmed'?'good':status==='unmatched'?'bad':status==='review'?'warn':'';
       return `<div class="manager-item"><div class="manager-item-head"><div style="min-width:0"><div class="manager-item-title">${escapeHtml(m.title||'Untitled')}</div><div class="manager-small">Matched: ${escapeHtml(m.tmdbTitle||'Not recorded')} · ${escapeHtml(m.year||'Year unknown')} · ${escapeHtml(m.language?languageName(m.language):'Language unknown')}</div><div class="manager-small">Source: ${escapeHtml(m.matchedVia==='upcmdb'?'UPCMDB barcode':m.genre?'TMDB / legacy':'None')} · IMDb: ${escapeHtml(m.imdbRating||'Missing')}</div>${issues.length?`<div class="manager-small" style="color:#A65B13">⚠ ${escapeHtml(issues.join(' · '))}</div>`:''}</div><span class="manager-tag ${tone}">${label}</span></div><button class="manager-btn" data-fix="${escapeHtml(m.id)}">Review / Correct</button></div>`;
     }).join('') || '<p class="empty-state">No movies in this category.</p>'}</div>`;
+  el.querySelector('#sync-status button').onclick=async()=>{const e=el.querySelector('#sync-status');e.textContent='Syncing…';try{e.textContent=await syncPendingEdits();}catch(err){e.textContent='Not synced: '+err.message;}};
   el.querySelector('#manager-filter').onchange=e=>{managerFilter=e.target.value;renderManager();};
   el.querySelector('#manager-search').oninput=e=>{managerSearch=e.target.value; const pos=e.target.selectionStart; renderManager();const input=document.getElementById('manager-search');input.focus();input.setSelectionRange(pos,pos);};
   el.querySelectorAll('[data-fix]').forEach(b=>b.onclick=()=>openDetail(b.dataset.fix));
 }
-function confirmMovie(id) {
-  const m=movies.find(x=>x.id===id); if(!m)return;
-  m.reviewStatus='confirmed'; m.reviewedAt=new Date().toISOString();
+
+function markPending(m) {
+  const pending=JSON.parse(localStorage.getItem('movie-pending-edits')||'{}');
+  pending[m.id]=m;
+  localStorage.setItem('movie-pending-edits',JSON.stringify(pending));
   localStorage.setItem('movie-cache',JSON.stringify(movies));
-  render(); openDetail(id);
+}
+async function syncPendingEdits() {
   const owner=localStorage.getItem('ghOwner'),repo=localStorage.getItem('ghRepo'),token=localStorage.getItem('ghToken');
-  const status=document.getElementById('review-status');
-  if(owner&&repo&&token) saveToGitHub(owner,repo,token,movies).then(()=>{if(status)status.textContent='Confirmed and saved to GitHub.';}).catch(e=>{if(status)status.textContent='Confirmed locally; GitHub save failed: '+e.message;});
-  else if(status)status.textContent='Confirmed locally. Add GitHub credentials to persist it.';
+  if(!owner||!repo||!token) throw new Error('Enter GitHub username, repository and token in Settings first.');
+  // Merge pending changes into latest remote file, avoiding overwriting unrelated edits.
+  const url=`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/movies.json`;
+  const headers={'Authorization':`Bearer ${token}`,'Accept':'application/vnd.github+json'};
+  const response=await fetch(url,{headers,cache:'no-store'});
+  if(!response.ok) throw new Error('GitHub read failed (HTTP '+response.status+'). Check token and repository permissions.');
+  const remote=await response.json();
+  const raw=atob(remote.content.replace(/\s/g,''));
+  const bytes=Uint8Array.from(raw,c=>c.charCodeAt(0));
+  const existing=JSON.parse(new TextDecoder().decode(bytes));
+  const pending=JSON.parse(localStorage.getItem('movie-pending-edits')||'{}');
+  const updated=existing.map(m=>pending[m.id]?{...m,...pending[m.id]}:m);
+  if(!Object.keys(pending).length) return 'No pending changes.';
+  const content=btoa(unescape(encodeURIComponent(JSON.stringify(updated,null,2))));
+  const put=await fetch(url,{method:'PUT',headers:{...headers,'Content-Type':'application/json'},body:JSON.stringify({message:'Save reviewed movie metadata',content,sha:remote.sha,branch:'main'})});
+  if(!put.ok) throw new Error('GitHub save failed (HTTP '+put.status+'): '+(await put.text()).slice(0,250));
+  localStorage.removeItem('movie-pending-edits');
+  movies=updated;
+  localStorage.setItem('movie-cache',JSON.stringify(movies));
+  render();
+  return 'Saved to GitHub. Changes will survive refresh.';
+}
+async function persistManualEdit(m,status) {
+  markPending(m);
+  if(status) status.textContent='Saved locally. Syncing to GitHub…';
+  try { const result=await syncPendingEdits();if(status)status.textContent=result; }
+  catch(e) { if(status)status.textContent='Saved locally, NOT on GitHub: '+e.message+' Your changes are retained on this device. Use Data Manager → Sync pending changes.'; }
+}
+async function saveBoxSet(id) {
+  const m=movies.find(x=>x.id===id);if(!m)return;
+  const checked=document.getElementById('boxset-check').checked;
+  const titles=document.getElementById('boxset-films').value.split('\n').map(x=>x.trim()).filter(Boolean);
+  m.isBoxSet=checked;
+  m.includedMovies=checked?titles.map(title=>({title})):[];
+  if(checked){m.reviewStatus='collection';m.imdbRating=null;}
+  buildGenreFilter();buildLanguageFilter();render();
+  await persistManualEdit(m,document.getElementById('boxset-status'));
+}
+
+function confirmMovie(id) {
+  const m=movies.find(x=>x.id===id);if(!m)return;
+  m.reviewStatus='confirmed';m.reviewedAt=new Date().toISOString();
+  render();
+  persistManualEdit(m,document.getElementById('review-status'));
 }
 async function findCandidates(id) {
   const m=movies.find(x=>x.id===id),key=localStorage.getItem('tmdbKey');
@@ -603,9 +653,7 @@ async function chooseCandidate(id,c) {
     const omdb=localStorage.getItem('omdbKey');if(omdb&&movies[idx].imdbId&&!isCollection(movies[idx]))movies[idx]=await retryOmdbOnly(movies[idx],omdb);
     localStorage.setItem('movie-cache',JSON.stringify(movies));buildGenreFilter();buildLanguageFilter();render();openDetail(id);
     const status=document.getElementById('review-status');
-    const owner=localStorage.getItem('ghOwner'),repo=localStorage.getItem('ghRepo'),token=localStorage.getItem('ghToken');
-    if(owner&&repo&&token){status.textContent='Corrected. Saving to GitHub…';await saveToGitHub(owner,repo,token,movies);status.textContent='Corrected and saved to GitHub.';}
-    else status.textContent='Corrected locally. Add GitHub credentials to persist.';
+    await persistManualEdit(movies[idx],status);
   }catch(e){const status=document.getElementById('review-status');if(status)status.textContent='Correction/save issue: '+e.message;}
 }
 
@@ -618,6 +666,7 @@ function openDetail(id) {
     ${coverHtml(m, 'sheet-cover', 'sheet-cover')}
     <div class="sheet-title">${escapeHtml(m.title || 'Untitled')}</div>
     <div class="sheet-studio">${escapeHtml(m.studio || '')}</div>
+    <div style="margin-top:12px;padding:12px;background:var(--surface);border-radius:10px;border:1px solid var(--groove)"><b>Collection / Box Set</b><p class="manager-small">Keep the original box cover. Enter each included film on a separate line. This does not create extra collection entries.</p><label style="font-size:12px"><input type="checkbox" id="boxset-check" ${m.isBoxSet?'checked':''}> This is a multi-movie collection</label><textarea id="boxset-films" rows="3" placeholder="One film per line" style="width:100%;margin-top:8px;border:1px solid var(--groove);border-radius:7px;padding:8px">${escapeHtml((m.includedMovies||[]).map(f=>typeof f==='string'?f:f.title).join('\n'))}</textarea><button class="manager-btn" onclick="saveBoxSet('${m.id}')">Save collection</button><p id="boxset-status" class="manager-small"></p></div>
     <div class="sheet-fields">
       <div><div class="field-label">Type</div><div class="field-value">${effectiveMediaType(m) === 'tv' ? 'TV Show' : 'Movie'}</div></div>
       <div><div class="field-label">Format</div><div class="field-value">${isUHD(m) ? '4K UHD' : 'Blu-ray'}</div></div>
@@ -687,14 +736,9 @@ async function rematchOne(id) {
       ? `Re-matched: now "${enriched.tmdbTitle || enriched.title}" (${enriched.year || '?'}).`
       : 'Still no match found.';
 
-    if (ghOwner && ghRepo && ghToken) {
-      statusEl.textContent = `${matchMsg} Saving to GitHub…`;
-      await saveToGitHub(ghOwner, ghRepo, ghToken, movies);
-      statusEl.textContent = `${matchMsg} Saved.`;
-    } else {
-      statusEl.textContent = `${matchMsg} Add GitHub details in Settings to make this stick -- otherwise the next refresh will undo it.`;
-    }
-    openDetail(id); // refresh the sheet with the new data
+    markPending(movies[idx]);
+    openDetail(id);
+    await persistManualEdit(movies[idx], document.getElementById('rematch-status'));
   } catch (e) {
     statusEl.textContent = `Re-match failed: ${e.message}`;
   }
