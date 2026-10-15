@@ -1523,8 +1523,8 @@
     "blurayDiscs": 1,
     "dvdDiscs": 1,
     "digitalCopy": true,
-    "genre": "Action",
-    "posterUrl": "https://imagestorage.org/883929484256.jpg",
+    "genre": "Drama",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/1BfTsk5VWuw8FCocAhCyqnRbEzq.jpg",
     "year": "2015",
     "overview": "The former World Heavyweight Champion Rocky Balboa serves as a trainer and mentor to Adonis Johnson, the son of his late friend and former rival Apollo Creed.",
     "mediaType": "movie",
@@ -1533,9 +1533,11 @@
     "imdbId": "tt3076658",
     "imdbRating": "7.6",
     "omdbNote": null,
-    "matchedVia": "upcmdb",
+    "matchedVia": "tmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "tmdbId": 312221,
+    "enrichNote": null
   },
   {
     "id": "MOV-0052",
