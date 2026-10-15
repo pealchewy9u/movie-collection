@@ -3112,7 +3112,21 @@
     "year": null,
     "overview": null,
     "enrichNote": "No TMDB match found",
-    "matchedVia": "tmdb"
+    "matchedVia": "tmdb",
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "Clueless"
+      },
+      {
+        "title": "Mean Girls"
+      },
+      {
+        "title": "She's the Man"
+      }
+    ],
+    "reviewStatus": "collection",
+    "imdbRating": null
   },
   {
     "id": "MOV-0117",
