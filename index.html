@@ -148,6 +148,9 @@
         <option value="tv">TV Shows</option>
       </select>
     </div>
+    <div class="filter-row" style="margin-top:8px;">
+      <select id="language-select"><option value="">All Languages</option></select>
+    </div>
 
   </header>
 
@@ -244,7 +247,27 @@ async function loadData() {
     }
   }
   buildGenreFilter();
+  buildLanguageFilter();
   render();
+}
+
+// TMDB returns ISO 639-1 codes, not display names -- map the common ones likely
+// to show up in this collection; anything unmapped just shows its raw code.
+const LANGUAGE_NAMES = {
+  en: 'English', hi: 'Hindi', pa: 'Punjabi', ta: 'Tamil', te: 'Telugu',
+  fr: 'French', es: 'Spanish', de: 'German', it: 'Italian', ja: 'Japanese',
+  ko: 'Korean', zh: 'Chinese', ru: 'Russian', ur: 'Urdu', bn: 'Bengali'
+};
+function languageName(code) {
+  return LANGUAGE_NAMES[code] || code;
+}
+
+function buildLanguageFilter() {
+  const sel = document.getElementById('language-select');
+  const langs = [...new Set(movies.map(m => m.language).filter(Boolean))]
+    .sort((a, b) => languageName(a).localeCompare(languageName(b)));
+  sel.innerHTML = '<option value="">All Languages</option>' +
+    langs.map(l => `<option value="${l}">${languageName(l)}</option>`).join('');
 }
 
 function buildGenreFilter() {
@@ -281,9 +304,11 @@ function filteredMovies() {
   const q = document.getElementById('search-input').value.trim().toLowerCase();
   const genre = document.getElementById('genre-select').value;
   const type = document.getElementById('type-select').value;
+  const language = document.getElementById('language-select').value;
   return movies
     .filter(m => !genre || m.genre === genre)
     .filter(m => !type || effectiveMediaType(m) === type)
+    .filter(m => !language || m.language === language)
     .filter(m => {
       if (!q) return true;
       const hay = [m.title, m.studio].join(' ').toLowerCase();
@@ -387,33 +412,46 @@ function renderSummary() {
     return;
   }
 
-  const studioCounts = {};
-  movies.forEach(m => {
-    const s = m.studio || 'Unknown';
-    studioCounts[s] = (studioCounts[s] || 0) + 1;
-  });
-  const sortedStudios = Object.entries(studioCounts).sort((a, b) => b[1] - a[1]).slice(0, 10);
-  const maxStudio = Math.max(...sortedStudios.map(([, c]) => c));
-
-  const uhdCount = movies.filter(isUHD).length;
-  const blurayCount = movies.length - uhdCount;
   const totalDiscs = movies.reduce((sum, m) => sum + (m.blurayDiscs || 0) + (m.dvdDiscs || 0), 0);
+
+  // Helper to build one "N of total, biggest bar first" breakdown section.
+  function breakdownSection(title, counts) {
+    const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    const max = Math.max(...sorted.map(([, c]) => c));
+    return `
+      <div class="summary-section-title">${title}</div>
+      ${sorted.map(([label, count]) => `
+        <div class="cat-row">
+          <div class="cat-row-top"><span>${escapeHtml(label)}</span><span>${count}</span></div>
+          <div class="cat-bar-track"><div class="cat-bar-fill" style="width:${(count / max) * 100}%"></div></div>
+        </div>
+      `).join('')}
+    `;
+  }
+
+  const languageCounts = {};
+  movies.forEach(m => {
+    const l = m.language ? languageName(m.language) : 'Not enriched yet';
+    languageCounts[l] = (languageCounts[l] || 0) + 1;
+  });
+
+  const formatCounts = {};
+  movies.forEach(m => {
+    const f = isUHD(m) ? '4K UHD' : 'Blu-ray';
+    formatCounts[f] = (formatCounts[f] || 0) + 1;
+  });
+
+  const genreCounts = {};
+  movies.forEach(m => {
+    const g = m.genre || 'Not enriched yet';
+    genreCounts[g] = (genreCounts[g] || 0) + 1;
+  });
 
   container.innerHTML = `
     <div class="summary-total">${movies.length} movie${movies.length === 1 ? '' : 's'} total · ${totalDiscs} discs</div>
-
-    <div class="stat-blocks">
-      <div><div class="stat-value">${uhdCount}</div><div class="stat-label">4K UHD</div></div>
-      <div><div class="stat-value">${blurayCount}</div><div class="stat-label">Blu-ray</div></div>
-    </div>
-
-    <div class="summary-section-title">Top Studios</div>
-    ${sortedStudios.map(([studio, count]) => `
-      <div class="cat-row">
-        <div class="cat-row-top"><span>${escapeHtml(studio)}</span><span>${count}</span></div>
-        <div class="cat-bar-track"><div class="cat-bar-fill" style="width:${(count / maxStudio) * 100}%"></div></div>
-      </div>
-    `).join('')}
+    ${breakdownSection('By Language', languageCounts)}
+    ${breakdownSection('By Format', formatCounts)}
+    ${breakdownSection('By Genre', genreCounts)}
   `;
 }
 
@@ -470,6 +508,7 @@ async function rematchOne(id) {
     movies[idx] = enriched;
     localStorage.setItem('movie-cache', JSON.stringify(movies));
     buildGenreFilter();
+    buildLanguageFilter();
     render();
 
     const ghOwner = localStorage.getItem('ghOwner');
@@ -512,6 +551,7 @@ document.querySelectorAll('.tab').forEach(tab => {
 document.getElementById('search-input').addEventListener('input', render);
 document.getElementById('genre-select').addEventListener('change', render);
 document.getElementById('type-select').addEventListener('change', render);
+document.getElementById('language-select').addEventListener('change', render);
 document.getElementById('refresh-btn').addEventListener('click', loadData);
 document.getElementById('detail-overlay').addEventListener('click', e => {
   if (e.target.id === 'detail-overlay') closeDetail();
@@ -599,14 +639,24 @@ async function enrichOne(item, tmdbKey, omdbKey) {
   // one actually on your shelf. Since the CSV export already has a real release
   // date for every title, use it to prefer whichever candidate's year actually
   // matches, rather than trusting result order alone.
-  const knownYear = (item.releaseDate || '').match(/\b(19|20)\d{2}\b/);
+  const knownYearMatch = (item.releaseDate || '').match(/\b(19|20)\d{2}\b/);
   let match = candidates[0];
-  if (knownYear) {
-    const yearMatch = candidates.find(c => {
+  if (knownYearMatch) {
+    const knownYear = parseInt(knownYearMatch[0], 10);
+    // A disc release date is when the physical media came out, not necessarily
+    // when the film/show did -- a remaster or re-release can land years later,
+    // so this needs tolerance, not an exact match (that's what broke Chernobyl:
+    // the 2019 show's 4K disc released in 2020, and exact matching rejected the
+    // real show in favor of an unrelated same-titled work that happened to BE
+    // from 2020). A few years' tolerance still catches genuinely different films
+    // sharing a generic title decades apart, like the three different "Blood
+    // Money" movies, while not penalizing ordinary reissue gaps.
+    const closeMatch = candidates.find(c => {
       const candidateDate = c.media_type === 'tv' ? c.first_air_date : c.release_date;
-      return (candidateDate || '').startsWith(knownYear[0]);
+      const candidateYear = parseInt((candidateDate || '').slice(0, 4), 10);
+      return !isNaN(candidateYear) && Math.abs(candidateYear - knownYear) <= 3;
     });
-    if (yearMatch) match = yearMatch;
+    if (closeMatch) match = closeMatch;
   }
 
   const mediaType = match.media_type; // 'movie' or 'tv'
@@ -736,6 +786,7 @@ async function enrichAll() {
   }
 
   buildGenreFilter();
+  buildLanguageFilter();
   render();
   localStorage.setItem('movie-cache', JSON.stringify(movies));
 
