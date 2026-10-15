@@ -4361,11 +4361,28 @@
     "tmdbTitle": "Ice Age Collection",
     "language": null,
     "imdbId": "tt0268380",
-    "imdbRating": "7.5",
+    "imdbRating": null,
     "omdbNote": null,
     "matchedVia": "upcmdb",
-    "isBoxSet": false,
-    "includedMovies": []
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "• Ice Age (2002)"
+      },
+      {
+        "title": "• Ice Age: The Meltdown (2006)"
+      },
+      {
+        "title": "• Ice Age: Dawn of the Dinosaurs (2009)"
+      },
+      {
+        "title": "• Ice Age: Continental Drift (2012)"
+      },
+      {
+        "title": "• Ice Age: Collision Course (2016)"
+      }
+    ],
+    "reviewStatus": "collection"
   },
   {
     "id": "MOV-0148",
