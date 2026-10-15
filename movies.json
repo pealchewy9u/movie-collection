@@ -2185,10 +2185,12 @@
     "enrichNote": "UPCMDB HTTP 404: {\"error\":\"Not Found\",\"message\":\"No record found for UPC: 704400106507\"}",
     "mediaType": "tv",
     "tmdbTitle": "Dragon Ball Z",
-    "language": "ja",
+    "language": "en",
     "imdbId": "tt0121220",
     "imdbRating": "8.8",
-    "omdbNote": null
+    "omdbNote": null,
+    "languageOverride": "en",
+    "languageReviewedAt": "2026-10-15T21:28:30.740Z"
   },
   {
     "id": "MOV-0078",
