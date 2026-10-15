@@ -5766,22 +5766,88 @@
     "isBoxSet": true,
     "includedMovies": [
       {
-        "title": "Black Panther (2018)"
+        "title": "Black Panther (2018)",
+        "tmdbId": 284054,
+        "tmdbTitle": "Black Panther",
+        "year": "2018",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/uxzzxijgPIY7slzFvMotPv8wjKA.jpg",
+        "language": "en",
+        "genre": "Action, Adventure, Science Fiction",
+        "overview": "King T'Challa returns home to the reclusive, technologically advanced African nation of Wakanda to serve as his country's new leader. However, T'Challa soon finds that he is challenged for the throne by factions within his own country as well as without. Using powers reserved to Wakandan kings, T'Challa assumes the Black Panther mantle to join with ex-girlfriend Nakia, the queen-mother, his princess-kid sister, members of the Dora Milaje (the Wakandan 'special forces') and an American secret agent, to prevent Wakanda from being dragged into a world war.",
+        "imdbId": "tt1825683",
+        "matchNote": null,
+        "imdbRating": "7.3",
+        "omdbNote": null
       },
       {
-        "title": "Avengers: Infinity War (2018)"
+        "title": "Avengers: Infinity War (2018)",
+        "tmdbId": 299536,
+        "tmdbTitle": "Avengers: Infinity War",
+        "year": "2018",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Science Fiction",
+        "overview": "As the Avengers and their allies have continued to protect the world from threats too large for any one hero to handle, a new danger has emerged from the cosmic shadows: Thanos. A despot of intergalactic infamy, his goal is to collect all six Infinity Stones, artifacts of unimaginable power, and use them to inflict his twisted will on all of reality. Everything the Avengers have fought for has led up to this moment - the fate of Earth and existence itself has never been more uncertain.",
+        "imdbId": "tt4154756",
+        "matchNote": null,
+        "imdbRating": "8.4",
+        "omdbNote": null
       },
       {
-        "title": "Ant-Man and the Wasp (2018)"
+        "title": "Ant-Man and the Wasp (2018)",
+        "tmdbId": 363088,
+        "tmdbTitle": "Ant-Man and the Wasp",
+        "year": "2018",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/cFQEO687n1K6umXbInzocxcnAQz.jpg",
+        "language": "en",
+        "genre": "Action, Adventure, Science Fiction",
+        "overview": "Just when his time under house arrest is about to end, Scott Lang once again puts his freedom at risk to help Hope van Dyne and Dr. Hank Pym dive into the quantum realm and try to accomplish, against time and any chance of success, a very dangerous rescue mission.",
+        "imdbId": "tt5095030",
+        "matchNote": null,
+        "imdbRating": "7.0",
+        "omdbNote": null
       },
       {
-        "title": "Captain Marvel (2019)"
+        "title": "Captain Marvel (2019)",
+        "tmdbId": 299537,
+        "tmdbTitle": "Captain Marvel",
+        "year": "2019",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg",
+        "language": "en",
+        "genre": "Action, Adventure, Science Fiction",
+        "overview": "The story follows Carol Danvers as she becomes one of the universe’s most powerful heroes when Earth is caught in the middle of a galactic war between two alien races. Set in the 1990s, Captain Marvel is an all-new adventure from a previously unseen period in the history of the Marvel Cinematic Universe.",
+        "imdbId": "tt4154664",
+        "matchNote": null,
+        "imdbRating": "6.7",
+        "omdbNote": null
       },
       {
-        "title": "Avengers: Endgame (2019)"
+        "title": "Avengers: Endgame (2019)",
+        "tmdbId": 299534,
+        "tmdbTitle": "Avengers: Endgame",
+        "year": "2019",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/bR8ISy1O9XQxqiy0fQFw2BX72RQ.jpg",
+        "language": "en",
+        "genre": "Adventure, Science Fiction, Action",
+        "overview": "After the devastating events of Avengers: Infinity War, the universe is in ruins due to the efforts of the Mad Titan, Thanos. With the help of remaining allies, the Avengers must assemble once more in order to undo Thanos' actions and restore order to the universe once and for all, no matter what consequences may be in store.",
+        "imdbId": "tt4154796",
+        "matchNote": null,
+        "imdbRating": "8.4",
+        "omdbNote": null
       },
       {
-        "title": "Spider-Man: Far from Home (2019)"
+        "title": "Spider-Man: Far from Home (2019)",
+        "tmdbId": 429617,
+        "tmdbTitle": "Spider-Man: Far From Home",
+        "year": "2019",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/4q2NNj4S5dG2RLF9CpXsej7yXl.jpg",
+        "language": "en",
+        "genre": "Action, Adventure, Science Fiction",
+        "overview": "Peter Parker and his friends go on a summer trip to Europe. However, they will hardly be able to rest - Peter will have to agree to help Nick Fury uncover the mystery of creatures that cause natural disasters and destruction throughout the continent.",
+        "imdbId": "tt6320628",
+        "matchNote": null,
+        "imdbRating": "7.3",
+        "omdbNote": null
       }
     ],
     "reviewStatus": "collection",
