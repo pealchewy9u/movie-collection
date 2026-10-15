@@ -2271,7 +2271,20 @@
     "imdbRating": null,
     "omdbNote": "UPCMDB had no rating for this title",
     "matchedVia": "tmdb",
-    "enrichNote": "No TMDB match found"
+    "enrichNote": "No TMDB match found",
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "The Expendables"
+      },
+      {
+        "title": "The Expendables 2"
+      },
+      {
+        "title": "The Expendables 3"
+      }
+    ],
+    "reviewStatus": "collection"
   },
   {
     "id": "MOV-0088",
