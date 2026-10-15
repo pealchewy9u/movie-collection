@@ -6206,13 +6206,36 @@
     "isBoxSet": true,
     "includedMovies": [
       {
-        "title": "The Matrix"
+        "title": "The Matrix",
+        "matchNote": "Multiple possible movies — choose manually"
       },
       {
-        "title": "The Matrix Reloaded"
+        "title": "The Matrix Reloaded",
+        "tmdbId": 604,
+        "tmdbTitle": "The Matrix Reloaded",
+        "year": "2003",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/8xEVAe84zlL9rkfYT6dZXero4KK.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Thriller, Science Fiction",
+        "overview": "The Resistance builds in numbers as humans are freed from the Matrix and brought to the city of Zion. Neo discovers his superpowers, including the ability to see the code inside the Matrix. With machine sentinels digging to Zion in 72 hours, Neo, Morpheus and Trinity must find the Keymaker to ultimately reach the Source.",
+        "imdbId": "tt0234215",
+        "matchNote": null,
+        "imdbRating": "7.2",
+        "omdbNote": null
       },
       {
-        "title": "The Matrix Revolutions"
+        "title": "The Matrix Revolutions",
+        "tmdbId": 605,
+        "tmdbTitle": "The Matrix Revolutions",
+        "year": "2003",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/qEWiBXJGXK28jGBAm8oFKKTB0WD.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Thriller, Science Fiction",
+        "overview": "The human city of Zion defends itself against the massive invasion of the machines as Neo fights to end the war at another front while also opposing the rogue Agent Smith.",
+        "imdbId": "tt0242653",
+        "matchNote": null,
+        "imdbRating": "6.8",
+        "omdbNote": null
       }
     ],
     "reviewStatus": "collection"
