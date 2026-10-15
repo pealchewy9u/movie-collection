@@ -3546,7 +3546,35 @@
     "imdbRating": null,
     "omdbNote": "UPCMDB had no rating for this title",
     "matchedVia": "tmdb",
-    "enrichNote": "No TMDB match found"
+    "enrichNote": "No TMDB match found",
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "Harry Potter and the Philosopher's Stone"
+      },
+      {
+        "title": "Harry Potter and the Chamber of Secrets"
+      },
+      {
+        "title": "Harry Potter and the Prisoner of Azkaban"
+      },
+      {
+        "title": "Harry Potter and the Goblet of Fire"
+      },
+      {
+        "title": "Harry Potter and the Order of the Phoenix"
+      },
+      {
+        "title": "Harry Potter and the Half-Blood Prince"
+      },
+      {
+        "title": "Harry Potter and the Deathly Hallows: Part 1"
+      },
+      {
+        "title": "Harry Potter and the Deathly Hallows: Part 2"
+      }
+    ],
+    "reviewStatus": "collection"
   },
   {
     "id": "MOV-0131",
