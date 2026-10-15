@@ -136,7 +136,8 @@
         "title": "Troy"
       }
     ],
-    "reviewStatus": "collection"
+    "reviewStatus": "confirmed",
+    "reviewedAt": "2026-10-15T19:41:31.975Z"
   },
   {
     "id": "MOV-0006",
