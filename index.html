@@ -70,6 +70,7 @@
   .imdb-badge { color: #fff; background: #F5A623; }
   .imdb-missing { color: var(--text-muted); background: var(--groove); }
   .collection-badge { color: #fff; background: #6B4F8C; }
+  .no-match-badge { color: #fff; background: var(--maroon); }
   .badge-stack { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
   .empty-state { padding: 60px 24px; text-align: center; color: var(--text-muted); }
 
@@ -214,8 +215,17 @@
     <hr style="margin:24px 0; border:none; border-top:1px solid var(--groove);">
 
     <p id="pending-count" style="font-size:13px; font-weight:600; margin-bottom:8px;"></p>
-    <button onclick="enrichAll()" id="enrich-btn" style="padding:10px 16px; border-radius:8px; border:none; background:var(--maroon); color:#fff; font-weight:600;">Enrich All Movies</button>
-    <p id="enrich-status" style="font-size:12px; color:var(--text-muted); margin-top:10px;"></p>
+
+    <button onclick="matchAllOnTmdb()" id="enrich-btn" style="padding:10px 16px; border-radius:8px; border:none; background:var(--brass); color:#fff; font-weight:600;">1. Match All on TMDB</button>
+    <p id="enrich-status" style="font-size:12px; color:var(--text-muted); margin-top:10px; margin-bottom:16px;"></p>
+
+    <button onclick="fetchAllImdbRatings()" id="imdb-fetch-btn" style="padding:10px 16px; border-radius:8px; border:none; background:var(--maroon); color:#fff; font-weight:600;">2. Fetch All IMDB Ratings</button>
+    <p id="imdb-fetch-status" style="font-size:12px; color:var(--text-muted); margin-top:10px;"></p>
+
+    <hr style="margin:20px 0; border:none; border-top:1px solid var(--groove);">
+    <p style="font-size:12px; color:var(--text-muted); line-height:1.5;">Forces every movie to re-match from scratch -- use this after a matching-logic fix (like the Chernobyl year issue) to apply it retroactively, not just to new movies. Takes a while for the full collection since nothing is skipped.</p>
+    <button onclick="rematchAll()" id="rematch-all-btn" style="padding:10px 16px; border-radius:8px; border:none; background:#6B4F8C; color:#fff; font-weight:600;">Re-match ALL Movies</button>
+    <p id="rematch-all-status" style="font-size:12px; color:var(--text-muted); margin-top:10px;"></p>
   </div>
 </div>
 
@@ -348,6 +358,7 @@ function renderList() {
       <div class="badge-stack">
         ${effectiveMediaType(m) === 'tv' ? '<div class="format-badge format-tv">TV</div>' : ''}
         <div class="format-badge ${isUHD(m) ? 'format-4k' : 'format-bluray'}">${isUHD(m) ? '4K UHD' : 'BLU-RAY'}</div>
+        ${m.enrichNote ? `<div class="format-badge no-match-badge">NO MATCH</div>` : ''}
         ${m.imdbRating
           ? `<div class="format-badge imdb-badge">★ ${escapeHtml(m.imdbRating)}</div>`
           : (isCollection(m) ? `<div class="format-badge collection-badge">COLLECTION</div>`
@@ -478,7 +489,12 @@ function openDetail(id) {
       <div><div class="field-label">Date Added</div><div class="field-value">${escapeHtml(m.dateAdded || '—')}</div></div>
     </div>
     ${m.overview ? `<div style="margin-top:16px; font-size:13px; line-height:1.5;">${escapeHtml(m.overview)}</div>` : ''}
-    <button onclick="rematchOne('${m.id}')" id="rematch-btn" style="margin-top:16px; padding:9px 14px; border-radius:8px; border:none; background:var(--maroon); color:#fff; font-weight:600; font-size:13px;">Re-match on TMDB</button>
+    ${m.enrichNote ? `<div style="margin-top:14px; padding:8px 10px; background:var(--surface-raised); border-radius:8px; font-size:12px;">⚠ ${escapeHtml(m.enrichNote)}. If Blu-ray.com's title doesn't match how TMDB lists it, try typing the correct title below.</div>` : ''}
+    <div style="margin-top:12px;">
+      <label style="font-size:11px; color:var(--text-muted); display:block; margin-bottom:4px;">Search TMDB with a different title (optional)</label>
+      <input id="rematch-title-input" type="text" placeholder="${escapeHtml(m.title)}" style="width:100%; padding:8px; border-radius:8px; border:1px solid var(--groove); font-size:13px; margin-bottom:8px;">
+    </div>
+    <button onclick="rematchOne('${m.id}')" id="rematch-btn" style="padding:9px 14px; border-radius:8px; border:none; background:var(--maroon); color:#fff; font-weight:600; font-size:13px;">Re-match on TMDB</button>
     <p id="rematch-status" style="font-size:12px; color:var(--text-muted); margin-top:8px;"></p>
   `;
   document.getElementById('detail-overlay').style.display = 'flex';
@@ -499,12 +515,18 @@ async function rematchOne(id) {
   const idx = movies.findIndex(m => m.id === id);
   if (idx === -1) return;
 
+  const overrideInput = document.getElementById('rematch-title-input');
+  const overrideTitle = overrideInput ? overrideInput.value.trim() : '';
+
   btn.disabled = true;
   statusEl.textContent = 'Re-matching…';
   try {
     const reset = { ...movies[idx], genre: null, posterUrl: null, year: null, overview: null,
                      language: null, imdbId: null, imdbRating: null, omdbNote: null, mediaType: null };
-    const enriched = await enrichOne(reset, tmdbKey, omdbKey);
+    let enriched = await matchOnTmdb(reset, tmdbKey, overrideTitle || null);
+    if (enriched.genre && omdbKey) {
+      enriched = await retryOmdbOnly(enriched, omdbKey);
+    }
     movies[idx] = enriched;
     localStorage.setItem('movie-cache', JSON.stringify(movies));
     buildGenreFilter();
@@ -623,8 +645,12 @@ function cleanTitleForSearch(title) {
     .trim();
 }
 
-async function enrichOne(item, tmdbKey, omdbKey) {
-  const searchTitle = cleanTitleForSearch(item.title);
+// TMDB-only: matches the title, pulls genre/poster/year/language/imdbId.
+// Does NOT touch IMDB rating at all -- that's a separate step now (fetchAllImdbRatings).
+// overrideTitle lets you manually correct the search for a movie TMDB couldn't find
+// on its own (e.g. a title that's spelled differently in Blu-ray.com's listing).
+async function matchOnTmdb(item, tmdbKey, overrideTitle) {
+  const searchTitle = overrideTitle ? overrideTitle.trim() : cleanTitleForSearch(item.title);
   // multi-search covers both movies and TV shows in one call, and tells us
   // which one each result actually is via media_type -- searching /search/movie
   // alone was why things like "Friends: The Complete Series" never matched.
@@ -648,15 +674,42 @@ async function enrichOne(item, tmdbKey, omdbKey) {
     // so this needs tolerance, not an exact match (that's what broke Chernobyl:
     // the 2019 show's 4K disc released in 2020, and exact matching rejected the
     // real show in favor of an unrelated same-titled work that happened to BE
-    // from 2020). A few years' tolerance still catches genuinely different films
-    // sharing a generic title decades apart, like the three different "Blood
-    // Money" movies, while not penalizing ordinary reissue gaps.
-    const closeMatch = candidates.find(c => {
+    // from 2020).
+    const closeMatches = candidates.filter(c => {
       const candidateDate = c.media_type === 'tv' ? c.first_air_date : c.release_date;
       const candidateYear = parseInt((candidateDate || '').slice(0, 4), 10);
       return !isNaN(candidateYear) && Math.abs(candidateYear - knownYear) <= 3;
     });
-    if (closeMatch) match = closeMatch;
+
+    if (closeMatches.length === 1) {
+      match = closeMatches[0];
+    } else if (closeMatches.length > 1 && item.studio) {
+      // More than one candidate lands in the same few years -- use the studio
+      // Blu-ray.com already told us (e.g. "HBO", "Warner Bros.") as a tie-breaker,
+      // rather than arbitrarily taking whichever one happened to search first.
+      // This is real data we weren't using at all before.
+      const studioWords = item.studio.toLowerCase().split(/[\s./]+/).filter(w => w.length > 2);
+      let bestMatch = closeMatches[0];
+      let bestScore = -1;
+      for (const candidate of closeMatches) {
+        const companiesUrl = candidate.media_type === 'tv'
+          ? `https://api.themoviedb.org/3/tv/${candidate.id}?api_key=${tmdbKey}`
+          : `https://api.themoviedb.org/3/movie/${candidate.id}?api_key=${tmdbKey}`;
+        try {
+          const detailRes = await fetch(companiesUrl, { cache: 'no-store' });
+          const detail = await detailRes.json();
+          const companyNames = candidate.media_type === 'tv'
+            ? (detail.networks || []).map(n => n.name)
+            : (detail.production_companies || []).map(c => c.name);
+          const haystack = companyNames.join(' ').toLowerCase();
+          const score = studioWords.filter(w => haystack.includes(w)).length;
+          if (score > bestScore) { bestScore = score; bestMatch = candidate; }
+        } catch (e) { /* if this lookup fails, just skip it as a tie-breaker candidate */ }
+      }
+      match = bestMatch;
+    } else if (closeMatches.length > 1) {
+      match = closeMatches[0]; // no studio data to break the tie with -- best guess
+    }
   }
 
   const mediaType = match.media_type; // 'movie' or 'tv'
@@ -678,28 +731,6 @@ async function enrichOne(item, tmdbKey, omdbKey) {
     imdbId = extData.imdb_id || null;
   }
 
-  let imdbRating = null;
-  let omdbNote = null;
-  if (!omdbKey) {
-    omdbNote = 'No OMDb key set';
-  } else if (!imdbId) {
-    omdbNote = 'TMDB had no IMDB id for this title';
-  } else {
-    try {
-      const omdbRes = await fetch(`https://www.omdbapi.com/?i=${imdbId}&apikey=${omdbKey}`, { cache: 'no-store' });
-      const omdbData = await omdbRes.json();
-      if (omdbData.Response === 'False') {
-        omdbNote = `OMDb: ${omdbData.Error || 'unknown error'}`;
-      } else if (!omdbData.imdbRating || omdbData.imdbRating === 'N/A') {
-        omdbNote = 'OMDb had no rating for this title';
-      } else {
-        imdbRating = omdbData.imdbRating;
-      }
-    } catch (e) {
-      omdbNote = `OMDb request failed: ${e.message}`;
-    }
-  }
-
   return {
     ...item,
     mediaType: mediaType,
@@ -710,8 +741,10 @@ async function enrichOne(item, tmdbKey, omdbKey) {
     overview: match.overview || null,
     language: match.original_language || null,
     imdbId: imdbId,
-    imdbRating: imdbRating,
-    omdbNote: omdbNote
+    // Deliberately not touching imdbRating/omdbNote here -- fetching the rating
+    // is now its own separate step (fetchAllImdbRatings), not bundled into matching.
+    imdbRating: item.imdbRating || null,
+    omdbNote: item.omdbNote || null
   };
 }
 
@@ -735,54 +768,35 @@ async function retryOmdbOnly(item, omdbKey) {
   }
 }
 
-async function enrichAll() {
+async function rematchAll() {
   const tmdbKey = localStorage.getItem('tmdbKey');
   const omdbKey = localStorage.getItem('omdbKey');
-  const statusEl = document.getElementById('enrich-status');
-  const btn = document.getElementById('enrich-btn');
+  const statusEl = document.getElementById('rematch-all-status');
+  const btn = document.getElementById('rematch-all-btn');
 
-  if (!tmdbKey) {
-    statusEl.textContent = 'Add your TMDB key above first.';
-    return;
-  }
+  if (!tmdbKey) { statusEl.textContent = 'Add your TMDB key above first.'; return; }
+  if (!confirm(`This re-matches all ${movies.length} movies from scratch, even ones already done. It'll take a while and can't be undone except by running it again. Continue?`)) return;
 
   btn.disabled = true;
-
-  // Pass 1: full TMDB + OMDb enrichment for anything that's never matched at all.
-  const needsFullEnrich = movies.filter(m => !m.genre);
   let successCount = 0;
   let imdbSuccessCount = 0;
 
-  for (let i = 0; i < needsFullEnrich.length; i++) {
-    statusEl.textContent = `Matching ${i + 1} of ${needsFullEnrich.length}: ${needsFullEnrich[i].title}…`;
+  for (let i = 0; i < movies.length; i++) {
+    statusEl.textContent = `Re-matching ${i + 1} of ${movies.length}: ${movies[i].title}…`;
     try {
-      const enriched = await enrichOne(needsFullEnrich[i], tmdbKey, omdbKey);
-      const idx = movies.findIndex(m => m.id === needsFullEnrich[i].id);
-      if (idx !== -1) movies[idx] = enriched;
+      const reset = { ...movies[i], genre: null, posterUrl: null, year: null, overview: null,
+                       language: null, imdbId: null, imdbRating: null, omdbNote: null, mediaType: null };
+      let enriched = await matchOnTmdb(reset, tmdbKey);
+      if (enriched.genre && omdbKey) {
+        enriched = await retryOmdbOnly(enriched, omdbKey);
+      }
+      movies[i] = enriched;
       if (enriched.genre) successCount++;
       if (enriched.imdbRating) imdbSuccessCount++;
     } catch (e) {
-      console.error('Enrich failed for', needsFullEnrich[i].title, e);
+      console.error('Re-match failed for', movies[i].title, e);
     }
     await new Promise(r => setTimeout(r, 300));
-  }
-
-  // Pass 2: retry just the OMDb half for movies that already matched TMDB but
-  // never got a rating -- this is what actually lets fixing an API key (like
-  // the activation issue) retroactively fix everything that failed before,
-  // instead of those movies being silently skipped forever.
-  const needsOmdbRetry = movies.filter(m => m.genre && !m.imdbRating && m.imdbId && !isCollection(m));
-  let imdbRetrySuccessCount = 0;
-
-  if (omdbKey) {
-    for (let i = 0; i < needsOmdbRetry.length; i++) {
-      statusEl.textContent = `Retrying IMDB rating ${i + 1} of ${needsOmdbRetry.length}: ${needsOmdbRetry[i].title}…`;
-      const retried = await retryOmdbOnly(needsOmdbRetry[i], omdbKey);
-      const idx = movies.findIndex(m => m.id === needsOmdbRetry[i].id);
-      if (idx !== -1) movies[idx] = retried;
-      if (retried.imdbRating) imdbRetrySuccessCount++;
-      await new Promise(r => setTimeout(r, 300));
-    }
   }
 
   buildGenreFilter();
@@ -790,8 +804,7 @@ async function enrichAll() {
   render();
   localStorage.setItem('movie-cache', JSON.stringify(movies));
 
-  const totalImdbNow = movies.filter(m => m.imdbRating).length;
-  const summaryLine = `${successCount} of ${needsFullEnrich.length} new matches on TMDB. Retried IMDB for ${needsOmdbRetry.length} already-matched movies, ${imdbRetrySuccessCount} succeeded. ${totalImdbNow} of ${movies.length} total now have an IMDB rating.`;
+  const summaryLine = `Re-matched all ${movies.length}: ${successCount} matched on TMDB, ${imdbSuccessCount} got an IMDB rating.`;
   statusEl.textContent = `${summaryLine} Saving to GitHub…`;
 
   const ghOwner = localStorage.getItem('ghOwner');
@@ -805,11 +818,97 @@ async function enrichAll() {
       statusEl.textContent = `${summaryLine} GitHub save failed: ${e.message}`;
     }
   } else {
-    statusEl.textContent = `${summaryLine} Add GitHub details above to save this for next time.`;
+    statusEl.textContent = `${summaryLine} Add GitHub details above to save this.`;
   }
   updatePendingCount();
-
   btn.disabled = false;
+}
+
+// Step 1 of 2: TMDB matching only -- genre, poster, year, language. No IMDB rating
+// at all here; that's its own separate step below, so you can run/retry each half
+// independently instead of them being bundled into one combined action.
+async function matchAllOnTmdb() {
+  const tmdbKey = localStorage.getItem('tmdbKey');
+  const statusEl = document.getElementById('enrich-status');
+  const btn = document.getElementById('enrich-btn');
+  if (!tmdbKey) { statusEl.textContent = 'Add your TMDB key above first.'; return; }
+
+  btn.disabled = true;
+  const targets = movies.filter(m => !m.genre);
+  let successCount = 0;
+
+  for (let i = 0; i < targets.length; i++) {
+    statusEl.textContent = `Matching ${i + 1} of ${targets.length}: ${targets[i].title}…`;
+    try {
+      const enriched = await matchOnTmdb(targets[i], tmdbKey);
+      const idx = movies.findIndex(m => m.id === targets[i].id);
+      if (idx !== -1) movies[idx] = enriched;
+      if (enriched.genre) successCount++;
+    } catch (e) {
+      console.error('TMDB match failed for', targets[i].title, e);
+    }
+    await new Promise(r => setTimeout(r, 300));
+  }
+
+  buildGenreFilter();
+  buildLanguageFilter();
+  render();
+  localStorage.setItem('movie-cache', JSON.stringify(movies));
+
+  const summaryLine = `${successCount} of ${targets.length} matched on TMDB.`;
+  await saveAndReport(statusEl, summaryLine);
+  updatePendingCount();
+  btn.disabled = false;
+}
+
+// Step 2 of 2: fetch IMDB ratings for every movie that already has a TMDB match
+// but no rating yet -- run this any time (after fixing an API key, after running
+// Match All, or just to pick up ones that failed before) without re-doing the
+// TMDB matching work for movies that already succeeded at that part.
+async function fetchAllImdbRatings() {
+  const omdbKey = localStorage.getItem('omdbKey');
+  const statusEl = document.getElementById('imdb-fetch-status');
+  const btn = document.getElementById('imdb-fetch-btn');
+  if (!omdbKey) { statusEl.textContent = 'Add your OMDb key above first.'; return; }
+
+  btn.disabled = true;
+  const targets = movies.filter(m => m.genre && !m.imdbRating && m.imdbId && !isCollection(m));
+  let successCount = 0;
+
+  for (let i = 0; i < targets.length; i++) {
+    statusEl.textContent = `Fetching IMDB rating ${i + 1} of ${targets.length}: ${targets[i].title}…`;
+    const retried = await retryOmdbOnly(targets[i], omdbKey);
+    const idx = movies.findIndex(m => m.id === targets[i].id);
+    if (idx !== -1) movies[idx] = retried;
+    if (retried.imdbRating) successCount++;
+    await new Promise(r => setTimeout(r, 300));
+  }
+
+  render();
+  localStorage.setItem('movie-cache', JSON.stringify(movies));
+
+  const summaryLine = `${successCount} of ${targets.length} got an IMDB rating.`;
+  await saveAndReport(statusEl, summaryLine);
+  updatePendingCount();
+  btn.disabled = false;
+}
+
+// Shared GitHub-save-and-report tail used by all the bulk actions above.
+async function saveAndReport(statusEl, summaryLine) {
+  statusEl.textContent = `${summaryLine} Saving to GitHub…`;
+  const ghOwner = localStorage.getItem('ghOwner');
+  const ghRepo = localStorage.getItem('ghRepo');
+  const ghToken = localStorage.getItem('ghToken');
+  if (ghOwner && ghRepo && ghToken) {
+    try {
+      await saveToGitHub(ghOwner, ghRepo, ghToken, movies);
+      statusEl.textContent = `${summaryLine} Saved to GitHub.`;
+    } catch (e) {
+      statusEl.textContent = `${summaryLine} GitHub save failed: ${e.message}`;
+    }
+  } else {
+    statusEl.textContent = `${summaryLine} Add GitHub details above to save this for next time.`;
+  }
 }
 
 // ---- GitHub write-back (same Contents API approach as the Mac app) ----
