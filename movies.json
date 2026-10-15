@@ -3014,10 +3014,22 @@
     "isBoxSet": true,
     "includedMovies": [
       {
-        "title": "Ghost Rider"
+        "title": "Ghost Rider",
+        "matchNote": "Multiple movies share this title — choose manually"
       },
       {
-        "title": "Ghost Rider: Spirit of Vengeance"
+        "title": "Ghost Rider: Spirit of Vengeance",
+        "tmdbId": 71676,
+        "tmdbTitle": "Ghost Rider: Spirit of Vengeance",
+        "year": "2011",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/xEoBT6lYfQNpSpTm8gJMTrQytiw.jpg",
+        "language": "en",
+        "genre": "Action, Fantasy, Thriller",
+        "overview": "When the devil resurfaces with aims to take over the world in human form, Johnny Blaze reluctantly comes out of hiding to transform into the flame-spewing supernatural hero Ghost Rider -- and rescue a 10-year-old boy from an unsavory end.",
+        "imdbId": "tt1071875",
+        "matchNote": null,
+        "imdbRating": "4.4",
+        "omdbNote": null
       }
     ],
     "reviewStatus": "collection"
