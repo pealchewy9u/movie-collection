@@ -550,6 +550,12 @@ function renderSummary() {
   }
 
   const totalDiscs = movies.reduce((sum, m) => sum + (m.blurayDiscs || 0) + (m.dvdDiscs || 0), 0);
+  const boxSets = movies.filter(m => m.isBoxSet);
+  const singles = movies.filter(m => !m.isBoxSet);
+  const included = boxSets.flatMap(m => (m.includedMovies || []).map(f => typeof f === 'string' ? {title:f} : f));
+  const tvCount = singles.filter(m => effectiveMediaType(m) === 'tv').length + included.filter(f => effectiveMediaType(f) === 'tv').length;
+  const filmCount = singles.filter(m => effectiveMediaType(m) !== 'tv').length + included.filter(f => effectiveMediaType(f) !== 'tv').length;
+  const incompleteBoxes = boxSets.filter(m => !(m.includedMovies || []).length).length;
 
   // Helper to build one "N of total, biggest bar first" breakdown section.
   function breakdownSection(title, counts) {
@@ -568,7 +574,7 @@ function renderSummary() {
 
   const languageCounts = {};
   movies.forEach(m => {
-    const l = m.language ? languageName(m.language) : 'Not enriched yet';
+    const l = m.language ? languageName(m.language) : 'Language not recorded';
     languageCounts[l] = (languageCounts[l] || 0) + 1;
   });
 
@@ -580,12 +586,14 @@ function renderSummary() {
 
   const genreCounts = {};
   movies.forEach(m => {
-    const g = m.genre || 'Not enriched yet';
+    const g = m.genre || 'Genre not recorded';
     genreCounts[g] = (genreCounts[g] || 0) + 1;
   });
 
   container.innerHTML = `
-    <div class="summary-total">${movies.length} movie${movies.length === 1 ? '' : 's'} total · ${totalDiscs} discs</div>
+    <div class="summary-total"><strong>${filmCount} movies · ${tvCount} TV shows across ${movies.length} collection items</strong></div>
+    <p class="manager-small">${boxSets.length} box sets · ${totalDiscs} physical discs. Films listed inside box sets are counted individually, while each box set remains one physical item.${incompleteBoxes ? ` ${incompleteBoxes} box set(s) have no included titles yet, so the movie count is incomplete.` : ''}</p>
+    <p class="manager-small">Language and genre counts below describe physical collection entries. "Not recorded" indicates missing metadata, not necessarily an unmatched movie.</p>
     ${breakdownSection('By Language', languageCounts)}
     ${breakdownSection('By Format', formatCounts)}
     ${breakdownSection('By Genre', genreCounts)}
@@ -1155,10 +1163,6 @@ function openDetail(id) {
     <div class="detail-hero">${coverHtml(m, 'sheet-cover', 'sheet-cover')}<div class="detail-hero-text"><div class="sheet-title">${escapeHtml(m.title || 'Untitled')}</div><div class="sheet-studio">${escapeHtml(m.studio || '')}</div><div class="detail-chips"><span>${isUHD(m)?'4K UHD':'Blu-ray'}</span>${m.year?`<span>${escapeHtml(m.year)}</span>`:''}${m.language?`<span>${escapeHtml(languageName(m.language))}</span>`:''}${m.imdbRating?`<span>★ ${escapeHtml(m.imdbRating)}</span>`:''}</div></div></div>
     ${includedFilmCards(m)}
     <div id="film-correction-panel" style="display:none;margin-top:12px;padding:12px;border:1px solid var(--groove);background:var(--surface);border-radius:10px"></div>
-    ${(!m.isBoxSet && (!m.language || (m.language && !['en','hi'].includes(m.language) && !m.languageOverride))) ? `    <details class="collection-editor" style="margin-top:12px"><summary>Correct movie language ${m.languageOverride?'(manually set)':''}</summary>
-      <div style="padding:12px"><p class="manager-small">This is the movie's original language. A manual selection is protected from future TMDB and barcode refreshes.</p>
-      <select id="language-correction">${[['','Select language'],['en','English'],['hi','Hindi'],['pa','Punjabi'],['ta','Tamil'],['te','Telugu'],['bn','Bengali'],['fr','French'],['es','Spanish'],['ja','Japanese'],['ko','Korean'],['zh','Chinese'],['de','German'],['other','Other / unknown']].map(([code,name])=>`<option value="${code}" ${(m.languageOverride||m.language)===code?'selected':''}>${name}</option>`).join('')}</select>
-      <button class="manager-btn" onclick="saveMovieLanguage('${m.id}')">Save language</button><p class="manager-small" id="language-save-status"></p></div></details>` : ''}
     <div class="sheet-fields">
       <div><div class="field-label">Type</div><div class="field-value">${effectiveMediaType(m) === 'tv' ? 'TV Show' : 'Movie'}</div></div>
       <div><div class="field-label">Format</div><div class="field-value">${isUHD(m) ? '4K UHD' : 'Blu-ray'}</div></div>
@@ -1176,10 +1180,10 @@ function openDetail(id) {
     ${m.enrichNote && !isHistoricalLookupError(m) ? `<div style="margin-top:14px; padding:8px 10px; background:var(--surface-raised); border-radius:8px; font-size:12px;">⚠ ${escapeHtml(m.enrichNote)}. If Blu-ray.com's title doesn't match how TMDB lists it, try typing the correct title below.</div>` : ''}
     ${m.isBoxSet ? `    <details class="collection-editor collection-edit-small"><summary>${m.isBoxSet?'Edit collection details / cover':'Mark as box set'}</summary><div style="margin-top:12px;padding:12px;background:var(--surface);border-radius:10px;border:1px solid var(--groove)"><b>Collection / Box Set</b><p class="manager-small">Automatically detects movies separated by / in the title. For franchise box sets, searches TMDB collections. Review suggestions before saving.</p><input id="boxset-search" type="text" value="${escapeHtml(m.title||'')}" placeholder="Collection or franchise name" style="width:100%;padding:8px;border:1px solid var(--groove);border-radius:7px;margin-bottom:8px"><button class="manager-btn secondary" onclick="suggestBoxSet('${m.id}')">Find included movies automatically</button><div id="boxset-suggestions" style="margin-top:8px"></div><label style="font-size:12px"><input type="checkbox" id="boxset-check" ${m.isBoxSet?'checked':''}> This is a multi-movie collection</label><label class="manager-small" style="display:block;margin-top:9px">Original box-set cover URL (optional; use https://)</label><input id="boxset-cover-url" type="url" value="${escapeHtml(m.boxCoverUrl||'')}" placeholder="https://.../original-box-cover.jpg" style="width:100%;padding:8px;border:1px solid var(--groove);border-radius:7px;margin:5px 0"><div class="cover-upload-zone" id="cover-upload-zone" tabindex="0" aria-label="Paste or upload a box-set cover image"><b style="font-size:12px">Box-set cover photo</b><p class="manager-small">Paste an image here (Ctrl+V / Cmd+V), or choose a photo from your device.</p><div class="cover-upload-buttons"><input id="boxset-cover-file" type="file" accept="image/*" aria-label="Choose cover photo"><button type="button" class="manager-btn secondary" id="cover-paste-focus">Paste image</button></div><img class="cover-preview" id="boxset-cover-preview" alt="New box-set cover preview"><p class="manager-small" id="cover-upload-status">An uploaded photo will be saved to GitHub when you tap Save collection.</p></div><p class="manager-small">When no original cover is supplied, the app displays a collage of included posters.</p><textarea id="boxset-films" rows="3" placeholder="One film per line" style="width:100%;margin-top:8px;border:1px solid var(--groove);border-radius:7px;padding:8px">${escapeHtml((m.includedMovies||[]).map(f=>typeof f==='string'?f:f.title).join('\n'))}</textarea><button class="manager-btn" onclick="saveBoxSet('${m.id}')">Save collection</button><p id="boxset-status" class="manager-small"></p></div></details>` : ''}
     ${!m.isBoxSet ? `<details class="collection-editor collection-edit-small"><summary>More editing options</summary><div style="padding:0 12px 12px">
-      ${m.languageOverride || (m.language && ['en','hi'].includes(m.language)) ? `    <details class="collection-editor" style="margin-top:12px"><summary>Correct movie language ${m.languageOverride?'(manually set)':''}</summary>
+      ${`    <details class="collection-editor" style="margin-top:12px"><summary>Correct movie language ${m.languageOverride?'(manually set)':''}</summary>
       <div style="padding:12px"><p class="manager-small">This is the movie's original language. A manual selection is protected from future TMDB and barcode refreshes.</p>
       <select id="language-correction">${[['','Select language'],['en','English'],['hi','Hindi'],['pa','Punjabi'],['ta','Tamil'],['te','Telugu'],['bn','Bengali'],['fr','French'],['es','Spanish'],['ja','Japanese'],['ko','Korean'],['zh','Chinese'],['de','German'],['other','Other / unknown']].map(([code,name])=>`<option value="${code}" ${(m.languageOverride||m.language)===code?'selected':''}>${name}</option>`).join('')}</select>
-      <button class="manager-btn" onclick="saveMovieLanguage('${m.id}')">Save language</button><p class="manager-small" id="language-save-status"></p></div></details>` : ''}
+      <button class="manager-btn" onclick="saveMovieLanguage('${m.id}')">Save language</button><p class="manager-small" id="language-save-status"></p></div></details>`}
           <details class="collection-editor collection-edit-small"><summary>${m.isBoxSet?'Edit collection details / cover':'Mark as box set'}</summary><div style="margin-top:12px;padding:12px;background:var(--surface);border-radius:10px;border:1px solid var(--groove)"><b>Collection / Box Set</b><p class="manager-small">Automatically detects movies separated by / in the title. For franchise box sets, searches TMDB collections. Review suggestions before saving.</p><input id="boxset-search" type="text" value="${escapeHtml(m.title||'')}" placeholder="Collection or franchise name" style="width:100%;padding:8px;border:1px solid var(--groove);border-radius:7px;margin-bottom:8px"><button class="manager-btn secondary" onclick="suggestBoxSet('${m.id}')">Find included movies automatically</button><div id="boxset-suggestions" style="margin-top:8px"></div><label style="font-size:12px"><input type="checkbox" id="boxset-check" ${m.isBoxSet?'checked':''}> This is a multi-movie collection</label><label class="manager-small" style="display:block;margin-top:9px">Original box-set cover URL (optional; use https://)</label><input id="boxset-cover-url" type="url" value="${escapeHtml(m.boxCoverUrl||'')}" placeholder="https://.../original-box-cover.jpg" style="width:100%;padding:8px;border:1px solid var(--groove);border-radius:7px;margin:5px 0"><div class="cover-upload-zone" id="cover-upload-zone" tabindex="0" aria-label="Paste or upload a box-set cover image"><b style="font-size:12px">Box-set cover photo</b><p class="manager-small">Paste an image here (Ctrl+V / Cmd+V), or choose a photo from your device.</p><div class="cover-upload-buttons"><input id="boxset-cover-file" type="file" accept="image/*" aria-label="Choose cover photo"><button type="button" class="manager-btn secondary" id="cover-paste-focus">Paste image</button></div><img class="cover-preview" id="boxset-cover-preview" alt="New box-set cover preview"><p class="manager-small" id="cover-upload-status">An uploaded photo will be saved to GitHub when you tap Save collection.</p></div><p class="manager-small">When no original cover is supplied, the app displays a collage of included posters.</p><textarea id="boxset-films" rows="3" placeholder="One film per line" style="width:100%;margin-top:8px;border:1px solid var(--groove);border-radius:7px;padding:8px">${escapeHtml((m.includedMovies||[]).map(f=>typeof f==='string'?f:f.title).join('\n'))}</textarea><button class="manager-btn" onclick="saveBoxSet('${m.id}')">Save collection</button><p id="boxset-status" class="manager-small"></p></div></details>
     </div></details>` : ''}
     <div style="margin-top:12px;">
