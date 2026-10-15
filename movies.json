@@ -7361,13 +7361,46 @@
     "isBoxSet": true,
     "includedMovies": [
       {
-        "title": "The Smurfs"
+        "title": "The Smurfs",
+        "tmdbId": 41513,
+        "tmdbTitle": "The Smurfs",
+        "year": "2011",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/vRhnslP2gW0QDym7BsMeSuioUfK.jpg",
+        "language": "en",
+        "genre": "Animation, Family, Adventure, Comedy, Fantasy",
+        "overview": "When the evil wizard Gargamel chases the tiny blue Smurfs out of their village, they tumble from their magical world and into ours -- in fact, smack dab in the middle of Central Park. Just three apples high and stuck in the Big Apple, the Smurfs must find a way to get back to their village before Gargamel tracks them down.",
+        "imdbId": "tt0472181",
+        "matchNote": null,
+        "imdbRating": "5.4",
+        "omdbNote": null
       },
       {
-        "title": "The Smurfs 2"
+        "title": "The Smurfs 2",
+        "tmdbId": 77931,
+        "tmdbTitle": "The Smurfs 2",
+        "year": "2013",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/tmjvgbEH4BKYFfHmWXjXrHgi8wT.jpg",
+        "language": "en",
+        "genre": "Fantasy, Family, Comedy, Animation",
+        "overview": "The evil wizard Gargamel creates a couple of mischievous Smurf-like creatures called the Naughties that he hopes will let him harness the all-powerful, magical Smurf-essence. But when he discovers that only a real Smurf can give him what he wants, and only a secret spell that Smurfette knows can turn the Naughties into real Smurfs, Gargamel kidnaps Smurfette and brings her to Paris, where he has been winning the adoration of millions as the world¹s greatest sorcerer. It's up to Papa, Clumsy, Grouchy, and Vanity to return to our world, reunite with their human friends Patrick and Grace Winslow, and rescue her! Will Smurfette, who has always felt different from the other Smurfs, find a new connection with the Naughties Vexy and Hackus or will the Smurfs convince her that their love for her is True Blue?",
+        "imdbId": "tt2017020",
+        "matchNote": null,
+        "imdbRating": "5.3",
+        "omdbNote": null
       },
       {
-        "title": "Smurfs: The Lost Village"
+        "title": "Smurfs: The Lost Village",
+        "tmdbId": 137116,
+        "tmdbTitle": "Smurfs: The Lost Village",
+        "year": "2017",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/swt9crREg1UcKgg3wGWfoFNlXOz.jpg",
+        "language": "en",
+        "genre": "Family, Comedy, Adventure, Animation",
+        "overview": "In this fully animated, all-new take on the Smurfs, a mysterious map sets Smurfette and her friends Brainy, Clumsy and Hefty on an exciting race through the Forbidden Forest leading to the discovery of the biggest secret in Smurf history.",
+        "imdbId": "tt2398241",
+        "matchNote": null,
+        "imdbRating": "6.0",
+        "omdbNote": null
       }
     ],
     "reviewStatus": "collection"
