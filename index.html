@@ -185,6 +185,10 @@
   .exact-direct{margin-top:12px;font-size:12px;color:var(--text-muted)}
   .exact-direct input{flex:1;min-width:150px}
   @media(max-width:480px){.exact-fields{grid-template-columns:1fr 1fr}.exact-search{padding:10px}}
+.manager-clean{padding:14px 16px}.manager-clean .manager-item-head{align-items:center}.manager-clean .manager-btn{flex-shrink:0}
+.issue-list{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}.issue-list span{font-size:11px;color:#915400;background:#fff0d0;border-radius:5px;padding:4px 7px}
+.manager-sync{font-size:12px;color:var(--text-muted);padding:10px 0;border-bottom:1px solid var(--groove)}
+.manager-stats{grid-template-columns:repeat(3,minmax(0,1fr))}@media(max-width:560px){.manager-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 </head>
 <body>
@@ -563,57 +567,79 @@ function renderSummary() {
   `;
 }
 
-// Data quality status is intentionally conservative: API success is not human confirmation.
-let managerFilter = 'review';
-let managerSearch = '';
-function dataIssues(m) {
-  const issues = [];
-  if (m.isBoxSet) return m.includedMovies?.length ? (m.includedMovies.some(f=>f.matchNote)?['Review included movies']:[]) : ['Add included films'];
-  if (!m.genre && !m.imdbId && !m.posterUrl) issues.push('No successful match');
-  if (m.language && !['en','hi'].includes(m.language)) issues.push('Unexpected language: ' + languageName(m.language));
-  if (m.enrichNote && !m.genre) issues.push('Match error');
-  if (m.genre && !m.posterUrl) issues.push('Missing poster');
-  if (m.genre && !m.imdbRating && !isCollection(m)) issues.push('Missing IMDb rating');
+// Dashboard separates inventory counts from actionable data-quality issues.
+let managerFilter='attention', managerSearch='';
+function dataIssues(m){
+  const issues=[];
+  if(m.isBoxSet){
+    if(!(m.includedMovies||[]).length)issues.push('Collection has no included movies');
+    else if(m.includedMovies.some(f=>typeof f==='string'||f.matchNote||!f.tmdbId))issues.push('Some included movies need matching');
+    return issues;
+  }
+  if(!m.genre&&!m.imdbId&&!m.posterUrl)issues.push('No movie match');
+  if(m.language && !['en','hi'].includes(m.language) && !m.languageOverride)issues.push('Check language: '+languageName(m.language));
+  if(m.genre&&!m.posterUrl)issues.push('Missing poster');
+  if(!m.imdbRating)issues.push('Missing IMDb rating');
+  if(m.enrichNote&&!m.genre)issues.push('Match lookup failed');
   return issues;
 }
-function matchStatus(m) {
-  if (m.isBoxSet) return 'collection';
-  if (m.reviewStatus === 'confirmed') return 'confirmed';
-  if (!m.genre && !m.imdbId && !m.posterUrl) return 'unmatched';
-  if (dataIssues(m).length) return 'review';
-  return 'matched';
+function matchStatus(m){
+  if(m.isBoxSet)return 'collection';
+  if(m.reviewStatus==='confirmed')return 'confirmed';
+  if(!m.genre&&!m.imdbId&&!m.posterUrl)return 'unmatched';
+  return dataIssues(m).length?'review':'matched';
 }
-function renderManager() {
-  const el = document.getElementById('manager-view');
-  const counts = {confirmed:0, matched:0, review:0, unmatched:0, collection:0};
-  movies.forEach(m => counts[matchStatus(m)]++);
-  const shown = movies.filter(m => (managerFilter === 'all' || matchStatus(m) === managerFilter) &&
-    (!managerSearch || [m.title,m.studio,m.tmdbTitle].join(' ').toLowerCase().includes(managerSearch.toLowerCase())));
-  el.innerHTML = `
-    <h2 style="font-size:19px;margin:0 0 5px">Movie Data Manager</h2>
-    <p class="manager-small">API matches are provisional until you confirm them. Fix suspicious titles without changing your original Blu-ray.com title.</p>
-    <div class="manager-stats">
-      <div class="manager-stat"><strong>${movies.length}</strong><span>Total movies</span></div>
-      <div class="manager-stat"><strong>${counts.confirmed}</strong><span>Manually confirmed</span></div>
-      <div class="manager-stat"><strong>${counts.review}</strong><span>Needs review / incomplete</span></div>
-      <div class="manager-stat"><strong>${counts.unmatched}</strong><span>Unmatched</span></div><div class="manager-stat"><strong>${counts.collection}</strong><span>Box sets / collections</span></div>
-    </div>
-    <p class="manager-small" id="sync-status">${Object.keys(JSON.parse(localStorage.getItem('movie-pending-edits')||'{}')).length} local changes waiting for GitHub sync. <button class="manager-btn secondary" onclick="syncPendingEdits()">Sync pending changes</button></p><p class="manager-small">${movies.filter(m=>m.matchedVia==='upcmdb').length} barcode-sourced · ${movies.filter(m=>m.genre && m.matchedVia!=='upcmdb').length} other matches · ${movies.filter(m=>m.imdbRating).length} with IMDb ratings</p>
-    <div class="manager-controls"><select id="manager-filter">
-      ${[['review','Needs review'],['unmatched','Unmatched'],['collection','Collections'],['matched','Provisional matches'],['confirmed','Confirmed'],['all','All movies']].map(([v,l])=>`<option value="${v}" ${managerFilter===v?'selected':''}>${l}</option>`).join('')}
-    </select></div>
-    <div class="search-row"><span>🔍</span><input id="manager-search" placeholder="Find a movie…" value="${escapeHtml(managerSearch)}"></div>
-    <p class="manager-small">Showing ${shown.length} movies. Check the original title against the matched title, language and artwork.</p>
+function renderManager(){
+  const el=document.getElementById('manager-view');
+  const collections=movies.filter(m=>m.isBoxSet), singles=movies.filter(m=>!m.isBoxSet);
+  const tv=singles.filter(m=>effectiveMediaType(m)==='tv');
+  const films=singles.filter(m=>effectiveMediaType(m)!=='tv');
+  const attention=movies.filter(m=>dataIssues(m).length);
+  const shown=movies.filter(m=>{
+    if(managerFilter==='attention'&&!dataIssues(m).length)return false;
+    if(managerFilter==='collection'&&!m.isBoxSet)return false;
+    if(managerFilter==='movie'&&(m.isBoxSet||effectiveMediaType(m)==='tv'))return false;
+    if(managerFilter==='tv'&&(m.isBoxSet||effectiveMediaType(m)!=='tv'))return false;
+    if(managerFilter==='confirmed'&&m.reviewStatus!=='confirmed')return false;
+    return !managerSearch||[m.title,m.tmdbTitle,m.studio].join(' ').toLowerCase().includes(managerSearch.toLowerCase());
+  }).sort((a,b)=>dataIssues(b).length-dataIssues(a).length||(a.title||'').localeCompare(b.title||''));
+  const stats=[['Collection entries',movies.length],['Individual movies',films.length],['TV shows',tv.length],['Box sets',collections.length],['Need attention',attention.length],['IMDb ratings',movies.filter(m=>m.imdbRating).length]];
+  el.innerHTML=`<h2 style="font-size:20px;margin:0 0 5px">Collection overview</h2>
+    <p class="manager-small" style="margin-bottom:14px">Physical collection entries are counted once. Movies inside box sets are not counted as separate entries.</p>
+    <div class="manager-stats">${stats.map(([label,n])=>`<div class="manager-stat"><strong>${n}</strong><span>${label}</span></div>`).join('')}</div>
+    <div class="manager-sync" id="sync-status">${Object.keys(pendingEdits()).length} local edits pending · <button class="manager-btn secondary" id="sync-now">Sync with GitHub</button></div>
+    <h3 style="font-size:17px;margin:24px 0 6px">Needs attention</h3>
+    <p class="manager-small">Only items with missing or suspicious information appear here. An API match does not automatically mean a verified match.</p>
+    <div class="manager-controls"><select id="manager-filter">${[['attention','Needs attention'],['movie','Individual movies'],['tv','TV shows'],['collection','Box sets'],['confirmed','Manually confirmed'],['all','All entries']].map(([v,l])=>`<option value="${v}" ${managerFilter===v?'selected':''}>${l}</option>`).join('')}</select></div>
+    <div class="search-row"><span>🔍</span><input id="manager-search" placeholder="Search your collection" value="${escapeHtml(managerSearch)}"></div>
+    <p class="manager-small">Showing ${shown.length} entries</p>
     <div id="manager-items">${shown.map(m=>{
-      const status=matchStatus(m), issues=dataIssues(m);
-      const label={confirmed:'Confirmed',matched:'Provisional',review:'Review',unmatched:'No match',collection:'Collection'}[status];
-      const tone=status==='confirmed'?'good':status==='unmatched'?'bad':status==='review'?'warn':'';
-      return `<div class="manager-item"><div class="manager-item-head"><div style="min-width:0"><div class="manager-item-title">${escapeHtml(m.title||'Untitled')}</div><div class="manager-small">Matched: ${escapeHtml(m.tmdbTitle||'Not recorded')} · ${escapeHtml(m.year||'Year unknown')} · ${escapeHtml(m.language?languageName(m.language):'Language unknown')}</div><div class="manager-small">Source: ${escapeHtml(m.matchedVia==='upcmdb'?'UPCMDB barcode':m.genre?'TMDB / legacy':'None')} · IMDb: ${escapeHtml(m.imdbRating||'Missing')}</div>${issues.length?`<div class="manager-small" style="color:#A65B13">⚠ ${escapeHtml(issues.join(' · '))}</div>`:''}</div><span class="manager-tag ${tone}">${label}</span></div><button class="manager-btn" data-fix="${escapeHtml(m.id)}">Review / Correct</button></div>`;
-    }).join('') || '<p class="empty-state">No movies in this category.</p>'}</div>`;
-  el.querySelector('#sync-status button').onclick=async()=>{const e=el.querySelector('#sync-status');e.textContent='Syncing…';try{e.textContent=await syncPendingEdits();}catch(err){e.textContent='Not synced: '+err.message;}};
+      const issues=dataIssues(m);
+      return `<div class="manager-item manager-clean"><div class="manager-item-head"><div style="min-width:0;flex:1"><div class="manager-item-title">${escapeHtml(m.title||'Untitled')}</div><div class="manager-small">${escapeHtml(m.tmdbTitle||'No matched title')} · ${escapeHtml(m.year||'Year unknown')} · ${escapeHtml(m.language?languageName(m.language):'Language unknown')}</div>
+      ${issues.length?`<div class="issue-list">${issues.map(x=>`<span>${escapeHtml(x)}</span>`).join('')}</div>`:'<div class="manager-small">No current data-quality warnings</div>'}</div><button class="manager-btn" data-fix="${escapeHtml(m.id)}">${issues.length?'Fix':'View'}</button></div></div>`;
+    }).join('')||'<p class="empty-state">Nothing needs attention in this view.</p>'}</div>`;
+  el.querySelector('#sync-now').onclick=async()=>{const e=el.querySelector('#sync-status');e.textContent='Syncing…';try{e.textContent=await syncPendingEdits();}catch(err){e.textContent='Not synced: '+err.message;}};
   el.querySelector('#manager-filter').onchange=e=>{managerFilter=e.target.value;renderManager();};
-  el.querySelector('#manager-search').oninput=e=>{managerSearch=e.target.value; const pos=e.target.selectionStart; renderManager();const input=document.getElementById('manager-search');input.focus();input.setSelectionRange(pos,pos);};
+  el.querySelector('#manager-search').oninput=e=>{managerSearch=e.target.value;const pos=e.target.selectionStart;renderManager();const input=document.getElementById('manager-search');input.focus();input.setSelectionRange(pos,pos);};
   el.querySelectorAll('[data-fix]').forEach(b=>b.onclick=()=>openDetail(b.dataset.fix));
+}
+
+// A user-chosen language is authoritative until explicitly changed again.
+function preserveLanguageOverride(item){
+  if(item.languageOverride)item.language=item.languageOverride;
+  return item;
+}
+async function saveMovieLanguage(id){
+  const m=movies.find(x=>x.id===id),select=document.getElementById('language-correction');
+  const status=document.getElementById('language-save-status');
+  if(!m||!select)return;
+  if(!select.value){status.textContent='Choose a language first.';return;}
+  m.languageOverride=select.value;
+  m.language=select.value;
+  m.languageReviewedAt=new Date().toISOString();
+  markPending(m);buildLanguageFilter();render();
+  await persistManualEdit(m,status);
+  // Keep the editor visible after saving without changing the user's selection.
 }
 
 function markPending(m) {
@@ -962,6 +988,7 @@ async function chooseCandidate(id,c) {
     const m=movies[idx];
     const imdbId=type==='tv'?(await (await fetch(`https://api.themoviedb.org/3/tv/${c.id}/external_ids?api_key=${encodeURIComponent(key)}`)).json()).imdb_id:detail.imdb_id;
     movies[idx]={...m,mediaType:type,tmdbId:c.id,tmdbTitle:c.title||c.name,genre:(c.genre_ids||[]).map(g=>genres[g]).filter(Boolean)[0]||null,posterUrl:c.poster_path?'https://image.tmdb.org/t/p/w500'+c.poster_path:null,year:(c.release_date||c.first_air_date||'').slice(0,4)||null,overview:c.overview||null,language:c.original_language||null,imdbId:imdbId||null,imdbRating:null,omdbNote:null,enrichNote:null,matchedVia:'tmdb-manual',reviewStatus:'confirmed',reviewedAt:new Date().toISOString()};
+    preserveLanguageOverride(movies[idx]);
     const omdb=localStorage.getItem('omdbKey');if(omdb&&movies[idx].imdbId&&!isCollection(movies[idx]))movies[idx]=await retryOmdbOnly(movies[idx],omdb);
     localStorage.setItem('movie-cache',JSON.stringify(movies));buildGenreFilter();buildLanguageFilter();render();openDetail(id);
     const status=document.getElementById('review-status');
@@ -978,6 +1005,10 @@ function openDetail(id) {
     <div class="detail-hero">${coverHtml(m, 'sheet-cover', 'sheet-cover')}<div class="detail-hero-text"><div class="sheet-title">${escapeHtml(m.title || 'Untitled')}</div><div class="sheet-studio">${escapeHtml(m.studio || '')}</div><div class="detail-chips"><span>${isUHD(m)?'4K UHD':'Blu-ray'}</span>${m.year?`<span>${escapeHtml(m.year)}</span>`:''}${m.language?`<span>${escapeHtml(languageName(m.language))}</span>`:''}${m.imdbRating?`<span>★ ${escapeHtml(m.imdbRating)}</span>`:''}</div></div></div>
     ${includedFilmCards(m)}
     <div id="film-correction-panel" style="display:none;margin-top:12px;padding:12px;border:1px solid var(--groove);background:var(--surface);border-radius:10px"></div>
+    <details class="collection-editor" style="margin-top:12px"><summary>Correct movie language ${m.languageOverride?'(manually set)':''}</summary>
+      <div style="padding:12px"><p class="manager-small">This is the movie's original language. A manual selection is protected from future TMDB and barcode refreshes.</p>
+      <select id="language-correction">${[['','Select language'],['en','English'],['hi','Hindi'],['pa','Punjabi'],['ta','Tamil'],['te','Telugu'],['bn','Bengali'],['fr','French'],['es','Spanish'],['ja','Japanese'],['ko','Korean'],['zh','Chinese'],['de','German'],['other','Other / unknown']].map(([code,name])=>`<option value="${code}" ${(m.languageOverride||m.language)===code?'selected':''}>${name}</option>`).join('')}</select>
+      <button class="manager-btn" onclick="saveMovieLanguage('${m.id}')">Save language</button><p class="manager-small" id="language-save-status"></p></div></details>
     <div class="sheet-fields">
       <div><div class="field-label">Type</div><div class="field-value">${effectiveMediaType(m) === 'tv' ? 'TV Show' : 'Movie'}</div></div>
       <div><div class="field-label">Format</div><div class="field-value">${isUHD(m) ? '4K UHD' : 'Blu-ray'}</div></div>
@@ -1036,7 +1067,7 @@ async function rematchOne(id) {
     if (enriched.genre && omdbKey) {
       enriched = await retryOmdbOnly(enriched, omdbKey);
     }
-    movies[idx] = enriched;
+    movies[idx] = preserveLanguageOverride(enriched);
     localStorage.setItem('movie-cache', JSON.stringify(movies));
     buildGenreFilter();
     buildLanguageFilter();
@@ -1377,7 +1408,7 @@ async function rematchAll() {
       if (enriched.genre && omdbKey) {
         enriched = await retryOmdbOnly(enriched, omdbKey);
       }
-      movies[i] = enriched;
+      movies[i] = preserveLanguageOverride(enriched);
       if (enriched.genre) successCount++;
       if (enriched.imdbRating) imdbSuccessCount++;
     } catch (e) {
@@ -1454,7 +1485,7 @@ async function matchAllViaUpcmdb() {
     try {
       const matched = await matchViaUpcmdb(targets[i], upcmdbKey);
       const idx = movies.findIndex(m => m.id === targets[i].id);
-      if (idx !== -1) movies[idx] = matched;
+      if (idx !== -1) movies[idx] = preserveLanguageOverride(matched);
       if (matched.genre || matched.imdbRating) successCount++;
     } catch (e) {
       console.error('UPCMDB match failed for', targets[i].title, e);
@@ -1489,7 +1520,7 @@ async function matchAllOnTmdb() {
       const enriched = await matchOnTmdb(targets[i], tmdbKey);
       enriched.matchedVia = 'tmdb';
       const idx = movies.findIndex(m => m.id === targets[i].id);
-      if (idx !== -1) movies[idx] = enriched;
+      if (idx !== -1) movies[idx] = preserveLanguageOverride(enriched);
       if (enriched.genre) successCount++;
     } catch (e) {
       console.error('TMDB match failed for', targets[i].title, e);
@@ -1512,32 +1543,54 @@ async function matchAllOnTmdb() {
 // but no rating yet -- run this any time (after fixing an API key, after running
 // Match All, or just to pick up ones that failed before) without re-doing the
 // TMDB matching work for movies that already succeeded at that part.
-async function fetchAllImdbRatings() {
-  const omdbKey = localStorage.getItem('omdbKey');
-  const statusEl = document.getElementById('imdb-fetch-status');
-  const btn = document.getElementById('imdb-fetch-btn');
-  if (!omdbKey) { statusEl.textContent = 'Add your OMDb key above first.'; return; }
-
-  btn.disabled = true;
-  const targets = movies.filter(m => m.genre && !m.imdbRating && m.imdbId && !isCollection(m));
-  let successCount = 0;
-
-  for (let i = 0; i < targets.length; i++) {
-    statusEl.textContent = `Fetching IMDB rating ${i + 1} of ${targets.length}: ${targets[i].title}…`;
-    const retried = await retryOmdbOnly(targets[i], omdbKey);
-    const idx = movies.findIndex(m => m.id === targets[i].id);
-    if (idx !== -1) movies[idx] = retried;
-    if (retried.imdbRating) successCount++;
-    await new Promise(r => setTimeout(r, 300));
-  }
-
-  render();
-  localStorage.setItem('movie-cache', JSON.stringify(movies));
-
-  const summaryLine = `${successCount} of ${targets.length} got an IMDB rating.`;
-  await saveAndReport(statusEl, summaryLine);
-  updatePendingCount();
-  btn.disabled = false;
+async function fetchAllImdbRatings(){
+  const omdb=localStorage.getItem('omdbKey'),key=localStorage.getItem('tmdbKey');
+  const status=document.getElementById('imdb-fetch-status'),btn=document.getElementById('imdb-fetch-btn');
+  if(!omdb){status.textContent='Add your OMDb key in Settings first.';return;}
+  const targets=movies.filter(m=>!m.isBoxSet&&!m.imdbRating);
+  btn.disabled=true;
+  let found=0,unresolved=0;
+  try{
+    for(let i=0;i<targets.length;i++){
+      const m=movies.find(x=>x.id===targets[i].id);
+      status.textContent=`Checking IMDb ${i+1}/${targets.length}: ${m.title}`;
+      try{
+        // Retrieve a missing IMDb ID by known TMDB ID without replacing movie metadata.
+        if(!m.imdbId&&m.tmdbId&&key){
+          const type=effectiveMediaType(m);
+          const path=type==='tv'?`tv/${m.tmdbId}/external_ids`:`movie/${m.tmdbId}`;
+          const r=await fetch(`https://api.themoviedb.org/3/${path}?api_key=${encodeURIComponent(key)}`);
+          if(r.ok)m.imdbId=(await r.json()).imdb_id||null;
+        }
+        // Without IDs, try TMDB title search, but only accept a unique exact-title
+        // match; never replace posters or other confirmed metadata.
+        if(!m.imdbId&&!m.tmdbId&&key&&m.title&&!m.isBoxSet){
+          const query=cleanTitleForSearch(m.title);
+          const type=effectiveMediaType(m);
+          const r=await fetch(`https://api.themoviedb.org/3/search/${type}?api_key=${encodeURIComponent(key)}&query=${encodeURIComponent(query)}`);
+          if(r.ok){
+            const data=await r.json(),norm=normalizeFilmTitle(query);
+            const matches=(data.results||[]).filter(c=>normalizeFilmTitle(c.title||c.name)===norm);
+            if(matches.length===1){
+              const c=matches[0],path=type==='tv'?`tv/${c.id}/external_ids`:`movie/${c.id}`;
+              const d=await fetch(`https://api.themoviedb.org/3/${path}?api_key=${encodeURIComponent(key)}`);
+              if(d.ok){m.imdbId=(await d.json()).imdb_id||null;m.tmdbId=c.id;}
+            }
+          }
+        }
+        if(m.imdbId){
+          const updated=await retryOmdbOnly(m,omdb);
+          Object.assign(m,updated);
+          if(m.imdbRating)found++;else unresolved++;
+        }else unresolved++;
+        markPending(m);
+      }catch(e){unresolved++;console.warn('IMDb lookup issue',m.title,e);}
+      await new Promise(r=>setTimeout(r,250));
+    }
+    const result=await syncPendingEdits().catch(e=>'Saved locally, not on GitHub: '+e.message);
+    status.textContent=`${found} ratings added; ${unresolved} still unresolved. ${result}`;
+    render();
+  }finally{btn.disabled=false;updatePendingCount();}
 }
 
 // Shared GitHub-save-and-report tail used by all the bulk actions above.
