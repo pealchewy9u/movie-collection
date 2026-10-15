@@ -606,6 +606,48 @@ async function persistManualEdit(m,status) {
   try { const result=await syncPendingEdits();if(status)status.textContent=result; }
   catch(e) { if(status)status.textContent='Saved locally, NOT on GitHub: '+e.message+' Your changes are retained on this device. Use Data Manager → Sync pending changes.'; }
 }
+// Find a TMDB collection by its name and suggest its member films.
+// Suggestions are never committed until the user reviews and saves them.
+async function suggestBoxSet(id) {
+  const m=movies.find(x=>x.id===id),key=localStorage.getItem('tmdbKey');
+  const out=document.getElementById('boxset-suggestions');
+  if(!m||!out)return;
+  if(!key){out.textContent='Add your TMDB API key in Settings first.';return;}
+  const input=document.getElementById('boxset-search');
+  const query=(input.value||m.title||'').replace(/\b4K\b/gi,'').replace(/\b(blu-ray|dvd|uhd|box set|boxed set|complete collection)\b/gi,'').trim();
+  if(!query){out.textContent='Enter a collection name to search.';return;}
+  out.textContent='Looking for TMDB collections…';
+  try {
+    const url=`https://api.themoviedb.org/3/search/collection?api_key=${encodeURIComponent(key)}&query=${encodeURIComponent(query)}`;
+    const res=await fetch(url);if(!res.ok)throw new Error('TMDB HTTP '+res.status);
+    const data=await res.json();
+    const candidates=(data.results||[]).slice(0,8);
+    if(!candidates.length){out.innerHTML='No TMDB collection found. Try a shorter franchise name, or enter films manually below.';return;}
+    out.innerHTML='<p class="manager-small">Choose the collection that matches your physical box set. Review the films before saving.</p>'+candidates.map((c,i)=>`<div class="candidate">${c.poster_path?`<img src="https://image.tmdb.org/t/p/w92${c.poster_path}" alt="">`:'<div style="width:46px">🎬</div>'}<div style="flex:1"><b>${escapeHtml(c.name||'Collection')}</b><div class="manager-small">${escapeHtml((c.overview||'').slice(0,110))}</div><button class="manager-btn" data-collection="${i}">View included films</button></div></div>`).join('');
+    out.querySelectorAll('[data-collection]').forEach(b=>b.onclick=()=>loadCollectionSuggestions(id,candidates[Number(b.dataset.collection)].id));
+  }catch(e){out.textContent='Collection search failed: '+e.message;}
+}
+async function loadCollectionSuggestions(id,collectionId){
+  const key=localStorage.getItem('tmdbKey'),out=document.getElementById('boxset-suggestions');
+  out.textContent='Loading included films…';
+  try {
+    const res=await fetch(`https://api.themoviedb.org/3/collection/${collectionId}?api_key=${encodeURIComponent(key)}`);
+    if(!res.ok)throw new Error('TMDB HTTP '+res.status);
+    const data=await res.json();
+    const parts=(data.parts||[]).filter(x=>x.title).sort((a,b)=>(a.release_date||'').localeCompare(b.release_date||''));
+    if(!parts.length){out.textContent='TMDB has no films listed for this collection. Add titles manually.';return;}
+    out.innerHTML='<p class="manager-small">Select only films actually included in your box set. TMDB collections may contain sequels you do not own.</p>'+parts.map((c,i)=>`<label class="candidate" style="cursor:pointer"><input type="checkbox" data-part="${i}" checked style="flex-shrink:0"><span style="flex:1"><b>${escapeHtml(c.title)}</b><span class="manager-small" style="display:block">${escapeHtml((c.release_date||'').slice(0,4))}</span></span>${c.poster_path?`<img src="https://image.tmdb.org/t/p/w92${c.poster_path}" alt="">`:''}</label>`).join('')+'<button class="manager-btn" id="apply-boxset-suggestions">Add selected films to editor</button>';
+    document.getElementById('apply-boxset-suggestions').onclick=()=>{
+      const selected=[...out.querySelectorAll('[data-part]:checked')].map(x=>parts[Number(x.dataset.part)].title);
+      const textarea=document.getElementById('boxset-films');
+      const existing=textarea.value.split('\n').map(x=>x.trim()).filter(Boolean);
+      textarea.value=[...new Set([...existing,...selected])].join('\n');
+      document.getElementById('boxset-check').checked=true;
+      out.textContent=`Added ${selected.length} suggested titles to the editor. Check the list, then tap Save collection to persist.`;
+    };
+  }catch(e){out.textContent='Could not load collection: '+e.message;}
+}
+
 async function saveBoxSet(id) {
   const m=movies.find(x=>x.id===id);if(!m)return;
   const checked=document.getElementById('boxset-check').checked;
@@ -666,7 +708,7 @@ function openDetail(id) {
     ${coverHtml(m, 'sheet-cover', 'sheet-cover')}
     <div class="sheet-title">${escapeHtml(m.title || 'Untitled')}</div>
     <div class="sheet-studio">${escapeHtml(m.studio || '')}</div>
-    <div style="margin-top:12px;padding:12px;background:var(--surface);border-radius:10px;border:1px solid var(--groove)"><b>Collection / Box Set</b><p class="manager-small">Keep the original box cover. Enter each included film on a separate line. This does not create extra collection entries.</p><label style="font-size:12px"><input type="checkbox" id="boxset-check" ${m.isBoxSet?'checked':''}> This is a multi-movie collection</label><textarea id="boxset-films" rows="3" placeholder="One film per line" style="width:100%;margin-top:8px;border:1px solid var(--groove);border-radius:7px;padding:8px">${escapeHtml((m.includedMovies||[]).map(f=>typeof f==='string'?f:f.title).join('\n'))}</textarea><button class="manager-btn" onclick="saveBoxSet('${m.id}')">Save collection</button><p id="boxset-status" class="manager-small"></p></div>
+    <div style="margin-top:12px;padding:12px;background:var(--surface);border-radius:10px;border:1px solid var(--groove)"><b>Collection / Box Set</b><p class="manager-small">Keep the original box cover. Search TMDB for suggested films, review them, then save. TMDB may list sequels that are not in your physical set.</p><input id="boxset-search" type="text" value="${escapeHtml(m.title||'')}" placeholder="Collection or franchise name" style="width:100%;padding:8px;border:1px solid var(--groove);border-radius:7px;margin-bottom:8px"><button class="manager-btn secondary" onclick="suggestBoxSet('${m.id}')">Find included movies automatically</button><div id="boxset-suggestions" style="margin-top:8px"></div><label style="font-size:12px"><input type="checkbox" id="boxset-check" ${m.isBoxSet?'checked':''}> This is a multi-movie collection</label><textarea id="boxset-films" rows="3" placeholder="One film per line" style="width:100%;margin-top:8px;border:1px solid var(--groove);border-radius:7px;padding:8px">${escapeHtml((m.includedMovies||[]).map(f=>typeof f==='string'?f:f.title).join('\n'))}</textarea><button class="manager-btn" onclick="saveBoxSet('${m.id}')">Save collection</button><p id="boxset-status" class="manager-small"></p></div>
     <div class="sheet-fields">
       <div><div class="field-label">Type</div><div class="field-value">${effectiveMediaType(m) === 'tv' ? 'TV Show' : 'Movie'}</div></div>
       <div><div class="field-label">Format</div><div class="field-value">${isUHD(m) ? '4K UHD' : 'Blu-ray'}</div></div>
