@@ -3187,7 +3187,18 @@
     "year": null,
     "overview": null,
     "enrichNote": "No TMDB match found",
-    "matchedVia": "tmdb"
+    "matchedVia": "tmdb",
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "Green Mile"
+      },
+      {
+        "title": "Forrest Gump"
+      }
+    ],
+    "reviewStatus": "collection",
+    "imdbRating": null
   },
   {
     "id": "MOV-0125",
