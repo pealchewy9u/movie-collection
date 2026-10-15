@@ -221,8 +221,13 @@
     "tmdbTitle": "Ajab Prem Ki Ghazab Kahani",
     "language": "hi",
     "imdbId": "tt1252596",
-    "imdbRating": null,
-    "omdbNote": null
+    "imdbRating": "6.4",
+    "omdbNote": null,
+    "tmdbId": 24827,
+    "enrichNote": null,
+    "matchedVia": "tmdb-manual",
+    "reviewStatus": "confirmed",
+    "reviewedAt": "2026-10-15T19:19:04.687Z"
   },
   {
     "id": "MOV-0010",
