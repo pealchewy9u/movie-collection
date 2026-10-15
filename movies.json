@@ -1082,8 +1082,11 @@
     "tmdbTitle": "Cheeni Kum",
     "language": "hi",
     "imdbId": "tt0976026",
-    "imdbRating": null,
-    "omdbNote": null
+    "imdbRating": "6.8",
+    "omdbNote": null,
+    "tmdbId": 16576,
+    "matchedVia": "tmdb",
+    "enrichNote": null
   },
   {
     "id": "MOV-0043",
