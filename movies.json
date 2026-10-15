@@ -8382,7 +8382,18 @@
     "includedMovies": [
       {
         "title": "X-Men (2000)",
-        "matchNote": "No exact title match on TMDB — review manually"
+        "matchNote": null,
+        "tmdbId": 36657,
+        "tmdbTitle": "X-Men",
+        "year": "2000",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/bRDAc4GogyS9ci3ow7UnInOcriN.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Science Fiction",
+        "overview": "Two mutants, Rogue and Wolverine, come to a private academy for their kind whose resident superhero team, the X-Men, must oppose a terrorist organization with similar powers.",
+        "imdbId": "tt0120903",
+        "imdbRating": "7.3",
+        "omdbNote": null,
+        "matchedVia": "tmdb-manual"
       },
       {
         "title": "X2: X-Men United (2003)",
