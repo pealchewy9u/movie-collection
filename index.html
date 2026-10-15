@@ -63,9 +63,6 @@
   .movie-meta { flex: 1; min-width: 0; }
   .movie-title { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .movie-studio { font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .watched-badge { font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
-  .watched-yes { color: #1B5E20; background: #C8E6C9; }
-  .watched-no { color: #4A1B0C; background: var(--surface-raised); }
   .format-badge { font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; letter-spacing: 0.02em; }
   .format-4k { color: #fff; background: var(--maroon); }
   .format-bluray { color: var(--text-muted); background: var(--groove); }
@@ -141,19 +138,8 @@
     </div>
     <div class="filter-row">
       <select id="genre-select"><option value="">All Genres</option></select>
-      <select id="watched-select">
-        <option value="">Watched & Unwatched</option>
-        <option value="yes">Watched</option>
-        <option value="no">Unwatched</option>
-      </select>
     </div>
-    <div class="filter-row" style="margin-top:8px;">
-      <select id="origin-select">
-        <option value="">English & Hindi</option>
-        <option value="hindi">Hindi / Indian</option>
-        <option value="english">English</option>
-      </select>
-    </div>
+
   </header>
 
   <div class="tabs">
@@ -223,21 +209,11 @@ function isUHD(movie) {
   return /\b4K\b/i.test(movie.title || '');
 }
 
-// No explicit language field in the data, but Country code is a solid proxy here --
-// IN almost always means a Hindi/Indian release in this particular collection.
-function isIndianOrigin(movie) {
-  return movie.countryCode === 'IN';
-}
-
 function filteredMovies() {
   const q = document.getElementById('search-input').value.trim().toLowerCase();
   const genre = document.getElementById('genre-select').value;
-  const watched = document.getElementById('watched-select').value;
-  const origin = document.getElementById('origin-select').value;
   return movies
     .filter(m => !genre || m.genre === genre)
-    .filter(m => !watched || (watched === 'yes' ? m.watched : !m.watched))
-    .filter(m => !origin || (origin === 'hindi' ? isIndianOrigin(m) : !isIndianOrigin(m)))
     .filter(m => {
       if (!q) return true;
       const hay = [m.title, m.studio].join(' ').toLowerCase();
@@ -274,10 +250,7 @@ function renderList() {
         <div class="movie-title">${escapeHtml(m.title || 'Untitled')}</div>
         <div class="movie-studio">${escapeHtml(m.studio || '')}</div>
       </div>
-      <div class="badge-stack">
-        <div class="format-badge ${isUHD(m) ? 'format-4k' : 'format-bluray'}">${isUHD(m) ? '4K UHD' : 'BLU-RAY'}</div>
-        <div class="watched-badge ${m.watched ? 'watched-yes' : 'watched-no'}">${m.watched ? 'Watched' : 'Unwatched'}</div>
-      </div>
+      <div class="format-badge ${isUHD(m) ? 'format-4k' : 'format-bluray'}">${isUHD(m) ? '4K UHD' : 'BLU-RAY'}</div>
     </div>
   `).join('');
   list.querySelectorAll('.movie-row').forEach(el => {
@@ -344,16 +317,16 @@ function renderSummary() {
   const sortedStudios = Object.entries(studioCounts).sort((a, b) => b[1] - a[1]).slice(0, 10);
   const maxStudio = Math.max(...sortedStudios.map(([, c]) => c));
 
-  const watchedCount = movies.filter(m => m.watched).length;
-  const unwatchedCount = movies.length - watchedCount;
+  const uhdCount = movies.filter(isUHD).length;
+  const blurayCount = movies.length - uhdCount;
   const totalDiscs = movies.reduce((sum, m) => sum + (m.blurayDiscs || 0) + (m.dvdDiscs || 0), 0);
 
   container.innerHTML = `
     <div class="summary-total">${movies.length} movie${movies.length === 1 ? '' : 's'} total · ${totalDiscs} discs</div>
 
     <div class="stat-blocks">
-      <div><div class="stat-value">${watchedCount}</div><div class="stat-label">Watched</div></div>
-      <div><div class="stat-value">${unwatchedCount}</div><div class="stat-label">Unwatched</div></div>
+      <div><div class="stat-value">${uhdCount}</div><div class="stat-label">4K UHD</div></div>
+      <div><div class="stat-value">${blurayCount}</div><div class="stat-label">Blu-ray</div></div>
     </div>
 
     <div class="summary-section-title">Top Studios</div>
@@ -383,7 +356,6 @@ function openDetail(id) {
       <div><div class="field-label">Country</div><div class="field-value">${escapeHtml(m.countryCode || '—')}</div></div>
       <div><div class="field-label">Blu-ray Discs</div><div class="field-value">${m.blurayDiscs ?? '—'}</div></div>
       <div><div class="field-label">DVD Discs</div><div class="field-value">${m.dvdDiscs ?? '—'}</div></div>
-      <div><div class="field-label">Watched</div><div class="field-value">${m.watched ? 'Yes' : 'No'}</div></div>
       <div><div class="field-label">Date Added</div><div class="field-value">${escapeHtml(m.dateAdded || '—')}</div></div>
     </div>
     ${m.overview ? `<div style="margin-top:16px; font-size:13px; line-height:1.5;">${escapeHtml(m.overview)}</div>` : ''}
@@ -410,7 +382,6 @@ document.querySelectorAll('.tab').forEach(tab => {
 
 document.getElementById('search-input').addEventListener('input', render);
 document.getElementById('genre-select').addEventListener('change', render);
-document.getElementById('watched-select').addEventListener('change', render);
 document.getElementById('refresh-btn').addEventListener('click', loadData);
 document.getElementById('detail-overlay').addEventListener('click', e => {
   if (e.target.id === 'detail-overlay') closeDetail();
