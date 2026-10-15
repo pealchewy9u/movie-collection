@@ -5022,7 +5022,20 @@
     "imdbRating": null,
     "omdbNote": "UPCMDB had no rating for this title",
     "matchedVia": "tmdb",
-    "enrichNote": "No TMDB match found"
+    "enrichNote": "No TMDB match found",
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "The Lord of the Rings: The Fellowship of the Ring"
+      },
+      {
+        "title": "The Lord of the Rings: The Two Towers"
+      },
+      {
+        "title": "The Lord of the Rings: The Return of the King"
+      }
+    ],
+    "reviewStatus": "collection"
   },
   {
     "id": "MOV-0190",
