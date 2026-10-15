@@ -2275,13 +2275,36 @@
     "isBoxSet": true,
     "includedMovies": [
       {
-        "title": "The Expendables"
+        "title": "The Expendables",
+        "matchNote": "Multiple movies share this title — choose manually"
       },
       {
-        "title": "The Expendables 2"
+        "title": "The Expendables 2",
+        "tmdbId": 76163,
+        "tmdbTitle": "The Expendables 2",
+        "year": "2012",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/74rTIGyGoIu5KSxDVMdr8H3MtMo.jpg",
+        "language": "en",
+        "genre": "Action, Adventure, Thriller",
+        "overview": "Mr. Church reunites the Expendables for what should be an easy paycheck, but when one of their men is murdered on the job, their quest for revenge puts them deep in enemy territory and up against an unexpected threat.",
+        "imdbId": "tt1764651",
+        "matchNote": null,
+        "imdbRating": "6.6",
+        "omdbNote": null
       },
       {
-        "title": "The Expendables 3"
+        "title": "The Expendables 3",
+        "tmdbId": 138103,
+        "tmdbTitle": "The Expendables 3",
+        "year": "2014",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/utS5euWHlEdKBNnEFwjpZ2oGuhF.jpg",
+        "language": "en",
+        "genre": "Action, Adventure, Thriller",
+        "overview": "Barney, Christmas and the rest of the team comes face-to-face with Conrad Stonebanks, who years ago co-founded The Expendables with Barney. Stonebanks subsequently became a ruthless arms trader and someone who Barney was forced to kill… or so he thought. Stonebanks, who eluded death once before, now is making it his mission to end The Expendables -- but Barney has other plans. Barney decides that he has to fight old blood with new blood, and brings in a new era of Expendables team members, recruiting individuals who are younger, faster and more tech-savvy. The latest mission becomes a clash of classic old-school style versus high-tech expertise in the Expendables’ most personal battle yet.",
+        "imdbId": "tt2333784",
+        "matchNote": null,
+        "imdbRating": "6.1",
+        "omdbNote": null
       }
     ],
     "reviewStatus": "collection"
