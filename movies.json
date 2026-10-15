@@ -1534,7 +1534,8 @@
     "tmdbTitle": "Dragon Ball Z",
     "language": "ja",
     "imdbId": "tt0121220",
-    "imdbRating": null
+    "imdbRating": null,
+    "omdbNote": "OMDb: Invalid API key!"
   },
   {
     "id": "MOV-0078",
@@ -1557,7 +1558,8 @@
     "tmdbTitle": "Dragon Ball Z",
     "language": "ja",
     "imdbId": "tt0121220",
-    "imdbRating": null
+    "imdbRating": null,
+    "omdbNote": "OMDb: Invalid API key!"
   },
   {
     "id": "MOV-0079",
@@ -1580,7 +1582,8 @@
     "tmdbTitle": "Dragon Ball Z",
     "language": "ja",
     "imdbId": "tt0121220",
-    "imdbRating": null
+    "imdbRating": null,
+    "omdbNote": "OMDb: Invalid API key!"
   },
   {
     "id": "MOV-0080",
@@ -2059,7 +2062,8 @@
     "tmdbTitle": "Friends",
     "language": "en",
     "imdbId": "tt0108778",
-    "imdbRating": null
+    "imdbRating": null,
+    "omdbNote": "OMDb: Invalid API key!"
   },
   {
     "id": "MOV-0104",
@@ -4412,7 +4416,8 @@
     "tmdbTitle": "The Newsroom",
     "language": "en",
     "imdbId": "tt1870479",
-    "imdbRating": null
+    "imdbRating": null,
+    "omdbNote": "OMDb: Invalid API key!"
   },
   {
     "id": "MOV-0223",
@@ -4435,7 +4440,8 @@
     "tmdbTitle": "The Newsroom",
     "language": "en",
     "imdbId": "tt1870479",
-    "imdbRating": null
+    "imdbRating": null,
+    "omdbNote": "OMDb: Invalid API key!"
   },
   {
     "id": "MOV-0224",
@@ -4458,7 +4464,8 @@
     "tmdbTitle": "The Newsroom",
     "language": "en",
     "imdbId": "tt1870479",
-    "imdbRating": null
+    "imdbRating": null,
+    "omdbNote": "OMDb: Invalid API key!"
   },
   {
     "id": "MOV-0225",
@@ -5417,7 +5424,8 @@
     "tmdbTitle": "Sherlock",
     "language": "en",
     "imdbId": "tt1475582",
-    "imdbRating": null
+    "imdbRating": null,
+    "omdbNote": "OMDb: Invalid API key!"
   },
   {
     "id": "MOV-0273",
