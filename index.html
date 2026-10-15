@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Movie Collection</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#FFF8EC">
+<style>
+  :root {
+    --background: #FFF8EC;
+    --surface: #FFFFFF;
+    --surface-raised: #F5E6C8;
+    --brass: #E8823D;
+    --maroon: #C62828;
+    --text: #3A2615;
+    --text-muted: #8A7355;
+    --groove: #EFE0C4;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--background);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+    height: 100%;
+    overscroll-behavior-y: contain;
+  }
+  #app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; }
+
+  header { padding: calc(12px + env(safe-area-inset-top)) 16px 10px; background: var(--background); flex-shrink: 0; }
+  h1 { font-size: 22px; margin: 0 0 10px; font-weight: 700; }
+
+  .search-row {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--surface); border-radius: 10px; padding: 9px 12px;
+    margin-bottom: 8px;
+  }
+  .search-row input { border: none; outline: none; background: transparent; flex: 1; font-size: 15px; color: var(--text); }
+  .search-row input::placeholder { color: var(--text-muted); }
+
+  .filter-row { display: flex; gap: 8px; }
+  select { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--groove); background: var(--surface); color: var(--text); font-size: 14px; margin-bottom: 4px; }
+
+  .tabs { display: flex; gap: 6px; padding: 0 16px 10px; flex-shrink: 0; }
+  .tab { flex: 1; text-align: center; padding: 9px 0; border-radius: 8px; font-size: 14px; font-weight: 600; color: var(--text-muted); background: var(--surface); }
+  .tab.active { background: var(--brass); color: white; }
+
+  main { flex: 1; overflow: hidden; position: relative; }
+
+  /* ---- List view ---- */
+  #list-view { height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: 30px; }
+  .movie-row { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--groove); }
+  .cover-thumb, .cover-placeholder {
+    width: 48px; height: 68px; border-radius: 6px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--surface-raised); overflow: hidden; font-size: 22px;
+  }
+  .cover-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .movie-meta { flex: 1; min-width: 0; }
+  .movie-title { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .movie-studio { font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .watched-badge { font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
+  .watched-yes { color: #1B5E20; background: #C8E6C9; }
+  .watched-no { color: #4A1B0C; background: var(--surface-raised); }
+  .empty-state { padding: 60px 24px; text-align: center; color: var(--text-muted); }
+
+  /* ---- Cover Flow view (poster aspect, taller than square) ---- */
+  #coverflow-view { height: 100%; display: none; flex-direction: column; }
+  .cf-scroll {
+    flex: 1; display: flex; align-items: center; overflow-x: auto; overflow-y: hidden;
+    scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+    padding: 0 calc(50vw - 75px);
+    perspective: 700px;
+  }
+  .cf-scroll::-webkit-scrollbar { display: none; }
+  .cf-card { scroll-snap-align: center; flex-shrink: 0; width: 150px; margin: 0 10px; display: flex; flex-direction: column; align-items: center; transition: transform 0.05s linear, opacity 0.05s linear; }
+  .cf-cover, .cf-cover-placeholder {
+    width: 150px; height: 220px; border-radius: 8px;
+    box-shadow: 0 14px 28px rgba(58,38,21,0.45), 0 4px 10px rgba(58,38,21,0.3);
+    display: flex; align-items: center; justify-content: center; background: var(--surface-raised);
+    overflow: hidden; font-size: 40px;
+  }
+  .cf-cover img { width: 100%; height: 100%; object-fit: cover; }
+  .cf-reflection, .cf-reflection-placeholder {
+    width: 150px; height: 110px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; background: var(--surface-raised);
+    overflow: hidden; font-size: 40px;
+    transform: scaleY(-1); margin-top: -2px;
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.28), transparent);
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.28), transparent);
+  }
+  .cf-reflection img { width: 100%; height: 220px; object-fit: cover; display: block; }
+  .cf-caption { text-align: center; padding: 10px 20px 0; flex-shrink: 0; height: 92px; display: flex; flex-direction: column; justify-content: flex-start; }
+  .cf-title { font-size: 17px; font-weight: 700; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .cf-studio { font-size: 12px; color: var(--text-muted); margin-top: 3px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+
+  /* ---- Summary view ---- */
+  #summary-view { height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 4px 16px 30px; display: none; }
+  .summary-total { font-size: 13px; color: var(--text-muted); margin-bottom: 18px; }
+  .summary-section-title { font-size: 15px; font-weight: 700; margin-bottom: 10px; margin-top: 20px; }
+  .cat-row { margin-bottom: 12px; }
+  .cat-row-top { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px; }
+  .cat-bar-track { background: var(--groove); border-radius: 4px; height: 8px; overflow: hidden; }
+  .cat-bar-fill { background: var(--brass); height: 100%; border-radius: 4px; }
+  .stat-blocks { display: flex; gap: 40px; margin-top: 10px; }
+  .stat-value { font-size: 26px; font-weight: 700; color: var(--brass); }
+  .stat-label { font-size: 12px; color: var(--text-muted); }
+
+  /* ---- Detail sheet ---- */
+  #detail-overlay { position: fixed; inset: 0; background: rgba(58,38,21,0.4); display: none; align-items: flex-end; z-index: 50; }
+  #detail-sheet { background: var(--background); width: 100%; max-height: 82vh; border-radius: 18px 18px 0 0; overflow-y: auto; padding: 20px 20px calc(30px + env(safe-area-inset-bottom)); }
+  .sheet-close { text-align: right; }
+  .sheet-close button { border: none; background: var(--surface-raised); color: var(--text); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; }
+  .sheet-cover { width: 110px; height: 160px; border-radius: 8px; margin: 10px 0; background: var(--surface-raised); overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 32px; }
+  .sheet-cover img { width: 100%; height: 100%; object-fit: cover; }
+  .sheet-title { font-size: 20px; font-weight: 700; }
+  .sheet-studio { font-size: 14px; color: var(--text-muted); margin-top: 2px; }
+  .sheet-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; font-size: 13px; }
+  .field-label { color: var(--text-muted); font-size: 11px; }
+  .field-value { font-weight: 500; }
+
+  #status-bar { font-size: 11px; color: var(--text-muted); text-align: center; padding: 6px 0 2px; flex-shrink: 0; }
+  #refresh-btn { border: none; background: none; color: var(--brass); font-weight: 600; font-size: 13px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>Movie Collection</h1>
+    <div class="search-row">
+      <span>🔍</span>
+      <input id="search-input" type="text" placeholder="Search title, studio…">
+    </div>
+    <div class="filter-row">
+      <select id="genre-select"><option value="">All Genres</option></select>
+      <select id="watched-select">
+        <option value="">Watched & Unwatched</option>
+        <option value="yes">Watched</option>
+        <option value="no">Unwatched</option>
+      </select>
+    </div>
+  </header>
+
+  <div class="tabs">
+    <div class="tab active" data-view="list">List</div>
+    <div class="tab" data-view="coverflow">Cover Flow</div>
+    <div class="tab" data-view="summary">Summary</div>
+  </div>
+
+  <main>
+    <div id="list-view"></div>
+    <div id="coverflow-view">
+      <div class="cf-scroll" id="cf-scroll"></div>
+      <div class="cf-caption" id="cf-caption"></div>
+    </div>
+    <div id="summary-view"></div>
+  </main>
+
+  <div id="status-bar">
+    <span id="status-text">Loading…</span>
+    <button id="refresh-btn">Refresh</button>
+  </div>
+</div>
+
+<div id="detail-overlay"><div id="detail-sheet"></div></div>
+
+<script>
+const DATA_URL = './movies.json';
+let movies = [];
+let currentView = 'list';
+
+async function loadData() {
+  document.getElementById('status-text').textContent = 'Loading…';
+  try {
+    const res = await fetch(DATA_URL, { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    movies = await res.json();
+    localStorage.setItem('movie-cache', JSON.stringify(movies));
+    const now = new Date();
+    localStorage.setItem('movie-cache-time', now.toISOString());
+    document.getElementById('status-text').textContent =
+      movies.length + ' movies · updated ' + now.toLocaleString([], {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'});
+  } catch (e) {
+    const cached = localStorage.getItem('movie-cache');
+    if (cached) {
+      movies = JSON.parse(cached);
+      const t = localStorage.getItem('movie-cache-time');
+      document.getElementById('status-text').textContent =
+        'Offline — showing data from ' + (t ? new Date(t).toLocaleDateString() : 'last sync');
+    } else {
+      document.getElementById('status-text').textContent = 'Could not load collection data.';
+    }
+  }
+  buildGenreFilter();
+  render();
+}
+
+function buildGenreFilter() {
+  const sel = document.getElementById('genre-select');
+  const genres = [...new Set(movies.map(m => m.genre).filter(Boolean))].sort();
+  sel.innerHTML = '<option value="">All Genres</option>' +
+    genres.map(g => `<option value="${g}">${g}</option>`).join('');
+}
+
+function filteredMovies() {
+  const q = document.getElementById('search-input').value.trim().toLowerCase();
+  const genre = document.getElementById('genre-select').value;
+  const watched = document.getElementById('watched-select').value;
+  return movies
+    .filter(m => !genre || m.genre === genre)
+    .filter(m => !watched || (watched === 'yes' ? m.watched : !m.watched))
+    .filter(m => {
+      if (!q) return true;
+      const hay = [m.title, m.studio].join(' ').toLowerCase();
+      return hay.includes(q);
+    })
+    .sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+}
+
+function coverHtml(movie, cls, placeholderCls) {
+  if (!movie.posterUrl) {
+    return `<div class="${placeholderCls}">🎬</div>`;
+  }
+  return `<div class="${cls}"><img src="${movie.posterUrl}" loading="lazy"
+    onerror="this.parentElement.outerHTML='<div class=&quot;${placeholderCls}&quot;>🎬</div>'"></div>`;
+}
+
+function render() {
+  if (currentView === 'list') renderList();
+  else if (currentView === 'coverflow') renderCoverFlow();
+  else renderSummary();
+}
+
+function renderList() {
+  const list = document.getElementById('list-view');
+  const items = filteredMovies();
+  if (items.length === 0) {
+    list.innerHTML = '<div class="empty-state">No movies match.</div>';
+    return;
+  }
+  list.innerHTML = items.map(m => `
+    <div class="movie-row" data-id="${m.id}">
+      ${coverHtml(m, 'cover-thumb', 'cover-placeholder')}
+      <div class="movie-meta">
+        <div class="movie-title">${escapeHtml(m.title || 'Untitled')}</div>
+        <div class="movie-studio">${escapeHtml(m.studio || '')}</div>
+      </div>
+      <div class="watched-badge ${m.watched ? 'watched-yes' : 'watched-no'}">${m.watched ? 'Watched' : 'Unwatched'}</div>
+    </div>
+  `).join('');
+  list.querySelectorAll('.movie-row').forEach(el => {
+    el.addEventListener('click', () => openDetail(el.dataset.id));
+  });
+}
+
+function renderCoverFlow() {
+  const scroll = document.getElementById('cf-scroll');
+  const items = filteredMovies();
+  scroll.innerHTML = items.map(m => `
+    <div class="cf-card" data-id="${m.id}">
+      ${coverHtml(m, 'cf-cover', 'cf-cover-placeholder')}
+      ${coverHtml(m, 'cf-reflection', 'cf-reflection-placeholder')}
+    </div>
+  `).join('');
+
+  function updateTiltAndCaption() {
+    const containerRect = scroll.getBoundingClientRect();
+    const containerCenter = containerRect.left + containerRect.width / 2;
+    let closestIdx = 0, closestDist = Infinity;
+
+    scroll.querySelectorAll('.cf-card').forEach((el, idx) => {
+      const rect = el.getBoundingClientRect();
+      const cardCenter = rect.left + rect.width / 2;
+      const dist = (cardCenter - containerCenter) / 170;
+      const clamped = Math.max(-3, Math.min(3, dist));
+      const scale = Math.max(0.6, 1 - Math.abs(clamped) * 0.18);
+      const rotation = clamped * -50;
+      const opacity = Math.abs(clamped) > 2.6 ? 0 : 1;
+      el.style.transform = `scale(${scale}) rotateY(${rotation}deg)`;
+      el.style.opacity = opacity;
+      el.style.zIndex = Math.round(10 - Math.abs(clamped));
+      if (Math.abs(dist) < closestDist) { closestDist = Math.abs(dist); closestIdx = idx; }
+    });
+
+    const m = items[closestIdx];
+    const caption = document.getElementById('cf-caption');
+    if (!m) { caption.innerHTML = ''; return; }
+    caption.innerHTML = `
+      <div class="cf-title">${escapeHtml(m.title || 'Untitled')}</div>
+      <div class="cf-studio">${escapeHtml(m.studio || '')}</div>
+    `;
+  }
+  scroll.onscroll = () => requestAnimationFrame(updateTiltAndCaption);
+  scroll.querySelectorAll('.cf-card').forEach(el => {
+    el.addEventListener('click', () => openDetail(el.dataset.id));
+  });
+  requestAnimationFrame(updateTiltAndCaption);
+}
+
+function renderSummary() {
+  const container = document.getElementById('summary-view');
+  if (movies.length === 0) {
+    container.innerHTML = '<div class="empty-state">No movies yet.</div>';
+    return;
+  }
+
+  const studioCounts = {};
+  movies.forEach(m => {
+    const s = m.studio || 'Unknown';
+    studioCounts[s] = (studioCounts[s] || 0) + 1;
+  });
+  const sortedStudios = Object.entries(studioCounts).sort((a, b) => b[1] - a[1]).slice(0, 10);
+  const maxStudio = Math.max(...sortedStudios.map(([, c]) => c));
+
+  const watchedCount = movies.filter(m => m.watched).length;
+  const unwatchedCount = movies.length - watchedCount;
+  const totalDiscs = movies.reduce((sum, m) => sum + (m.blurayDiscs || 0) + (m.dvdDiscs || 0), 0);
+
+  container.innerHTML = `
+    <div class="summary-total">${movies.length} movie${movies.length === 1 ? '' : 's'} total · ${totalDiscs} discs</div>
+
+    <div class="stat-blocks">
+      <div><div class="stat-value">${watchedCount}</div><div class="stat-label">Watched</div></div>
+      <div><div class="stat-value">${unwatchedCount}</div><div class="stat-label">Unwatched</div></div>
+    </div>
+
+    <div class="summary-section-title">Top Studios</div>
+    ${sortedStudios.map(([studio, count]) => `
+      <div class="cat-row">
+        <div class="cat-row-top"><span>${escapeHtml(studio)}</span><span>${count}</span></div>
+        <div class="cat-bar-track"><div class="cat-bar-fill" style="width:${(count / maxStudio) * 100}%"></div></div>
+      </div>
+    `).join('')}
+  `;
+}
+
+function openDetail(id) {
+  const m = movies.find(x => x.id === id);
+  if (!m) return;
+
+  document.getElementById('detail-sheet').innerHTML = `
+    <div class="sheet-close"><button onclick="closeDetail()">Close</button></div>
+    ${coverHtml(m, 'sheet-cover', 'sheet-cover')}
+    <div class="sheet-title">${escapeHtml(m.title || 'Untitled')}</div>
+    <div class="sheet-studio">${escapeHtml(m.studio || '')}</div>
+    <div class="sheet-fields">
+      <div><div class="field-label">Genre</div><div class="field-value">${escapeHtml(m.genre || '—')}</div></div>
+      <div><div class="field-label">Year</div><div class="field-value">${escapeHtml(m.year || '—')}</div></div>
+      <div><div class="field-label">Release Date</div><div class="field-value">${escapeHtml(m.releaseDate || '—')}</div></div>
+      <div><div class="field-label">Country</div><div class="field-value">${escapeHtml(m.countryCode || '—')}</div></div>
+      <div><div class="field-label">Blu-ray Discs</div><div class="field-value">${m.blurayDiscs ?? '—'}</div></div>
+      <div><div class="field-label">DVD Discs</div><div class="field-value">${m.dvdDiscs ?? '—'}</div></div>
+      <div><div class="field-label">Watched</div><div class="field-value">${m.watched ? 'Yes' : 'No'}</div></div>
+      <div><div class="field-label">Date Added</div><div class="field-value">${escapeHtml(m.dateAdded || '—')}</div></div>
+    </div>
+    ${m.overview ? `<div style="margin-top:16px; font-size:13px; line-height:1.5;">${escapeHtml(m.overview)}</div>` : ''}
+  `;
+  document.getElementById('detail-overlay').style.display = 'flex';
+}
+function closeDetail() { document.getElementById('detail-overlay').style.display = 'none'; }
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    currentView = tab.dataset.view;
+    document.getElementById('list-view').style.display = currentView === 'list' ? 'block' : 'none';
+    document.getElementById('coverflow-view').style.display = currentView === 'coverflow' ? 'flex' : 'none';
+    document.getElementById('summary-view').style.display = currentView === 'summary' ? 'block' : 'none';
+    render();
+  });
+});
+
+document.getElementById('search-input').addEventListener('input', render);
+document.getElementById('genre-select').addEventListener('change', render);
+document.getElementById('watched-select').addEventListener('change', render);
+document.getElementById('refresh-btn').addEventListener('click', loadData);
+document.getElementById('detail-overlay').addEventListener('click', e => {
+  if (e.target.id === 'detail-overlay') closeDetail();
+});
+
+// No service worker for now, same reasoning as the vinyl app during active development --
+// avoids the installed-PWA stale-cache headaches while this is still being built out.
+
+loadData();
+</script>
+</body>
+</html>
