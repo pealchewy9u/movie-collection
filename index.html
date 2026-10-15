@@ -496,7 +496,7 @@ async function getGenreMap(tmdbKey, mediaType) {
   if (cached) {
     map = JSON.parse(cached);
   } else {
-    const res = await fetch(`https://api.themoviedb.org/3/genre/${mediaType}/list?api_key=${tmdbKey}`);
+    const res = await fetch(`https://api.themoviedb.org/3/genre/${mediaType}/list?api_key=${tmdbKey}`, { cache: 'no-store' });
     const data = await res.json();
     map = {};
     (data.genres || []).forEach(g => { map[g.id] = g.name; });
@@ -523,7 +523,7 @@ async function enrichOne(item, tmdbKey, omdbKey) {
   // multi-search covers both movies and TV shows in one call, and tells us
   // which one each result actually is via media_type -- searching /search/movie
   // alone was why things like "Friends: The Complete Series" never matched.
-  const searchRes = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${tmdbKey}&query=${encodeURIComponent(searchTitle)}`);
+  const searchRes = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${tmdbKey}&query=${encodeURIComponent(searchTitle)}`, { cache: 'no-store' });
   const searchData = await searchRes.json();
   const match = (searchData.results || []).find(r => r.media_type === 'movie' || r.media_type === 'tv');
   if (!match) return { ...item, enrichNote: 'No TMDB match found' };
@@ -538,11 +538,11 @@ async function enrichOne(item, tmdbKey, omdbKey) {
   // doesn't include it the way /movie/{id} does for movies.
   let imdbId = null;
   if (mediaType === 'movie') {
-    const detailRes = await fetch(`https://api.themoviedb.org/3/movie/${match.id}?api_key=${tmdbKey}`);
+    const detailRes = await fetch(`https://api.themoviedb.org/3/movie/${match.id}?api_key=${tmdbKey}`, { cache: 'no-store' });
     const detail = await detailRes.json();
     imdbId = detail.imdb_id || null;
   } else {
-    const extRes = await fetch(`https://api.themoviedb.org/3/tv/${match.id}/external_ids?api_key=${tmdbKey}`);
+    const extRes = await fetch(`https://api.themoviedb.org/3/tv/${match.id}/external_ids?api_key=${tmdbKey}`, { cache: 'no-store' });
     const extData = await extRes.json();
     imdbId = extData.imdb_id || null;
   }
@@ -555,7 +555,7 @@ async function enrichOne(item, tmdbKey, omdbKey) {
     omdbNote = 'TMDB had no IMDB id for this title';
   } else {
     try {
-      const omdbRes = await fetch(`https://www.omdbapi.com/?i=${imdbId}&apikey=${omdbKey}`);
+      const omdbRes = await fetch(`https://www.omdbapi.com/?i=${imdbId}&apikey=${omdbKey}`, { cache: 'no-store' });
       const omdbData = await omdbRes.json();
       if (omdbData.Response === 'False') {
         omdbNote = `OMDb: ${omdbData.Error || 'unknown error'}`;
