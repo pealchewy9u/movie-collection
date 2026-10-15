@@ -5621,16 +5621,50 @@
     "isBoxSet": true,
     "includedMovies": [
       {
-        "title": "Madagascar"
+        "title": "Madagascar",
+        "matchNote": "Multiple possible movies — choose manually"
       },
       {
-        "title": "Madagascar: Escape 2 Africa"
+        "title": "Madagascar: Escape 2 Africa",
+        "tmdbId": 10527,
+        "tmdbTitle": "Madagascar: Escape 2 Africa",
+        "year": "2008",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/agRbLOHgN46TQO4YdKR462iR7To.jpg",
+        "language": "en",
+        "genre": "Adventure, Animation, Comedy, Family",
+        "overview": "Alex, Marty, and other zoo animals find a way to escape from Madagascar when the penguins reassemble a wrecked airplane. The precariously repaired craft stays airborne just long enough to make it to the African continent. There the New Yorkers encounter members of their own species for the first time. Africa proves to be a wild place, but Alex and company wonder if it is better than their Central Park home.",
+        "imdbId": "tt0479952",
+        "matchNote": null,
+        "imdbRating": "6.7",
+        "omdbNote": null
       },
       {
-        "title": "Madagascar 3: Europe's Most Wanted"
+        "title": "Madagascar 3: Europe's Most Wanted",
+        "tmdbId": 80321,
+        "tmdbTitle": "Madagascar 3: Europe's Most Wanted",
+        "year": "2012",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/ekraj4ksvIKeuvQVEevEJkuybZd.jpg",
+        "language": "en",
+        "genre": "Animation, Family, Comedy, Adventure",
+        "overview": "Animal pals Alex, Marty, Melman, and Gloria are still trying to make it back to New York's Central Park Zoo. They are forced to take a detour to Europe to find the penguins and chimps who broke the bank at a Monte Carlo casino. When French animal-control officer Capitaine Chantel DuBois picks up their scent, Alex and company are forced to hide out in a traveling circus.",
+        "imdbId": "tt1277953",
+        "matchNote": null,
+        "imdbRating": "6.8",
+        "omdbNote": null
       },
       {
-        "title": "Penguins of Madagascar"
+        "title": "Penguins of Madagascar",
+        "tmdbId": 270946,
+        "tmdbTitle": "Penguins of Madagascar",
+        "year": "2014",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/dXbpNrPDZDMEbujFoOxmMNQVMHa.jpg",
+        "language": "en",
+        "genre": "Family, Animation, Adventure, Comedy",
+        "overview": "Skipper, Kowalski, Rico and Private join forces with undercover organization The North Wind to stop the villainous Dr. Octavius Brine from destroying the world as we know it.",
+        "imdbId": "tt1911658",
+        "matchNote": null,
+        "imdbRating": "6.7",
+        "omdbNote": null
       }
     ],
     "reviewStatus": "collection"
