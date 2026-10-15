@@ -1293,7 +1293,32 @@
     "imdbRating": null,
     "omdbNote": "UPCMDB had no rating for this title",
     "matchedVia": "tmdb",
-    "enrichNote": "No TMDB match found"
+    "enrichNote": "No TMDB match found",
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "The Conjuring (2013)"
+      },
+      {
+        "title": "Annabelle (2014)"
+      },
+      {
+        "title": "The Conjuring 2 (2016)"
+      },
+      {
+        "title": "Annabelle: Creation (2017)"
+      },
+      {
+        "title": "The Nun (2018)"
+      },
+      {
+        "title": "Annabelle Comes Home (2019)"
+      },
+      {
+        "title": "The Conjuring: The Devil Made Me Do It (2021)"
+      }
+    ],
+    "reviewStatus": "collection"
   },
   {
     "id": "MOV-0050",
