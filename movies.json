@@ -116,12 +116,12 @@
     "posterUrl": null,
     "year": null,
     "overview": null,
-    "mediaType": "movie",
+    "mediaType": null,
     "tmdbTitle": "300/ 300: Roe/ Troy",
     "language": null,
     "imdbId": null,
     "imdbRating": null,
-    "omdbNote": "UPCMDB had no rating for this title",
+    "omdbNote": null,
     "matchedVia": "tmdb",
     "enrichNote": "No TMDB match found"
   },
@@ -562,11 +562,8 @@
     "tmdbTitle": "B.A. Pass",
     "language": "hi",
     "imdbId": "tt2408040",
-    "imdbRating": "6.3",
-    "omdbNote": null,
-    "tmdbId": 222951,
-    "matchedVia": "tmdb",
-    "enrichNote": null
+    "imdbRating": null,
+    "omdbNote": null
   },
   {
     "id": "MOV-0023",
@@ -662,15 +659,13 @@
     "posterUrl": "https://image.tmdb.org/t/p/w500/34zBSGpu8MnUlIF74PcWfrZZAG1.jpg",
     "year": "1972",
     "overview": "Desperate for a cook, the disgruntled Sharmas are relieved when a multi-talented man, Raghu, takes up the job. However, when all seems well, the family jewels disappear and so does Raghu.",
-    "enrichNote": null,
+    "enrichNote": "UPCMDB HTTP 404: {\"error\":\"Not Found\",\"message\":\"No record found for UPC: 8904212311218\"}",
     "mediaType": "movie",
     "tmdbTitle": "Bawarchi",
     "language": "hi",
     "imdbId": "tt0068257",
-    "imdbRating": "8.1",
-    "omdbNote": null,
-    "tmdbId": 60389,
-    "matchedVia": "tmdb"
+    "imdbRating": null,
+    "omdbNote": null
   },
   {
     "id": "MOV-0027",
@@ -714,15 +709,13 @@
     "posterUrl": "https://image.tmdb.org/t/p/w500/bXywc0CEzS1fIshPWWi4V8A58U3.jpg",
     "year": "2013",
     "overview": "The true story of the \"Flying Sikh\" world champion runner and Olympian Milkha Singh who overcame the massacre of his family, civil war during the India-Pakistan partition, and homelessness to become one of India's most iconic athletes.",
-    "enrichNote": null,
+    "enrichNote": "UPCMDB HTTP 404: {\"error\":\"Not Found\",\"message\":\"No record found for UPC: 8904036838632\"}",
     "mediaType": "movie",
     "tmdbTitle": "Bhaag Milkha Bhaag",
     "language": "hi",
     "imdbId": "tt2356180",
-    "imdbRating": "8.2",
-    "omdbNote": null,
-    "tmdbId": 206324,
-    "matchedVia": "tmdb"
+    "imdbRating": null,
+    "omdbNote": null
   },
   {
     "id": "MOV-0029",
@@ -745,11 +738,8 @@
     "tmdbTitle": "Bhagam Bhag",
     "language": "hi",
     "imdbId": "tt0805184",
-    "imdbRating": "6.8",
-    "omdbNote": null,
-    "tmdbId": 41188,
-    "matchedVia": "tmdb",
-    "enrichNote": null
+    "imdbRating": null,
+    "omdbNote": null
   },
   {
     "id": "MOV-0030",
@@ -772,11 +762,8 @@
     "tmdbTitle": "Bhoothnath",
     "language": "hi",
     "imdbId": "tt0991346",
-    "imdbRating": "6.4",
-    "omdbNote": null,
-    "tmdbId": 15974,
-    "matchedVia": "tmdb",
-    "enrichNote": null
+    "imdbRating": null,
+    "omdbNote": null
   },
   {
     "id": "MOV-0031",
@@ -849,13 +836,8 @@
     "tmdbTitle": "Bodyguard",
     "language": "hi",
     "imdbId": "tt1729637",
-    "imdbRating": "4.8",
-    "omdbNote": null,
-    "tmdbId": 73582,
-    "matchedVia": "tmdb-manual",
-    "enrichNote": null,
-    "reviewStatus": "confirmed",
-    "reviewedAt": "2026-10-15T19:29:00.574Z"
+    "imdbRating": null,
+    "omdbNote": null
   },
   {
     "id": "MOV-0034",
@@ -974,15 +956,13 @@
     "posterUrl": "https://image.tmdb.org/t/p/w500/32OxUzs9ETQ3QvLFFYaDuuAtq3Y.jpg",
     "year": "2005",
     "overview": "Bunty and Babli are two young people who randomly meet each other after running away from their homes to chase their dream.  After facing hurdles in their path they decide to take up conning and soon become the best con artists in the country. However, their success is threatened as a relentless cop is on their trail.",
-    "enrichNote": null,
+    "enrichNote": "UPCMDB HTTP 404: {\"error\":\"Not Found\",\"message\":\"No record found for UPC: 8902797330273\"}",
     "mediaType": "movie",
     "tmdbTitle": "Bunty Aur Babli",
     "language": "hi",
     "imdbId": "tt0448206",
-    "imdbRating": "6.3",
-    "omdbNote": null,
-    "tmdbId": 11763,
-    "matchedVia": "tmdb"
+    "imdbRating": null,
+    "omdbNote": null
   },
   {
     "id": "MOV-0039",
@@ -1026,15 +1006,13 @@
     "posterUrl": "https://image.tmdb.org/t/p/w500/lMrxYKKhd4lqRzwUHAy5gcx9PSO.jpg",
     "year": "2006",
     "overview": "Le Chiffre, a banker to the world's terrorists, is scheduled to participate in a high-stakes poker game in Montenegro, where he intends to use his winnings to establish his financial grip on the terrorist market. M sends Bond—on his maiden mission as a 00 Agent—to attend this game and prevent Le Chiffre from winning. With the help of Vesper Lynd and Felix Leiter, Bond enters the most important poker game in his already dangerous career.",
-    "enrichNote": null,
+    "enrichNote": "UPCMDB HTTP 404: {\"error\":\"Not Found\",\"message\":\"No record found for UPC: 043396163362\"}",
     "mediaType": "movie",
     "tmdbTitle": "Casino Royale",
     "language": "en",
     "imdbId": "tt0381061",
-    "imdbRating": "8.0",
-    "omdbNote": null,
-    "tmdbId": 36557,
-    "matchedVia": "tmdb"
+    "imdbRating": null,
+    "omdbNote": null
   },
   {
     "id": "MOV-0041",
@@ -1057,11 +1035,8 @@
     "tmdbTitle": "Chak De! India",
     "language": "hi",
     "imdbId": "tt0871510",
-    "imdbRating": "8.1",
-    "omdbNote": null,
-    "tmdbId": 14163,
-    "matchedVia": "tmdb",
-    "enrichNote": null
+    "imdbRating": null,
+    "omdbNote": null
   },
   {
     "id": "MOV-0042",
@@ -1084,11 +1059,8 @@
     "tmdbTitle": "Cheeni Kum",
     "language": "hi",
     "imdbId": "tt0976026",
-    "imdbRating": "6.8",
-    "omdbNote": null,
-    "tmdbId": 16576,
-    "matchedVia": "tmdb",
-    "enrichNote": null
+    "imdbRating": null,
+    "omdbNote": null
   },
   {
     "id": "MOV-0043",
