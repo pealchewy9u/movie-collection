@@ -1511,10 +1511,12 @@
     "isBoxSet": true,
     "includedMovies": [
       {
-        "title": "Date Night"
+        "title": "Date Night",
+        "matchNote": "Multiple movies share this title — choose manually"
       },
       {
-        "title": "Mr. & Mrs. Smith"
+        "title": "Mr. & Mrs. Smith",
+        "matchNote": "Multiple movies share this title — choose manually"
       }
     ],
     "reviewStatus": "collection",
