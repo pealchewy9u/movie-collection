@@ -8527,10 +8527,22 @@
     "isBoxSet": true,
     "includedMovies": [
       {
-        "title": "Ted"
+        "title": "Ted",
+        "matchNote": "Multiple possible movies — choose manually"
       },
       {
-        "title": "Ted 2"
+        "title": "Ted 2",
+        "tmdbId": 214756,
+        "tmdbTitle": "Ted 2",
+        "year": "2015",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/38C91I7Xft0gyY7BITm8i4yvuRb.jpg",
+        "language": "en",
+        "genre": "Comedy, Fantasy",
+        "overview": "Newlywed couple Ted and Tami-Lynn want to have a baby, but in order to qualify to be a parent, Ted will have to prove he's a person in a court of law.",
+        "imdbId": "tt2637276",
+        "matchNote": null,
+        "imdbRating": "6.3",
+        "omdbNote": null
       }
     ],
     "reviewStatus": "collection"
