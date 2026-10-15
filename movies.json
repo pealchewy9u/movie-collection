@@ -4363,7 +4363,9 @@
     "imdbId": "tt0268380",
     "imdbRating": "7.5",
     "omdbNote": null,
-    "matchedVia": "upcmdb"
+    "matchedVia": "upcmdb",
+    "isBoxSet": false,
+    "includedMovies": []
   },
   {
     "id": "MOV-0148",
