@@ -5891,7 +5891,9 @@
     "year": null,
     "overview": null,
     "enrichNote": "No TMDB match found",
-    "matchedVia": "tmdb"
+    "matchedVia": "tmdb",
+    "isBoxSet": false,
+    "includedMovies": []
   },
   {
     "id": "MOV-0203",
