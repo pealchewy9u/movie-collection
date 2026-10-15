@@ -8523,7 +8523,17 @@
     "imdbId": "tt2637276",
     "imdbRating": null,
     "omdbNote": "UPCMDB had no rating for this title",
-    "matchedVia": "upcmdb"
+    "matchedVia": "upcmdb",
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "Ted"
+      },
+      {
+        "title": "Ted 2"
+      }
+    ],
+    "reviewStatus": "collection"
   },
   {
     "id": "MOV-0288",
