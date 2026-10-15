@@ -4159,7 +4159,17 @@
     "language": "en",
     "imdbId": "tt26743210",
     "imdbRating": null,
-    "omdbNote": null
+    "omdbNote": null,
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "How To Train Your Dragon"
+      },
+      {
+        "title": "How To Train Your Dragon 2"
+      }
+    ],
+    "reviewStatus": "collection"
   },
   {
     "id": "MOV-0142",
