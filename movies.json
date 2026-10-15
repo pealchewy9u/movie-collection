@@ -607,13 +607,15 @@
     "posterUrl": "https://image.tmdb.org/t/p/w500/5UsK3grJvtQrtzEgqNlDljJW96w.jpg",
     "year": "2016",
     "overview": "Fearing the actions of a god-like Super Hero left unchecked, Gotham City’s own formidable, forceful vigilante takes on Metropolis’s most revered, modern-day savior, while the world wrestles with what sort of hero it really needs. And with Batman and Superman at war with one another, a new threat quickly arises, putting mankind in greater danger than it’s ever known before.",
-    "enrichNote": "UPCMDB HTTP 404: {\"error\":\"Not Found\",\"message\":\"No record found for UPC: 883929533138\"}",
+    "enrichNote": null,
     "mediaType": "movie",
     "tmdbTitle": "Batman v Superman: Dawn of Justice",
     "language": "en",
     "imdbId": "tt2975590",
-    "imdbRating": null,
-    "omdbNote": null
+    "imdbRating": "6.4",
+    "omdbNote": null,
+    "tmdbId": 209112,
+    "matchedVia": "tmdb"
   },
   {
     "id": "MOV-0025",
