@@ -67,6 +67,8 @@
   .format-4k { color: #fff; background: var(--maroon); }
   .format-bluray { color: var(--text-muted); background: var(--groove); }
   .format-tv { color: #fff; background: #2D6A8F; }
+  .imdb-badge { color: #fff; background: #F5A623; }
+  .imdb-missing { color: var(--text-muted); background: var(--groove); }
   .badge-stack { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
   .empty-state { padding: 60px 24px; text-align: center; color: var(--text-muted); }
 
@@ -312,6 +314,9 @@ function renderList() {
       <div class="badge-stack">
         ${effectiveMediaType(m) === 'tv' ? '<div class="format-badge format-tv">TV</div>' : ''}
         <div class="format-badge ${isUHD(m) ? 'format-4k' : 'format-bluray'}">${isUHD(m) ? '4K UHD' : 'BLU-RAY'}</div>
+        ${m.imdbRating
+          ? `<div class="format-badge imdb-badge">★ ${escapeHtml(m.imdbRating)}</div>`
+          : (m.genre ? `<div class="format-badge imdb-missing">No IMDB</div>` : '')}
       </div>
     </div>
   `).join('');
