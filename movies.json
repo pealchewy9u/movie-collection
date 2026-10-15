@@ -5295,7 +5295,18 @@
       },
       {
         "title": "Doctor Strange (2016)",
-        "matchNote": "No exact title match on TMDB — review manually"
+        "matchNote": null,
+        "tmdbId": 284052,
+        "tmdbTitle": "Doctor Strange",
+        "year": "2016",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/uGBVj3bEbCoZbDjjl9wTxcygko1.jpg",
+        "language": "en",
+        "genre": "Fantasy, Adventure, Action",
+        "overview": "After his career is destroyed, a brilliant but arrogant surgeon gets a new lease on life when a sorcerer takes him under her wing and trains him to defend the world against evil.",
+        "imdbId": "tt1211837",
+        "imdbRating": "7.5",
+        "omdbNote": null,
+        "matchedVia": "tmdb-manual"
       },
       {
         "title": "Guardians of the Galaxy Vol. 2 (2017)",
