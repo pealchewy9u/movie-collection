@@ -1297,25 +1297,32 @@
     "isBoxSet": true,
     "includedMovies": [
       {
-        "title": "The Conjuring (2013)"
+        "title": "The Conjuring (2013)",
+        "matchNote": "No exact title match on TMDB — review manually"
       },
       {
-        "title": "Annabelle (2014)"
+        "title": "Annabelle (2014)",
+        "matchNote": "No exact title match on TMDB — review manually"
       },
       {
-        "title": "The Conjuring 2 (2016)"
+        "title": "The Conjuring 2 (2016)",
+        "matchNote": "No exact title match on TMDB — review manually"
       },
       {
-        "title": "Annabelle: Creation (2017)"
+        "title": "Annabelle: Creation (2017)",
+        "matchNote": "No exact title match on TMDB — review manually"
       },
       {
-        "title": "The Nun (2018)"
+        "title": "The Nun (2018)",
+        "matchNote": "No exact title match on TMDB — review manually"
       },
       {
-        "title": "Annabelle Comes Home (2019)"
+        "title": "Annabelle Comes Home (2019)",
+        "matchNote": "No exact title match on TMDB — review manually"
       },
       {
-        "title": "The Conjuring: The Devil Made Me Do It (2021)"
+        "title": "The Conjuring: The Devil Made Me Do It (2021)",
+        "matchNote": "No exact title match on TMDB — review manually"
       }
     ],
     "reviewStatus": "collection"
