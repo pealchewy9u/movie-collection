@@ -1507,7 +1507,18 @@
     "year": null,
     "overview": null,
     "enrichNote": "No TMDB match found",
-    "matchedVia": "tmdb"
+    "matchedVia": "tmdb",
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "Date Night"
+      },
+      {
+        "title": "Mr. & Mrs. Smith"
+      }
+    ],
+    "reviewStatus": "collection",
+    "imdbRating": null
   },
   {
     "id": "MOV-0059",
