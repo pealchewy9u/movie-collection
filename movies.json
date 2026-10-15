@@ -8431,7 +8431,18 @@
       },
       {
         "title": "X-Men: First Class (2011)",
-        "matchNote": "No exact title match on TMDB — review manually"
+        "matchNote": null,
+        "tmdbId": 49538,
+        "tmdbTitle": "X-Men: First Class",
+        "year": "2011",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/hNEokmUke0dazoBhttFN0o3L7Xv.jpg",
+        "language": "en",
+        "genre": "Action, Science Fiction, Adventure",
+        "overview": "Before Charles Xavier and Erik Lensherr took the names Professor X and Magneto, they were two young men discovering their powers for the first time. Before they were arch-enemies, they were closest of friends, working together with other mutants (some familiar, some new), to stop the greatest threat the world has ever known.",
+        "imdbId": "tt1270798",
+        "imdbRating": "7.7",
+        "omdbNote": null,
+        "matchedVia": "tmdb-manual"
       },
       {
         "title": "The Wolverine",
