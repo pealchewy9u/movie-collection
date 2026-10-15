@@ -5956,7 +5956,18 @@
       },
       {
         "title": "The Mummy Returns",
-        "matchNote": "Multiple movies share this title — choose manually"
+        "matchNote": null,
+        "tmdbId": 1734,
+        "tmdbTitle": "The Mummy Returns",
+        "year": "2001",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/kdJsW7hcy1lrj7tdMPycTAQPAiR.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Fantasy",
+        "overview": "Rick and Evelyn O’Connell, along with their 8-year-old son Alex, discover the key to the legendary Scorpion King’s might: the fabled Bracelet of Anubis. Unfortunately, a newly resurrected Imhotep has designs on the bracelet as well, and isn’t above kidnapping its new bearer, Alex, to gain control of Anubis’s otherworldly army.",
+        "imdbId": "tt0209163",
+        "imdbRating": "6.4",
+        "omdbNote": null,
+        "matchedVia": "tmdb-manual"
       },
       {
         "title": "The Mummy: Tomb of the Dragon Emperor",
