@@ -2753,7 +2753,12 @@
     "year": null,
     "overview": null,
     "enrichNote": "No TMDB match found",
-    "matchedVia": "tmdb"
+    "matchedVia": "tmdb",
+    "language": null,
+    "imdbId": null,
+    "imdbRating": null,
+    "omdbNote": null,
+    "mediaType": null
   },
   {
     "id": "MOV-0111",
