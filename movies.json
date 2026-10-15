@@ -2276,7 +2276,18 @@
     "includedMovies": [
       {
         "title": "The Expendables",
-        "matchNote": "Multiple movies share this title — choose manually"
+        "matchNote": null,
+        "tmdbId": 27578,
+        "tmdbTitle": "The Expendables",
+        "year": "2010",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/j09ZkH6R4JWVylBcDai1laCmGw7.jpg",
+        "language": "en",
+        "genre": "Thriller, Adventure, Action",
+        "overview": "Barney Ross leads a band of highly skilled mercenaries including knife enthusiast Lee Christmas, a martial arts expert Yin Yang, heavy weapons specialist Hale Caesar, demolitionist Toll Road, and a loose-cannon sniper Gunner Jensen. When the group is commissioned by the mysterious Mr. Church to assassinate the dictator of a small South American island, Barney and Lee visit the remote locale to scout out their opposition and discover the true nature of the conflict engulfing the city.",
+        "imdbId": "tt1320253",
+        "imdbRating": "6.4",
+        "omdbNote": null,
+        "matchedVia": "tmdb-manual"
       },
       {
         "title": "The Expendables 2",
