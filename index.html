@@ -720,28 +720,46 @@ async function saveBoxSet(id) {
   if(checked && titles.length) await resolveBoxSetFilms(id);
 }
 async function correctIncludedFilm(id,index) {
-  const m=movies.find(x=>x.id===id);if(!m)return;
-  const film=m.includedMovies[index];if(!film)return;
+  const m=movies.find(x=>x.id===id),film=m?.includedMovies?.[index];
+  if(!film)return;
+  const key=localStorage.getItem('tmdbKey');
+  const panel=document.getElementById('film-correction-panel');
+  if(!panel)return;
   const original=typeof film==='string'?film:film.title;
-  const query=prompt('Enter the movie title to search on TMDB:',original);
-  if(query===null||!query.trim())return;
-  const key=localStorage.getItem('tmdbKey');if(!key){alert('Add TMDB API key in Settings first.');return;}
-  const res=await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${encodeURIComponent(key)}&query=${encodeURIComponent(query.trim())}`);
-  if(!res.ok){alert('TMDB search failed (HTTP '+res.status+').');return;}
-  const candidates=(await res.json()).results||[];
-  if(!candidates.length){alert('No movies found. Try another title.');return;}
-  const selection=prompt('Choose the correct movie number:\n'+candidates.slice(0,10).map((c,i)=>`${i+1}. ${c.title} (${(c.release_date||'').slice(0,4)||'?'})`).join('\n'),'1');
-  if(selection===null)return;
-  const n=Number(selection)-1;if(!Number.isInteger(n)||n<0||n>=Math.min(10,candidates.length)){alert('Invalid selection.');return;}
-  const c=candidates[n],old=typeof film==='string'?{title:film}:film;
-  m.includedMovies[index]={...old,title:original,tmdbId:c.id,matchNote:null,posterUrl:null};
-  markPending(m);
-  const updated=await enrichIncludedFilm(m.includedMovies[index],key,localStorage.getItem('omdbKey'));
-  m.includedMovies[index]=updated;
-  markPending(m);
-  const result=await syncPendingEdits().catch(e=>'Saved locally, NOT on GitHub: '+e.message);
-  openDetail(id);
-  const status=document.getElementById('boxset-status');if(status)status.textContent=result;
+  panel.style.display='block';
+  panel.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b>Correct: ${escapeHtml(original)}</b><button class="manager-btn secondary" id="close-film-search">Close</button></div><p class="manager-small">Search and select the exact film. No changes are saved until you choose a result.</p><div style="display:flex;gap:8px"><input id="film-search-input" style="flex:1;min-width:0;padding:9px;border:1px solid var(--groove);border-radius:8px" value="${escapeHtml(original)}"><button class="manager-btn" id="run-film-search">Search</button></div><div id="film-search-results" class="manager-small"></div>`;
+  panel.querySelector('#close-film-search').onclick=()=>{panel.style.display='none';};
+  const search=async()=>{
+    const out=panel.querySelector('#film-search-results');
+    if(!key){out.textContent='Add TMDB API key in Settings first.';return;}
+    const query=panel.querySelector('#film-search-input').value.trim();
+    if(!query){out.textContent='Enter a title.';return;}
+    out.textContent='Searching TMDB…';
+    try {
+      const res=await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${encodeURIComponent(key)}&query=${encodeURIComponent(query)}`,{cache:'no-store'});
+      if(!res.ok)throw new Error('TMDB HTTP '+res.status);
+      const candidates=((await res.json()).results||[]).slice(0,12);
+      out.innerHTML=candidates.length?candidates.map((c,i)=>`<div class="candidate">${c.poster_path?`<img src="https://image.tmdb.org/t/p/w92${c.poster_path}" alt="">`:'<div style="width:46px">🎬</div>'}<div style="flex:1;min-width:0"><b>${escapeHtml(c.title||'Untitled')}</b><div class="manager-small">${escapeHtml((c.release_date||'').slice(0,4)||'Year unknown')} · ${escapeHtml(languageName(c.original_language||'?'))}</div><button class="manager-btn" data-film-pick="${i}">Use this movie</button></div></div>`).join(''):'No movies found. Try another search title.';
+      out.querySelectorAll('[data-film-pick]').forEach(btn=>btn.onclick=async()=>{
+        const c=candidates[Number(btn.dataset.filmPick)];
+        out.textContent='Fetching details and saving…';
+        try {
+          const old=typeof film==='string'?{title:film}:film;
+          const updated=await enrichIncludedFilm({...old,title:original,tmdbId:c.id,posterUrl:null,imdbRating:null,imdbId:null,matchNote:null},key,localStorage.getItem('omdbKey'));
+          if(!updated.tmdbId||updated.matchNote)throw new Error(updated.matchNote||'Movie details unavailable');
+          m.includedMovies[index]=updated;
+          markPending(m);
+          const result=await syncPendingEdits().catch(e=>'Saved locally, NOT on GitHub: '+e.message);
+          openDetail(id);
+          const status=document.getElementById('boxset-status');if(status)status.textContent=result;
+        }catch(e){out.textContent='Correction failed: '+e.message;}
+      });
+    }catch(e){out.textContent='Search failed: '+e.message;}
+  };
+  panel.querySelector('#run-film-search').onclick=search;
+  panel.querySelector('#film-search-input').onkeydown=e=>{if(e.key==='Enter')search();};
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+  search();
 }
 
 function confirmMovie(id) {
@@ -793,8 +811,9 @@ function openDetail(id) {
     ${coverHtml(m, 'sheet-cover', 'sheet-cover')}
     <div class="sheet-title">${escapeHtml(m.title || 'Untitled')}</div>
     <div class="sheet-studio">${escapeHtml(m.studio || '')}</div>
-    <div style="margin-top:12px;padding:12px;background:var(--surface);border-radius:10px;border:1px solid var(--groove)"><b>Collection / Box Set</b><p class="manager-small">Keep the original box cover. Search TMDB for suggested films, review them, then save. TMDB may list sequels that are not in your physical set.</p><input id="boxset-search" type="text" value="${escapeHtml(m.title||'')}" placeholder="Collection or franchise name" style="width:100%;padding:8px;border:1px solid var(--groove);border-radius:7px;margin-bottom:8px"><button class="manager-btn secondary" onclick="suggestBoxSet('${m.id}')">Find included movies automatically</button><div id="boxset-suggestions" style="margin-top:8px"></div><label style="font-size:12px"><input type="checkbox" id="boxset-check" ${m.isBoxSet?'checked':''}> This is a multi-movie collection</label><textarea id="boxset-films" rows="3" placeholder="One film per line" style="width:100%;margin-top:8px;border:1px solid var(--groove);border-radius:7px;padding:8px">${escapeHtml((m.includedMovies||[]).map(f=>typeof f==='string'?f:f.title).join('\n'))}</textarea><button class="manager-btn" onclick="saveBoxSet('${m.id}')">Save collection</button><p id="boxset-status" class="manager-small"></p></div>
     ${includedFilmCards(m)}
+    <div id="film-correction-panel" style="display:none;margin-top:12px;padding:12px;border:1px solid var(--groove);background:var(--surface);border-radius:10px"></div>
+    <div style="margin-top:12px;padding:12px;background:var(--surface);border-radius:10px;border:1px solid var(--groove)"><b>Collection / Box Set</b><p class="manager-small">Keep the original box cover. Search TMDB for suggested films, review them, then save. TMDB may list sequels that are not in your physical set.</p><input id="boxset-search" type="text" value="${escapeHtml(m.title||'')}" placeholder="Collection or franchise name" style="width:100%;padding:8px;border:1px solid var(--groove);border-radius:7px;margin-bottom:8px"><button class="manager-btn secondary" onclick="suggestBoxSet('${m.id}')">Find included movies automatically</button><div id="boxset-suggestions" style="margin-top:8px"></div><label style="font-size:12px"><input type="checkbox" id="boxset-check" ${m.isBoxSet?'checked':''}> This is a multi-movie collection</label><textarea id="boxset-films" rows="3" placeholder="One film per line" style="width:100%;margin-top:8px;border:1px solid var(--groove);border-radius:7px;padding:8px">${escapeHtml((m.includedMovies||[]).map(f=>typeof f==='string'?f:f.title).join('\n'))}</textarea><button class="manager-btn" onclick="saveBoxSet('${m.id}')">Save collection</button><p id="boxset-status" class="manager-small"></p></div>
     <div class="sheet-fields">
       <div><div class="field-label">Type</div><div class="field-value">${effectiveMediaType(m) === 'tv' ? 'TV Show' : 'Movie'}</div></div>
       <div><div class="field-label">Format</div><div class="field-value">${isUHD(m) ? '4K UHD' : 'Blu-ray'}</div></div>
