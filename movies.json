@@ -6078,7 +6078,21 @@
     "year": null,
     "overview": null,
     "enrichNote": "No TMDB match found",
-    "matchedVia": "tmdb"
+    "matchedVia": "tmdb",
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "Ocean's Eleven"
+      },
+      {
+        "title": "Ocean's Twelve"
+      },
+      {
+        "title": "Ocean's Thirteen"
+      }
+    ],
+    "reviewStatus": "collection",
+    "imdbRating": null
   },
   {
     "id": "MOV-0232",
