@@ -6634,7 +6634,8 @@
         "omdbNote": null
       }
     ],
-    "reviewStatus": "collection"
+    "reviewStatus": "collection",
+    "boxCoverUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/box-covers/MOV-0206.jpg?v=0ce0344de147ecb6ed79ad1832eefc409f6c29b3"
   },
   {
     "id": "MOV-0207",
