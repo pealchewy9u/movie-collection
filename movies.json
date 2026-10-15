@@ -1472,13 +1472,36 @@
     "isBoxSet": true,
     "includedMovies": [
       {
-        "title": "Batman Begins"
+        "title": "Batman Begins",
+        "tmdbId": 272,
+        "tmdbTitle": "Batman Begins",
+        "year": "2005",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/sPX89Td70IDDjVr85jdSBb4rWGr.jpg",
+        "language": "en",
+        "genre": "Drama, Crime, Action",
+        "overview": "Driven by tragedy, billionaire Bruce Wayne dedicates his life to uncovering and defeating the corruption that plagues his home, Gotham City.  Unable to work within the system, he instead creates a new identity, a symbol of fear for the criminal underworld - The Batman.",
+        "imdbId": "tt0372784",
+        "matchNote": null,
+        "imdbRating": "8.2",
+        "omdbNote": null
       },
       {
-        "title": "The Dark Knight"
+        "title": "The Dark Knight",
+        "matchNote": "Multiple movies share this title — choose manually"
       },
       {
-        "title": "The Dark Knight Rises"
+        "title": "The Dark Knight Rises",
+        "tmdbId": 49026,
+        "tmdbTitle": "The Dark Knight Rises",
+        "year": "2012",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/hr0L2aueqlP2BYUblTTjmtn0hw4.jpg",
+        "language": "en",
+        "genre": "Action, Crime, Thriller",
+        "overview": "Following the death of District Attorney Harvey Dent, Batman assumes responsibility for Dent's crimes to protect the late attorney's reputation and is subsequently hunted by the Gotham City Police Department. Eight years later, Batman encounters the mysterious Selina Kyle and the villainous Bane, a new terrorist leader who overwhelms Gotham's finest. The Dark Knight resurfaces to protect a city that has branded him an enemy.",
+        "imdbId": "tt1345836",
+        "matchNote": null,
+        "imdbRating": "8.4",
+        "omdbNote": null
       }
     ],
     "reviewStatus": "collection"
