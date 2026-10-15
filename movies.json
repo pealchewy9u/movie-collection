@@ -5622,7 +5622,18 @@
     "includedMovies": [
       {
         "title": "Madagascar",
-        "matchNote": "Multiple possible movies — choose manually"
+        "matchNote": null,
+        "tmdbId": 953,
+        "tmdbTitle": "Madagascar",
+        "year": "2005",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/zMpJY5CJKUufG9OTw0In4eAFqPX.jpg",
+        "language": "en",
+        "genre": "Adventure, Animation, Comedy, Family",
+        "overview": "Four animal friends get a taste of the wild life when they break out of captivity at the Central Park Zoo and wash ashore on the island of Madagascar.",
+        "imdbId": "tt0351283",
+        "imdbRating": "7.0",
+        "omdbNote": null,
+        "matchedVia": "tmdb-manual"
       },
       {
         "title": "Madagascar: Escape 2 Africa",
