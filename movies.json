@@ -379,8 +379,13 @@
     "tmdbTitle": "Andaz Apna Apna",
     "language": "hi",
     "imdbId": "tt0109117",
-    "imdbRating": null,
-    "omdbNote": null
+    "imdbRating": "8.0",
+    "omdbNote": null,
+    "tmdbId": 58128,
+    "enrichNote": null,
+    "matchedVia": "tmdb-manual",
+    "reviewStatus": "confirmed",
+    "reviewedAt": "2026-10-15T19:19:49.538Z"
   },
   {
     "id": "MOV-0016",
