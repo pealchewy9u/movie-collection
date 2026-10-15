@@ -3121,7 +3121,17 @@
       },
       {
         "title": "Mean Girls",
-        "matchNote": "Multiple movies share this title — choose manually"
+        "matchNote": null,
+        "tmdbId": 10625,
+        "posterUrl": "https://image.tmdb.org/t/p/w500/2ZkuQXvVhh45uSvkBej4S7Ix1NJ.jpg",
+        "imdbRating": "7.1",
+        "imdbId": "tt0377092",
+        "tmdbTitle": "Mean Girls",
+        "year": "2004",
+        "language": "en",
+        "genre": "Drama, Comedy",
+        "overview": "Cady Heron is a hit with The Plastics, the A-list girl clique at her new school, until she makes the mistake of falling for Aaron Samuels, the ex-boyfriend of alpha Plastic Regina George.",
+        "omdbNote": null
       },
       {
         "title": "She's the Man",
