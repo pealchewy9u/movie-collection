@@ -195,6 +195,13 @@
   .detail-inline-action{border:0;background:none;padding:4px 0;color:var(--text-muted);font-size:12px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
   .collection-edit-small{margin:8px 0 12px}
 .manager-stats{grid-template-columns:repeat(3,minmax(0,1fr))}@media(max-width:560px){.manager-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+  .cover-upload-zone{margin:10px 0;padding:12px;border:1px dashed var(--text-muted);border-radius:10px;background:var(--background);outline-offset:2px}
+  .cover-upload-zone:focus{outline:2px solid var(--brass)}
+  .cover-upload-zone .cover-preview{display:none;width:110px;height:158px;object-fit:cover;border-radius:7px;margin:9px 0}
+  .cover-upload-zone .cover-preview.visible{display:block}
+  .cover-upload-zone .cover-upload-buttons{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .cover-upload-zone input[type=file]{max-width:100%;font-size:12px}
 </style>
 </head>
 <body>
@@ -872,11 +879,86 @@ async function resolveBoxSetFilms(id, force=false) {
   const msg=document.getElementById('boxset-status');if(msg)msg.textContent=result;
 }
 async function refreshBoxSetFilms(id){await resolveBoxSetFilms(id);}
+// Keep selected images only in memory until the user saves this particular collection.
+const pendingCoverPhotos = new Map();
+function initCoverPhotoEditor(id) {
+  const zone=document.getElementById('cover-upload-zone');
+  const fileInput=document.getElementById('boxset-cover-file');
+  if(!zone||!fileInput)return;
+  const status=document.getElementById('cover-upload-status');
+  const preview=document.getElementById('boxset-cover-preview');
+  const existing=pendingCoverPhotos.get(id);
+  if(existing){preview.src=existing.preview;preview.classList.add('visible');status.textContent='New cover selected; tap Save collection to upload it.';}
+  const selectImage=async(file)=>{
+    if(!file||!file.type.startsWith('image/')){status.textContent='Please choose an image file.';return;}
+    if(file.size>25*1024*1024){status.textContent='Photo is too large (maximum 25 MB).';return;}
+    status.textContent='Preparing photo…';
+    try{
+      const prepared=await prepareCoverPhoto(file);
+      const previous=pendingCoverPhotos.get(id);
+      if(previous)URL.revokeObjectURL(previous.preview);
+      const url=URL.createObjectURL(prepared);
+      pendingCoverPhotos.set(id,{blob:prepared,preview:url});
+      preview.src=url;preview.classList.add('visible');
+      status.textContent='Cover ready. Tap Save collection to upload it to GitHub.';
+    }catch(e){status.textContent='Cannot read image: '+e.message;}
+  };
+  fileInput.onchange=()=>selectImage(fileInput.files?.[0]);
+  zone.onpaste=(e)=>{
+    const file=[...(e.clipboardData?.files||[])].find(f=>f.type.startsWith('image/'));
+    if(file){e.preventDefault();selectImage(file);}
+    else status.textContent='No image on clipboard. Copy an image itself, or choose a photo.';
+  };
+  document.getElementById('cover-paste-focus').onclick=()=>{
+    zone.focus();status.textContent='Cover area is selected. Press Ctrl+V (Windows) or Cmd+V (Mac). On mobile, use Choose photo.';
+  };
+}
+async function prepareCoverPhoto(file){
+  const bitmap=await createImageBitmap(file);
+  try{
+    const max=1100,scale=Math.min(1,max/Math.max(bitmap.width,bitmap.height));
+    const canvas=document.createElement('canvas');
+    canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));
+    const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Image processing unavailable');
+    ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);
+    const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('Could not convert image')),'image/jpeg',0.84));
+    if(blob.size>2*1024*1024)throw new Error('Prepared cover exceeds 2 MB. Try a smaller photo.');
+    return blob;
+  }finally{bitmap.close?.();}
+}
+async function uploadBoxCoverToGitHub(id,blob){
+  const cfg=githubConfig();if(!cfg)throw new Error('GitHub settings are required to upload a cover photo.');
+  const path='box-covers/'+encodeURIComponent(id)+'.jpg';
+  const api=`https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${path}`;
+  const headers={Authorization:`Bearer ${cfg.token}`,Accept:'application/vnd.github+json'};
+  const prev=await fetch(api,{headers,cache:'no-store'});
+  if(prev.status!==404&&!prev.ok)throw new Error('Unable to check existing cover (HTTP '+prev.status+').');
+  const sha=prev.ok?(await prev.json()).sha:undefined;
+  const bytes=new Uint8Array(await blob.arrayBuffer());
+  let binary='';for(let i=0;i<bytes.length;i+=8192)binary+=String.fromCharCode(...bytes.subarray(i,i+8192));
+  const content=btoa(binary);
+  const result=await fetch(api,{method:'PUT',headers:{...headers,'Content-Type':'application/json'},body:JSON.stringify({message:'Update box set cover '+id,content,sha,branch:'main'})});
+  if(!result.ok)throw new Error('Cover upload failed (HTTP '+result.status+'): '+(await result.text()).slice(0,140));
+  // Raw GitHub image URL with a unique revision query avoids stale cover caches.
+  const revision=(await result.json()).content?.sha||Date.now();
+  return `https://raw.githubusercontent.com/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/main/${path}?v=${encodeURIComponent(revision)}`;
+}
 async function saveBoxSet(id) {
   const m=movies.find(x=>x.id===id);if(!m)return;
   const checked=document.getElementById('boxset-check').checked;
   const titles=document.getElementById('boxset-films').value.split('\n').map(x=>x.trim()).filter(Boolean);
   const existing=(m.includedMovies||[]).map(f=>typeof f==='string'?{title:f}:f);
+  const selectedCover=pendingCoverPhotos.get(id);
+  if(checked && selectedCover){
+    const status=document.getElementById('boxset-status');
+    if(status)status.textContent='Uploading cover image to GitHub…';
+    try{
+      const uploadedUrl=await uploadBoxCoverToGitHub(id,selectedCover.blob);
+      const field=document.getElementById('boxset-cover-url');
+      if(field)field.value=uploadedUrl;
+    }catch(e){if(status)status.textContent='Cover not saved: '+e.message+' Please retry Save collection.';return;}
+  }
   m.isBoxSet=checked;
   const coverInput=document.getElementById('boxset-cover-url');
   if(checked && coverInput){
@@ -893,6 +975,9 @@ async function saveBoxSet(id) {
   markPending(m);
   buildGenreFilter();buildLanguageFilter();render();
   await persistManualEdit(m,document.getElementById('boxset-status'));
+  if(!pendingEdits()[id] && selectedCover){
+    URL.revokeObjectURL(selectedCover.preview);pendingCoverPhotos.delete(id);
+  }
   if(checked && titles.length) await resolveBoxSetFilms(id);
 }
 async function correctIncludedFilm(id,index) {
@@ -1089,13 +1174,13 @@ function openDetail(id) {
     </div>
     ${m.overview ? `<div style="margin-top:16px; font-size:13px; line-height:1.5;">${escapeHtml(m.overview)}</div>` : ''}
     ${m.enrichNote && !isHistoricalLookupError(m) ? `<div style="margin-top:14px; padding:8px 10px; background:var(--surface-raised); border-radius:8px; font-size:12px;">⚠ ${escapeHtml(m.enrichNote)}. If Blu-ray.com's title doesn't match how TMDB lists it, try typing the correct title below.</div>` : ''}
-    ${m.isBoxSet ? `    <details class="collection-editor collection-edit-small"><summary>${m.isBoxSet?'Edit collection details / cover':'Mark as box set'}</summary><div style="margin-top:12px;padding:12px;background:var(--surface);border-radius:10px;border:1px solid var(--groove)"><b>Collection / Box Set</b><p class="manager-small">Automatically detects movies separated by / in the title. For franchise box sets, searches TMDB collections. Review suggestions before saving.</p><input id="boxset-search" type="text" value="${escapeHtml(m.title||'')}" placeholder="Collection or franchise name" style="width:100%;padding:8px;border:1px solid var(--groove);border-radius:7px;margin-bottom:8px"><button class="manager-btn secondary" onclick="suggestBoxSet('${m.id}')">Find included movies automatically</button><div id="boxset-suggestions" style="margin-top:8px"></div><label style="font-size:12px"><input type="checkbox" id="boxset-check" ${m.isBoxSet?'checked':''}> This is a multi-movie collection</label><label class="manager-small" style="display:block;margin-top:9px">Original box-set cover URL (optional; use https://)</label><input id="boxset-cover-url" type="url" value="${escapeHtml(m.boxCoverUrl||'')}" placeholder="https://.../original-box-cover.jpg" style="width:100%;padding:8px;border:1px solid var(--groove);border-radius:7px;margin:5px 0"><p class="manager-small">When no original cover is supplied, the app displays a collage of included posters.</p><textarea id="boxset-films" rows="3" placeholder="One film per line" style="width:100%;margin-top:8px;border:1px solid var(--groove);border-radius:7px;padding:8px">${escapeHtml((m.includedMovies||[]).map(f=>typeof f==='string'?f:f.title).join('\n'))}</textarea><button class="manager-btn" onclick="saveBoxSet('${m.id}')">Save collection</button><p id="boxset-status" class="manager-small"></p></div></details>` : ''}
+    ${m.isBoxSet ? `    <details class="collection-editor collection-edit-small"><summary>${m.isBoxSet?'Edit collection details / cover':'Mark as box set'}</summary><div style="margin-top:12px;padding:12px;background:var(--surface);border-radius:10px;border:1px solid var(--groove)"><b>Collection / Box Set</b><p class="manager-small">Automatically detects movies separated by / in the title. For franchise box sets, searches TMDB collections. Review suggestions before saving.</p><input id="boxset-search" type="text" value="${escapeHtml(m.title||'')}" placeholder="Collection or franchise name" style="width:100%;padding:8px;border:1px solid var(--groove);border-radius:7px;margin-bottom:8px"><button class="manager-btn secondary" onclick="suggestBoxSet('${m.id}')">Find included movies automatically</button><div id="boxset-suggestions" style="margin-top:8px"></div><label style="font-size:12px"><input type="checkbox" id="boxset-check" ${m.isBoxSet?'checked':''}> This is a multi-movie collection</label><label class="manager-small" style="display:block;margin-top:9px">Original box-set cover URL (optional; use https://)</label><input id="boxset-cover-url" type="url" value="${escapeHtml(m.boxCoverUrl||'')}" placeholder="https://.../original-box-cover.jpg" style="width:100%;padding:8px;border:1px solid var(--groove);border-radius:7px;margin:5px 0"><div class="cover-upload-zone" id="cover-upload-zone" tabindex="0" aria-label="Paste or upload a box-set cover image"><b style="font-size:12px">Box-set cover photo</b><p class="manager-small">Paste an image here (Ctrl+V / Cmd+V), or choose a photo from your device.</p><div class="cover-upload-buttons"><input id="boxset-cover-file" type="file" accept="image/*" aria-label="Choose cover photo"><button type="button" class="manager-btn secondary" id="cover-paste-focus">Paste image</button></div><img class="cover-preview" id="boxset-cover-preview" alt="New box-set cover preview"><p class="manager-small" id="cover-upload-status">An uploaded photo will be saved to GitHub when you tap Save collection.</p></div><p class="manager-small">When no original cover is supplied, the app displays a collage of included posters.</p><textarea id="boxset-films" rows="3" placeholder="One film per line" style="width:100%;margin-top:8px;border:1px solid var(--groove);border-radius:7px;padding:8px">${escapeHtml((m.includedMovies||[]).map(f=>typeof f==='string'?f:f.title).join('\n'))}</textarea><button class="manager-btn" onclick="saveBoxSet('${m.id}')">Save collection</button><p id="boxset-status" class="manager-small"></p></div></details>` : ''}
     ${!m.isBoxSet ? `<details class="collection-editor collection-edit-small"><summary>More editing options</summary><div style="padding:0 12px 12px">
       ${m.languageOverride || (m.language && ['en','hi'].includes(m.language)) ? `    <details class="collection-editor" style="margin-top:12px"><summary>Correct movie language ${m.languageOverride?'(manually set)':''}</summary>
       <div style="padding:12px"><p class="manager-small">This is the movie's original language. A manual selection is protected from future TMDB and barcode refreshes.</p>
       <select id="language-correction">${[['','Select language'],['en','English'],['hi','Hindi'],['pa','Punjabi'],['ta','Tamil'],['te','Telugu'],['bn','Bengali'],['fr','French'],['es','Spanish'],['ja','Japanese'],['ko','Korean'],['zh','Chinese'],['de','German'],['other','Other / unknown']].map(([code,name])=>`<option value="${code}" ${(m.languageOverride||m.language)===code?'selected':''}>${name}</option>`).join('')}</select>
       <button class="manager-btn" onclick="saveMovieLanguage('${m.id}')">Save language</button><p class="manager-small" id="language-save-status"></p></div></details>` : ''}
-          <details class="collection-editor collection-edit-small"><summary>${m.isBoxSet?'Edit collection details / cover':'Mark as box set'}</summary><div style="margin-top:12px;padding:12px;background:var(--surface);border-radius:10px;border:1px solid var(--groove)"><b>Collection / Box Set</b><p class="manager-small">Automatically detects movies separated by / in the title. For franchise box sets, searches TMDB collections. Review suggestions before saving.</p><input id="boxset-search" type="text" value="${escapeHtml(m.title||'')}" placeholder="Collection or franchise name" style="width:100%;padding:8px;border:1px solid var(--groove);border-radius:7px;margin-bottom:8px"><button class="manager-btn secondary" onclick="suggestBoxSet('${m.id}')">Find included movies automatically</button><div id="boxset-suggestions" style="margin-top:8px"></div><label style="font-size:12px"><input type="checkbox" id="boxset-check" ${m.isBoxSet?'checked':''}> This is a multi-movie collection</label><label class="manager-small" style="display:block;margin-top:9px">Original box-set cover URL (optional; use https://)</label><input id="boxset-cover-url" type="url" value="${escapeHtml(m.boxCoverUrl||'')}" placeholder="https://.../original-box-cover.jpg" style="width:100%;padding:8px;border:1px solid var(--groove);border-radius:7px;margin:5px 0"><p class="manager-small">When no original cover is supplied, the app displays a collage of included posters.</p><textarea id="boxset-films" rows="3" placeholder="One film per line" style="width:100%;margin-top:8px;border:1px solid var(--groove);border-radius:7px;padding:8px">${escapeHtml((m.includedMovies||[]).map(f=>typeof f==='string'?f:f.title).join('\n'))}</textarea><button class="manager-btn" onclick="saveBoxSet('${m.id}')">Save collection</button><p id="boxset-status" class="manager-small"></p></div></details>
+          <details class="collection-editor collection-edit-small"><summary>${m.isBoxSet?'Edit collection details / cover':'Mark as box set'}</summary><div style="margin-top:12px;padding:12px;background:var(--surface);border-radius:10px;border:1px solid var(--groove)"><b>Collection / Box Set</b><p class="manager-small">Automatically detects movies separated by / in the title. For franchise box sets, searches TMDB collections. Review suggestions before saving.</p><input id="boxset-search" type="text" value="${escapeHtml(m.title||'')}" placeholder="Collection or franchise name" style="width:100%;padding:8px;border:1px solid var(--groove);border-radius:7px;margin-bottom:8px"><button class="manager-btn secondary" onclick="suggestBoxSet('${m.id}')">Find included movies automatically</button><div id="boxset-suggestions" style="margin-top:8px"></div><label style="font-size:12px"><input type="checkbox" id="boxset-check" ${m.isBoxSet?'checked':''}> This is a multi-movie collection</label><label class="manager-small" style="display:block;margin-top:9px">Original box-set cover URL (optional; use https://)</label><input id="boxset-cover-url" type="url" value="${escapeHtml(m.boxCoverUrl||'')}" placeholder="https://.../original-box-cover.jpg" style="width:100%;padding:8px;border:1px solid var(--groove);border-radius:7px;margin:5px 0"><div class="cover-upload-zone" id="cover-upload-zone" tabindex="0" aria-label="Paste or upload a box-set cover image"><b style="font-size:12px">Box-set cover photo</b><p class="manager-small">Paste an image here (Ctrl+V / Cmd+V), or choose a photo from your device.</p><div class="cover-upload-buttons"><input id="boxset-cover-file" type="file" accept="image/*" aria-label="Choose cover photo"><button type="button" class="manager-btn secondary" id="cover-paste-focus">Paste image</button></div><img class="cover-preview" id="boxset-cover-preview" alt="New box-set cover preview"><p class="manager-small" id="cover-upload-status">An uploaded photo will be saved to GitHub when you tap Save collection.</p></div><p class="manager-small">When no original cover is supplied, the app displays a collage of included posters.</p><textarea id="boxset-films" rows="3" placeholder="One film per line" style="width:100%;margin-top:8px;border:1px solid var(--groove);border-radius:7px;padding:8px">${escapeHtml((m.includedMovies||[]).map(f=>typeof f==='string'?f:f.title).join('\n'))}</textarea><button class="manager-btn" onclick="saveBoxSet('${m.id}')">Save collection</button><p id="boxset-status" class="manager-small"></p></div></details>
     </div></details>` : ''}
     <div style="margin-top:12px;">
       <label style="font-size:11px; color:var(--text-muted); display:block; margin-bottom:4px;">Search TMDB with a different title (optional)</label>
@@ -1110,6 +1195,7 @@ function openDetail(id) {
   `;
   document.getElementById('detail-overlay').style.display = 'flex';
   document.querySelectorAll('[data-film-index]').forEach(b=>b.onclick=()=>correctIncludedFilm(id,Number(b.dataset.filmIndex)));
+  initCoverPhotoEditor(id);
 }
 function closeDetail() { document.getElementById('detail-overlay').style.display = 'none'; }
 
