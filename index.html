@@ -160,10 +160,51 @@
   <div id="status-bar">
     <span id="status-text">Loading…</span>
     <button id="refresh-btn">Refresh</button>
+    &nbsp;·&nbsp;
+    <button id="settings-btn">Settings</button>
   </div>
 </div>
 
 <div id="detail-overlay"><div id="detail-sheet"></div></div>
+<div id="settings-overlay" style="position:fixed; inset:0; background:rgba(58,38,21,0.4); display:none; align-items:flex-end; z-index:60;">
+  <div style="background:var(--background); width:100%; max-height:85vh; border-radius:18px 18px 0 0; overflow-y:auto; padding:20px 20px calc(30px + env(safe-area-inset-bottom));">
+    <div style="text-align:right;"><button onclick="closeSettings()" style="border:none; background:var(--surface-raised); color:var(--text); padding:6px 14px; border-radius:20px; font-size:13px; font-weight:600;">Close</button></div>
+    <h2 style="font-size:20px; margin:12px 0 4px;">Settings</h2>
+
+    <p style="font-size:12px; color:var(--text-muted); line-height:1.5;">These are stored only in this browser, on this device -- never saved in the app's own code, which stays public on GitHub.</p>
+
+    <div style="margin-top:16px;">
+      <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:4px;">TMDB API Key</label>
+      <input id="tmdb-key-input" type="password" style="width:100%; padding:9px; border-radius:8px; border:1px solid var(--groove); font-size:14px;">
+    </div>
+    <div style="margin-top:12px;">
+      <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:4px;">OMDb API Key</label>
+      <input id="omdb-key-input" type="password" style="width:100%; padding:9px; border-radius:8px; border:1px solid var(--groove); font-size:14px;">
+    </div>
+
+    <p style="font-size:12px; color:var(--text-muted); line-height:1.5; margin-top:20px;">GitHub details, needed only if you want this app to save enrichment results back for everyone (otherwise it'll still show enriched data to you personally, just not persisted).</p>
+    <div style="margin-top:12px;">
+      <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:4px;">GitHub Username</label>
+      <input id="gh-owner-input" type="text" style="width:100%; padding:9px; border-radius:8px; border:1px solid var(--groove); font-size:14px;">
+    </div>
+    <div style="margin-top:12px;">
+      <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:4px;">Repository Name</label>
+      <input id="gh-repo-input" type="text" style="width:100%; padding:9px; border-radius:8px; border:1px solid var(--groove); font-size:14px;">
+    </div>
+    <div style="margin-top:12px;">
+      <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:4px;">GitHub Personal Access Token</label>
+      <input id="gh-token-input" type="password" style="width:100%; padding:9px; border-radius:8px; border:1px solid var(--groove); font-size:14px;">
+    </div>
+
+    <button onclick="saveSettings()" style="margin-top:16px; padding:10px 16px; border-radius:8px; border:none; background:var(--brass); color:#fff; font-weight:600;">Save</button>
+    <span id="settings-saved-msg" style="display:none; color:#1B5E20; font-size:13px; margin-left:10px;">Saved</span>
+
+    <hr style="margin:24px 0; border:none; border-top:1px solid var(--groove);">
+
+    <button onclick="enrichAll()" id="enrich-btn" style="padding:10px 16px; border-radius:8px; border:none; background:var(--maroon); color:#fff; font-weight:600;">Enrich All Movies</button>
+    <p id="enrich-status" style="font-size:12px; color:var(--text-muted); margin-top:10px;"></p>
+  </div>
+</div>
 
 <script>
 const DATA_URL = './movies.json';
@@ -290,9 +331,10 @@ function renderCoverFlow() {
     const m = items[closestIdx];
     const caption = document.getElementById('cf-caption');
     if (!m) { caption.innerHTML = ''; return; }
+    const subtitle = m.imdbRating ? `★ ${m.imdbRating} IMDB` : (m.studio || '');
     caption.innerHTML = `
       <div class="cf-title">${escapeHtml(m.title || 'Untitled')}</div>
-      <div class="cf-studio">${escapeHtml(m.studio || '')}</div>
+      <div class="cf-studio">${escapeHtml(subtitle)}</div>
     `;
   }
   scroll.onscroll = () => requestAnimationFrame(updateTiltAndCaption);
@@ -352,6 +394,8 @@ function openDetail(id) {
       <div><div class="field-label">Format</div><div class="field-value">${isUHD(m) ? '4K UHD' : 'Blu-ray'}</div></div>
       <div><div class="field-label">Genre</div><div class="field-value">${escapeHtml(m.genre || '—')}</div></div>
       <div><div class="field-label">Year</div><div class="field-value">${escapeHtml(m.year || '—')}</div></div>
+      <div><div class="field-label">IMDB Rating</div><div class="field-value">${m.imdbRating ? '★ ' + escapeHtml(m.imdbRating) : '—'}</div></div>
+      <div><div class="field-label">Language</div><div class="field-value">${escapeHtml(m.language || '—')}</div></div>
       <div><div class="field-label">Release Date</div><div class="field-value">${escapeHtml(m.releaseDate || '—')}</div></div>
       <div><div class="field-label">Country</div><div class="field-value">${escapeHtml(m.countryCode || '—')}</div></div>
       <div><div class="field-label">Blu-ray Discs</div><div class="field-value">${m.blurayDiscs ?? '—'}</div></div>
@@ -386,6 +430,169 @@ document.getElementById('refresh-btn').addEventListener('click', loadData);
 document.getElementById('detail-overlay').addEventListener('click', e => {
   if (e.target.id === 'detail-overlay') closeDetail();
 });
+
+document.getElementById('settings-btn').addEventListener('click', openSettings);
+
+function openSettings() {
+  document.getElementById('tmdb-key-input').value = localStorage.getItem('tmdbKey') || '';
+  document.getElementById('omdb-key-input').value = localStorage.getItem('omdbKey') || '';
+  document.getElementById('gh-owner-input').value = localStorage.getItem('ghOwner') || '';
+  document.getElementById('gh-repo-input').value = localStorage.getItem('ghRepo') || '';
+  document.getElementById('gh-token-input').value = localStorage.getItem('ghToken') || '';
+  document.getElementById('settings-overlay').style.display = 'flex';
+}
+function closeSettings() { document.getElementById('settings-overlay').style.display = 'none'; }
+
+function saveSettings() {
+  localStorage.setItem('tmdbKey', document.getElementById('tmdb-key-input').value.trim());
+  localStorage.setItem('omdbKey', document.getElementById('omdb-key-input').value.trim());
+  localStorage.setItem('ghOwner', document.getElementById('gh-owner-input').value.trim());
+  localStorage.setItem('ghRepo', document.getElementById('gh-repo-input').value.trim());
+  localStorage.setItem('ghToken', document.getElementById('gh-token-input').value.trim());
+  const msg = document.getElementById('settings-saved-msg');
+  msg.style.display = 'inline';
+  setTimeout(() => { msg.style.display = 'none'; }, 2000);
+}
+
+// ---- TMDB genre list (fetched once, cached) ----
+let genreMap = null;
+async function getGenreMap(tmdbKey) {
+  if (genreMap) return genreMap;
+  const cached = localStorage.getItem('tmdbGenreMap');
+  if (cached) { genreMap = JSON.parse(cached); return genreMap; }
+  const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${tmdbKey}`);
+  const data = await res.json();
+  genreMap = {};
+  (data.genres || []).forEach(g => { genreMap[g.id] = g.name; });
+  localStorage.setItem('tmdbGenreMap', JSON.stringify(genreMap));
+  return genreMap;
+}
+
+// Blu-ray.com titles often have "4K" or a trailing collection/edition note that
+// won't match TMDB's actual movie title -- strip the obvious ones before searching.
+function cleanTitleForSearch(title) {
+  return title.replace(/\s*4K\s*$/i, '').replace(/\s*\(.*?\)\s*$/, '').trim();
+}
+
+async function enrichOne(movie, tmdbKey, omdbKey) {
+  const searchTitle = cleanTitleForSearch(movie.title);
+  const searchRes = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${tmdbKey}&query=${encodeURIComponent(searchTitle)}`);
+  const searchData = await searchRes.json();
+  const match = (searchData.results || [])[0];
+  if (!match) return { ...movie, enrichNote: 'No TMDB match found' };
+
+  const genres = await getGenreMap(tmdbKey);
+  const genreName = (match.genre_ids || []).map(id => genres[id]).filter(Boolean)[0] || null;
+
+  const detailRes = await fetch(`https://api.themoviedb.org/3/movie/${match.id}?api_key=${tmdbKey}`);
+  const detail = await detailRes.json();
+
+  let imdbRating = null;
+  if (detail.imdb_id && omdbKey) {
+    try {
+      const omdbRes = await fetch(`https://www.omdbapi.com/?i=${detail.imdb_id}&apikey=${omdbKey}`);
+      const omdbData = await omdbRes.json();
+      if (omdbData.imdbRating && omdbData.imdbRating !== 'N/A') imdbRating = omdbData.imdbRating;
+    } catch (e) { /* OMDb miss shouldn't block the rest of the enrichment */ }
+  }
+
+  return {
+    ...movie,
+    genre: genreName,
+    posterUrl: match.poster_path ? `https://image.tmdb.org/t/p/w500${match.poster_path}` : null,
+    year: (match.release_date || '').slice(0, 4) || null,
+    overview: match.overview || null,
+    language: match.original_language || null,
+    imdbId: detail.imdb_id || null,
+    imdbRating: imdbRating
+  };
+}
+
+async function enrichAll() {
+  const tmdbKey = localStorage.getItem('tmdbKey');
+  const omdbKey = localStorage.getItem('omdbKey');
+  const statusEl = document.getElementById('enrich-status');
+  const btn = document.getElementById('enrich-btn');
+
+  if (!tmdbKey) {
+    statusEl.textContent = 'Add your TMDB key above first.';
+    return;
+  }
+
+  btn.disabled = true;
+  const targets = movies.filter(m => !m.genre); // only enrich what's not already done
+  let successCount = 0;
+
+  for (let i = 0; i < targets.length; i++) {
+    statusEl.textContent = `Enriching ${i + 1} of ${targets.length}: ${targets[i].title}…`;
+    try {
+      const enriched = await enrichOne(targets[i], tmdbKey, omdbKey);
+      const idx = movies.findIndex(m => m.id === targets[i].id);
+      if (idx !== -1) movies[idx] = enriched;
+      if (enriched.genre) successCount++;
+    } catch (e) {
+      console.error('Enrich failed for', targets[i].title, e);
+    }
+    // Be polite to both free APIs across a batch this size.
+    await new Promise(r => setTimeout(r, 300));
+  }
+
+  buildGenreFilter();
+  render();
+  localStorage.setItem('movie-cache', JSON.stringify(movies));
+
+  statusEl.textContent = `Done locally: ${successCount} of ${targets.length} matched. Saving to GitHub…`;
+
+  const ghOwner = localStorage.getItem('ghOwner');
+  const ghRepo = localStorage.getItem('ghRepo');
+  const ghToken = localStorage.getItem('ghToken');
+  if (ghOwner && ghRepo && ghToken) {
+    try {
+      await saveToGitHub(ghOwner, ghRepo, ghToken, movies);
+      statusEl.textContent = `Done: ${successCount} of ${targets.length} matched, and saved to GitHub.`;
+    } catch (e) {
+      statusEl.textContent = `Enriched locally, but GitHub save failed: ${e.message}`;
+    }
+  } else {
+    statusEl.textContent = `Done locally: ${successCount} of ${targets.length} matched. Add GitHub details above to save this for next time.`;
+  }
+
+  btn.disabled = false;
+}
+
+// ---- GitHub write-back (same Contents API approach as the Mac app) ----
+async function saveToGitHub(owner, repo, token, data) {
+  const path = 'movies.json';
+  const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+  const headers = {
+    'Authorization': `Bearer ${token}`,
+    'Accept': 'application/vnd.github+json'
+  };
+
+  let sha = null;
+  const getRes = await fetch(url, { headers });
+  if (getRes.ok) {
+    const getData = await getRes.json();
+    sha = getData.sha;
+  }
+
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+  const putRes = await fetch(url, {
+    method: 'PUT',
+    headers: { ...headers, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      message: 'Enrich movie data via TMDB/OMDb',
+      content: content,
+      sha: sha,
+      branch: 'main'
+    })
+  });
+
+  if (!putRes.ok) {
+    const errText = await putRes.text();
+    throw new Error(errText);
+  }
+}
 
 // No service worker for now, same reasoning as the vinyl app during active development --
 // avoids the installed-PWA stale-cache headaches while this is still being built out.
