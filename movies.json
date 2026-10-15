@@ -3191,10 +3191,22 @@
     "isBoxSet": true,
     "includedMovies": [
       {
-        "title": "Green Mile"
+        "title": "Green Mile",
+        "matchNote": "No exact title match on TMDB — review manually"
       },
       {
-        "title": "Forrest Gump"
+        "title": "Forrest Gump",
+        "tmdbId": 13,
+        "tmdbTitle": "Forrest Gump",
+        "year": "1994",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/saHP97rTPS5eLmrLQEcANmKrsFl.jpg",
+        "language": "en",
+        "genre": "Comedy, Drama, Romance",
+        "overview": "A man with a low IQ has accomplished great things in his life and been present during significant historic events—in each case, far exceeding what anyone imagined he could do. But despite all he has achieved, his one true love eludes him.",
+        "imdbId": "tt0109830",
+        "matchNote": null,
+        "imdbRating": "8.8",
+        "omdbNote": null
       }
     ],
     "reviewStatus": "collection",
