@@ -160,6 +160,20 @@
     padding: 6px 0 calc(20px + env(safe-area-inset-bottom));
   }
   #refresh-btn { border: none; background: none; color: var(--brass); font-weight: 600; font-size: 13px; }
+
+  /* Compact, readable movie detail layout */
+  #detail-sheet { max-width:860px;margin:0 auto;max-height:90dvh; }
+  .detail-hero { display:flex;align-items:flex-start;gap:18px;margin:12px 0 16px; }
+  .detail-hero .sheet-cover { margin:0;flex:0 0 110px; }
+  .detail-hero-text { min-width:0;flex:1;padding-top:3px; }
+  .detail-chips { display:flex;flex-wrap:wrap;gap:6px;margin-top:12px; }
+  .detail-chips span { background:var(--surface-raised);padding:5px 8px;border-radius:6px;font-size:11px;font-weight:600; }
+  .collection-editor { margin:18px 0 8px;border:1px solid var(--groove);border-radius:10px;background:var(--surface);overflow:hidden; }
+  .collection-editor summary { cursor:pointer;padding:13px 14px;font-weight:650;font-size:13px; }
+  .collection-editor[open] summary { border-bottom:1px solid var(--groove); }
+  .collection-editor > div { border:0 !important;margin:0 !important; }
+  .sheet-fields { border-top:1px solid var(--groove);padding-top:14px; }
+  @media(min-width:900px){#detail-overlay{align-items:center;justify-content:center}#detail-sheet{border-radius:18px;max-height:90vh}}
 </style>
 </head>
 <body>
@@ -281,34 +295,49 @@ const DATA_URL = './movies.json';
 let movies = [];
 let currentView = 'list';
 
+// GitHub is the source of truth when configured. Pages is a fallback only.
+function githubConfig() {
+  const owner=localStorage.getItem('ghOwner'), repo=localStorage.getItem('ghRepo'), token=localStorage.getItem('ghToken');
+  return owner&&repo&&token?{owner,repo,token}:null;
+}
+function githubFileUrl(c) {return `https://api.github.com/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/contents/movies.json?ref=main`;}
+function decodeGitHubContent(file) {
+  if (!file.content) throw new Error('GitHub did not return file contents');
+  return JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(file.content.replace(/\s/g,'')),ch=>ch.charCodeAt(0))));
+}
+async function readGitHubMovies(c) {
+  const response=await fetch(githubFileUrl(c),{headers:{Authorization:`Bearer ${c.token}`,Accept:'application/vnd.github+json'},cache:'no-store'});
+  if(!response.ok)throw new Error('GitHub read HTTP '+response.status);
+  const file=await response.json();return {data:decodeGitHubContent(file),sha:file.sha};
+}
+function pendingEdits(){try{return JSON.parse(localStorage.getItem('movie-pending-edits')||'{}')}catch(e){return {}}}
+function overlayPending(data){const pending=pendingEdits();return data.map(m=>pending[m.id]?{...m,...pending[m.id]}:m)}
 async function loadData() {
-  document.getElementById('status-text').textContent = 'Loading…';
+  const status=document.getElementById('status-text');status.textContent='Loading…';
   try {
-    const res = await fetch(DATA_URL, { cache: 'no-store' });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    movies = await res.json();
-    // Keep unsynced manual edits when refreshing; never silently discard them.
-    const pending = JSON.parse(localStorage.getItem('movie-pending-edits') || '{}');
-    movies = movies.map(m => pending[m.id] ? {...m, ...pending[m.id]} : m);
-    localStorage.setItem('movie-cache', JSON.stringify(movies));
-    const now = new Date();
-    localStorage.setItem('movie-cache-time', now.toISOString());
-    document.getElementById('status-text').textContent =
-      movies.length + ' movies · updated ' + now.toLocaleString([], {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'});
-  } catch (e) {
-    const cached = localStorage.getItem('movie-cache');
-    if (cached) {
-      movies = JSON.parse(cached);
-      const t = localStorage.getItem('movie-cache-time');
-      document.getElementById('status-text').textContent =
-        'Offline — showing data from ' + (t ? new Date(t).toLocaleDateString() : 'last sync');
-    } else {
-      document.getElementById('status-text').textContent = 'Could not load collection data.';
+    const config=githubConfig();let data,source;
+    if(config){
+      try {data=(await readGitHubMovies(config)).data;source='GitHub';}
+      catch(err){
+        const cached=localStorage.getItem('movie-cache');
+        if(cached){data=JSON.parse(cached);source='local cache (GitHub unavailable)';}
+        else throw err;
+      }
+    }else{
+      const res=await fetch(DATA_URL+'?t='+Date.now(),{cache:'no-store'});
+      if(!res.ok)throw new Error('HTTP '+res.status);
+      data=await res.json();source='GitHub Pages';
     }
+    movies=overlayPending(data);
+    localStorage.setItem('movie-cache',JSON.stringify(movies));
+    localStorage.setItem('movie-cache-time',new Date().toISOString());
+    status.textContent=`${movies.length} movies · ${source}${Object.keys(pendingEdits()).length?' · local edits pending':''}`;
+  }catch(err){
+    const cached=localStorage.getItem('movie-cache');
+    if(cached){movies=overlayPending(JSON.parse(cached));status.textContent='Offline · local cache';}
+    else status.textContent='Could not load collection: '+err.message;
   }
-  buildGenreFilter();
-  buildLanguageFilter();
-  render();
+  buildGenreFilter();buildLanguageFilter();render();
 }
 
 // TMDB returns ISO 639-1 codes, not display names -- map the common ones likely
@@ -582,30 +611,38 @@ function markPending(m) {
   localStorage.setItem('movie-pending-edits',JSON.stringify(pending));
   localStorage.setItem('movie-cache',JSON.stringify(movies));
 }
-async function syncPendingEdits() {
-  const owner=localStorage.getItem('ghOwner'),repo=localStorage.getItem('ghRepo'),token=localStorage.getItem('ghToken');
-  if(!owner||!repo||!token) throw new Error('Enter GitHub username, repository and token in Settings first.');
-  // Merge pending changes into latest remote file, avoiding overwriting unrelated edits.
-  const url=`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/movies.json`;
-  const headers={'Authorization':`Bearer ${token}`,'Accept':'application/vnd.github+json'};
-  const response=await fetch(url,{headers,cache:'no-store'});
-  if(!response.ok) throw new Error('GitHub read failed (HTTP '+response.status+'). Check token and repository permissions.');
-  const remote=await response.json();
-  const raw=atob(remote.content.replace(/\s/g,''));
-  const bytes=Uint8Array.from(raw,c=>c.charCodeAt(0));
-  const existing=JSON.parse(new TextDecoder().decode(bytes));
-  const pending=JSON.parse(localStorage.getItem('movie-pending-edits')||'{}');
-  const updated=existing.map(m=>pending[m.id]?{...m,...pending[m.id]}:m);
-  if(!Object.keys(pending).length) return 'No pending changes.';
-  const content=btoa(unescape(encodeURIComponent(JSON.stringify(updated,null,2))));
-  const put=await fetch(url,{method:'PUT',headers:{...headers,'Content-Type':'application/json'},body:JSON.stringify({message:'Save reviewed movie metadata',content,sha:remote.sha,branch:'main'})});
-  if(!put.ok) throw new Error('GitHub save failed (HTTP '+put.status+'): '+(await put.text()).slice(0,250));
-  localStorage.removeItem('movie-pending-edits');
-  movies=updated;
-  localStorage.setItem('movie-cache',JSON.stringify(movies));
-  render();
-  return 'Saved to GitHub. Changes will survive refresh.';
+// Serializes saves so concurrent corrections cannot overwrite one another.
+let syncQueue=Promise.resolve();
+function syncPendingEdits(){
+  const work=syncQueue.catch(()=>{}).then(syncPendingEditsNow);
+  syncQueue=work.catch(()=>{});return work;
 }
+async function syncPendingEditsNow(){
+  const config=githubConfig();if(!config)throw new Error('Set GitHub username, repository and token in Settings.');
+  const pending=pendingEdits(),ids=Object.keys(pending);
+  if(!ids.length)return 'No pending changes.';
+  const {data,sha}=await readGitHubMovies(config);
+  const updated=data.map(m=>pending[m.id]?{...m,...pending[m.id]}:m);
+  const content=btoa(unescape(encodeURIComponent(JSON.stringify(updated,null,2))));
+  const url=`https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}/contents/movies.json`;
+  const response=await fetch(url,{method:'PUT',headers:{Authorization:`Bearer ${config.token}`,Accept:'application/vnd.github+json','Content-Type':'application/json'},body:JSON.stringify({message:'Save reviewed movie metadata',content,sha,branch:'main'})});
+  if(!response.ok)throw new Error('GitHub save HTTP '+response.status+': '+(await response.text()).slice(0,200));
+  // Read the committed file back from GitHub, not GitHub Pages.
+  const verified=(await readGitHubMovies(config)).data;
+  for(const id of ids){
+    const actual=verified.find(m=>m.id===id);
+    if(!actual || JSON.stringify(actual)!==JSON.stringify(updated.find(m=>m.id===id)))
+      throw new Error('GitHub read-back did not match the saved movie '+id+'. Local changes retained.');
+  }
+  const current=pendingEdits();
+  for(const id of ids){if(JSON.stringify(current[id])===JSON.stringify(pending[id]))delete current[id];}
+  localStorage.setItem('movie-pending-edits',JSON.stringify(current));
+  movies=overlayPending(verified);
+  localStorage.setItem('movie-cache',JSON.stringify(movies));
+  buildGenreFilter();buildLanguageFilter();render();
+  return 'Saved and verified on GitHub. Safe to refresh.';
+}
+
 async function persistManualEdit(m,status) {
   markPending(m);
   if(status) status.textContent='Saved locally. Syncing to GitHub…';
@@ -842,12 +879,9 @@ function openDetail(id) {
 
   document.getElementById('detail-sheet').innerHTML = `
     <div class="sheet-close"><button onclick="closeDetail()">Close</button></div>
-    ${coverHtml(m, 'sheet-cover', 'sheet-cover')}
-    <div class="sheet-title">${escapeHtml(m.title || 'Untitled')}</div>
-    <div class="sheet-studio">${escapeHtml(m.studio || '')}</div>
+    <div class="detail-hero">${coverHtml(m, 'sheet-cover', 'sheet-cover')}<div class="detail-hero-text"><div class="sheet-title">${escapeHtml(m.title || 'Untitled')}</div><div class="sheet-studio">${escapeHtml(m.studio || '')}</div><div class="detail-chips"><span>${isUHD(m)?'4K UHD':'Blu-ray'}</span>${m.year?`<span>${escapeHtml(m.year)}</span>`:''}${m.language?`<span>${escapeHtml(languageName(m.language))}</span>`:''}${m.imdbRating?`<span>★ ${escapeHtml(m.imdbRating)}</span>`:''}</div></div></div>
     ${includedFilmCards(m)}
     <div id="film-correction-panel" style="display:none;margin-top:12px;padding:12px;border:1px solid var(--groove);background:var(--surface);border-radius:10px"></div>
-    <div style="margin-top:12px;padding:12px;background:var(--surface);border-radius:10px;border:1px solid var(--groove)"><b>Collection / Box Set</b><p class="manager-small">Automatically detects movies separated by / in the title. For franchise box sets, searches TMDB collections. Review suggestions before saving.</p><input id="boxset-search" type="text" value="${escapeHtml(m.title||'')}" placeholder="Collection or franchise name" style="width:100%;padding:8px;border:1px solid var(--groove);border-radius:7px;margin-bottom:8px"><button class="manager-btn secondary" onclick="suggestBoxSet('${m.id}')">Find included movies automatically</button><div id="boxset-suggestions" style="margin-top:8px"></div><label style="font-size:12px"><input type="checkbox" id="boxset-check" ${m.isBoxSet?'checked':''}> This is a multi-movie collection</label><textarea id="boxset-films" rows="3" placeholder="One film per line" style="width:100%;margin-top:8px;border:1px solid var(--groove);border-radius:7px;padding:8px">${escapeHtml((m.includedMovies||[]).map(f=>typeof f==='string'?f:f.title).join('\n'))}</textarea><button class="manager-btn" onclick="saveBoxSet('${m.id}')">Save collection</button><p id="boxset-status" class="manager-small"></p></div>
     <div class="sheet-fields">
       <div><div class="field-label">Type</div><div class="field-value">${effectiveMediaType(m) === 'tv' ? 'TV Show' : 'Movie'}</div></div>
       <div><div class="field-label">Format</div><div class="field-value">${isUHD(m) ? '4K UHD' : 'Blu-ray'}</div></div>
@@ -863,6 +897,7 @@ function openDetail(id) {
     </div>
     ${m.overview ? `<div style="margin-top:16px; font-size:13px; line-height:1.5;">${escapeHtml(m.overview)}</div>` : ''}
     ${m.enrichNote ? `<div style="margin-top:14px; padding:8px 10px; background:var(--surface-raised); border-radius:8px; font-size:12px;">⚠ ${escapeHtml(m.enrichNote)}. If Blu-ray.com's title doesn't match how TMDB lists it, try typing the correct title below.</div>` : ''}
+    <details class="collection-editor" ${m.isBoxSet?'open':''}><summary>${m.isBoxSet?'Manage collection / box set':'Is this a multi-movie box set?'}</summary><div style="margin-top:12px;padding:12px;background:var(--surface);border-radius:10px;border:1px solid var(--groove)"><b>Collection / Box Set</b><p class="manager-small">Automatically detects movies separated by / in the title. For franchise box sets, searches TMDB collections. Review suggestions before saving.</p><input id="boxset-search" type="text" value="${escapeHtml(m.title||'')}" placeholder="Collection or franchise name" style="width:100%;padding:8px;border:1px solid var(--groove);border-radius:7px;margin-bottom:8px"><button class="manager-btn secondary" onclick="suggestBoxSet('${m.id}')">Find included movies automatically</button><div id="boxset-suggestions" style="margin-top:8px"></div><label style="font-size:12px"><input type="checkbox" id="boxset-check" ${m.isBoxSet?'checked':''}> This is a multi-movie collection</label><textarea id="boxset-films" rows="3" placeholder="One film per line" style="width:100%;margin-top:8px;border:1px solid var(--groove);border-radius:7px;padding:8px">${escapeHtml((m.includedMovies||[]).map(f=>typeof f==='string'?f:f.title).join('\n'))}</textarea><button class="manager-btn" onclick="saveBoxSet('${m.id}')">Save collection</button><p id="boxset-status" class="manager-small"></p></div></details>
     <div style="margin-top:12px;">
       <label style="font-size:11px; color:var(--text-muted); display:block; margin-bottom:4px;">Search TMDB with a different title (optional)</label>
       <input id="rematch-title-input" type="text" placeholder="${escapeHtml(m.title)}" style="width:100%; padding:8px; border-radius:8px; border:1px solid var(--groove); font-size:13px; margin-bottom:8px;">
