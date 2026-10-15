@@ -5762,7 +5762,30 @@
     "year": null,
     "overview": null,
     "enrichNote": "No TMDB match found",
-    "matchedVia": "tmdb"
+    "matchedVia": "tmdb",
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "Black Panther (2018)"
+      },
+      {
+        "title": "Avengers: Infinity War (2018)"
+      },
+      {
+        "title": "Ant-Man and the Wasp (2018)"
+      },
+      {
+        "title": "Captain Marvel (2019)"
+      },
+      {
+        "title": "Avengers: Endgame (2019)"
+      },
+      {
+        "title": "Spider-Man: Far from Home (2019)"
+      }
+    ],
+    "reviewStatus": "collection",
+    "imdbRating": null
   },
   {
     "id": "MOV-0202",
