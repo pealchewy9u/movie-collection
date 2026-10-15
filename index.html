@@ -719,18 +719,32 @@ async function loadCollectionSuggestions(id,collectionId){
 function normalizeFilmTitle(title) {
   return String(title||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
 }
+// Years embedded in bundle film titles refer to theatrical release, not disc release.
+function parseIncludedFilmTitle(raw) {
+  const title=String(raw||'').trim();
+  const match=title.match(/\s*\((18|19|20)\d{2}\)\s*$/);
+  return {searchTitle:match?title.slice(0,match.index).trim():title,
+          year:match?match[0].match(/\d{4}/)[0]:null};
+}
 async function enrichIncludedFilm(film, tmdbKey, omdbKey) {
   if (!tmdbKey) return {...film, matchNote:'TMDB API key missing'};
   const title=film.title||'';
+  // Never replace a film explicitly selected by the owner.
+  if(film.matchedVia==='tmdb-manual' && film.tmdbId) return film;
+  const parsed=parseIncludedFilmTitle(title);
   try {
-    const res=await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${encodeURIComponent(tmdbKey)}&query=${encodeURIComponent(title)}`,{cache:'no-store'});
+    const res=await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${encodeURIComponent(tmdbKey)}&query=${encodeURIComponent(parsed.searchTitle)}`,{cache:'no-store'});
     if(!res.ok) throw new Error('TMDB HTTP '+res.status);
     const data=await res.json();
-    const candidates=(data.results||[]).filter(c=>normalizeFilmTitle(c.title)===normalizeFilmTitle(title) || normalizeFilmTitle(c.original_title)===normalizeFilmTitle(title));
-    if(!candidates.length) return {...film,matchNote:'No exact title match on TMDB — review manually'};
-    // Multiple films can share a title. Don't guess without an existing verified TMDB ID.
-    if(candidates.length>1 && !film.tmdbId) return {...film,matchNote:'Multiple movies share this title — choose manually'};
-    const c=candidates.find(c=>c.id===film.tmdbId)||candidates[0];
+    const candidates=(data.results||[]).filter(c=>normalizeFilmTitle(c.title)===normalizeFilmTitle(parsed.searchTitle) || normalizeFilmTitle(c.original_title)===normalizeFilmTitle(parsed.searchTitle));
+    if(!candidates.length) return {...film,matchNote:'No matching title on TMDB — review manually'};
+    // An explicit film year can disambiguate same-named films. Never use the disc date.
+    const yearMatches=parsed.year?candidates.filter(c=>(c.release_date||'').slice(0,4)===parsed.year):candidates;
+    const eligible=parsed.year?yearMatches:candidates;
+    if(!eligible.length) return {...film,matchNote:'Title found but release year differs — review manually'};
+    const chosen=eligible.find(c=>c.id===film.tmdbId);
+    if(!chosen && eligible.length!==1) return {...film,matchNote:'Multiple possible movies — choose manually'};
+    const c=chosen||eligible[0];
     const detailRes=await fetch(`https://api.themoviedb.org/3/movie/${c.id}?api_key=${encodeURIComponent(tmdbKey)}`,{cache:'no-store'});
     if(!detailRes.ok) throw new Error('TMDB detail HTTP '+detailRes.status);
     const detail=await detailRes.json();
