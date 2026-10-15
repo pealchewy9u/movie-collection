@@ -583,11 +583,20 @@ function renderSummary() {
     `;
   }
 
+  // Count titles, not physical packages: every standalone title and every film in a box set.
+  // Individual film overrides take precedence over the optional box-set default.
   const languageCounts = {};
-  movies.forEach(m => {
-    const l = m.language ? languageName(m.language) : 'Language not recorded';
+  singles.forEach(m => {
+    const code = m.languageOverride || m.language;
+    const l = code ? languageName(code) : 'Language not recorded';
     languageCounts[l] = (languageCounts[l] || 0) + 1;
   });
+  boxSets.forEach(box => (box.includedMovies || []).forEach(raw => {
+    const film = typeof raw === 'string' ? {title:raw} : raw;
+    const code = film.languageOverride || film.language || box.languageOverride || box.language;
+    const l = code ? languageName(code) : 'Language not recorded';
+    languageCounts[l] = (languageCounts[l] || 0) + 1;
+  }));
 
   const formatCounts = {};
   movies.forEach(m => {
@@ -603,8 +612,6 @@ function renderSummary() {
 
   container.innerHTML = `
     <div class="summary-total"><strong>${filmCount} movies · ${tvCount} TV shows across ${movies.length} collection items</strong></div>
-    <p class="manager-small">${boxSets.length} box sets · ${totalDiscs} physical discs. Films listed inside box sets are counted individually, while each box set remains one physical item.${incompleteBoxes ? ` ${incompleteBoxes} box set(s) have no included titles yet, so the movie count is incomplete.` : ''}</p>
-    <p class="manager-small">Language and genre counts below describe physical collection entries. "Not recorded" indicates missing metadata, not necessarily an unmatched movie.</p>
     ${breakdownSection('By Language', languageCounts)}
     ${breakdownSection('By Format', formatCounts)}
     ${breakdownSection('By Genre', genreCounts)}
@@ -687,7 +694,7 @@ function renderManager(){
     <div class="manager-stats">${stats.map(([label,n])=>`<div class="manager-stat"><strong>${n}</strong><span>${label}</span></div>`).join('')}</div>
     <div class="manager-sync" id="sync-status">${Object.keys(pendingEdits()).length} local edits pending · <button class="manager-btn secondary" id="sync-now">Sync with GitHub</button></div>
     <details class="bulk-language" id="bulk-language-panel" ${bulkLanguageOpen?'open':''}>
-      <summary>Bulk language review · ${movies.filter(m=>!m.isBoxSet&&!m.language&&!m.languageOverride).length} missing</summary>
+      <summary>Bulk language review · ${missingLanguageEntries().length} missing</summary>
       <div id="bulk-language-body"></div>
     </details>
     <h3 style="font-size:17px;margin:24px 0 6px">Needs attention</h3>
@@ -714,14 +721,38 @@ let bulkLanguageDraft={};
 let bulkLanguageProgress='';
 let bulkLanguageBusy=false;
 const BULK_LANGUAGE_OPTIONS=[['','Unresolved'],['en','English'],['hi','Hindi'],['pa','Punjabi'],['ta','Tamil'],['te','Telugu'],['bn','Bengali'],['ur','Urdu'],['fr','French'],['es','Spanish'],['ja','Japanese'],['ko','Korean'],['zh','Chinese'],['de','German'],['it','Italian'],['ru','Russian'],['other','Other / unknown']];
-function missingLanguageEntries(){return movies.filter(m=>!m.isBoxSet&&!m.language&&!m.languageOverride);}
+// Each child movie is a distinct title in Summary. Box sets are physical containers,
+// but the review can apply one language to every missing film in a set.
+function missingLanguageEntries(){
+  const entries=[];
+  movies.forEach(m=>{
+    if(!m.isBoxSet){
+      if(!m.language&&!m.languageOverride)entries.push({...m,parentId:null});
+      return;
+    }
+    (m.includedMovies||[]).forEach((raw,index)=>{
+      const film=typeof raw==='string'?{title:raw}:raw;
+      if(!film.language&&!film.languageOverride&&!m.languageOverride&&!m.language){
+        entries.push({...film,id:m.id+'::'+index,parentId:m.id,filmIndex:index,boxTitle:m.title});
+      }
+    });
+  });
+  return entries;
+}
+function applyBoxSetLanguage(boxId,language){
+  const missing=missingLanguageEntries().filter(entry=>entry.parentId===boxId);
+  missing.forEach(entry=>{
+    bulkLanguageDraft[entry.id]={...(bulkLanguageDraft[entry.id]||{}),value:language};
+  });
+  renderBulkLanguageReview();
+}
 function renderBulkLanguageReview(){
   const body=document.getElementById('bulk-language-body');if(!body)return;
   const missing=missingLanguageEntries();
   const validIds=new Set(missing.map(m=>m.id));
   Object.keys(bulkLanguageDraft).forEach(id=>{if(!validIds.has(id))delete bulkLanguageDraft[id];});
   const proposed=missing.filter(m=>bulkLanguageDraft[m.id]?.value).length;
-  body.innerHTML=`<p class="manager-small">Suggestions use TMDB's original language. Review each choice; nothing changes in your collection until you save. Physical box sets are excluded.</p>
+  body.innerHTML=`<p class="manager-small">Suggestions use TMDB's original language. Review each choice before saving. For a box set, use its group selector to assign the same language to all missing films, or edit films individually.</p>
     <div class="manager-small">${missing.length} missing · ${proposed} selected for saving</div>
     <div class="bulk-language-actions">
       <button class="manager-btn secondary" id="bulk-fetch-language" ${bulkLanguageBusy?'disabled':''}>Suggest from TMDB</button>
@@ -730,9 +761,11 @@ function renderBulkLanguageReview(){
       <button class="manager-btn" id="bulk-save-language" ${bulkLanguageBusy?'disabled':''}>Save selected languages (${proposed})</button>
     </div>
     <p class="manager-small" id="bulk-language-status" role="status">${escapeHtml(bulkLanguageProgress)}</p>
+    ${movies.filter(box=>box.isBoxSet && missing.some(entry=>entry.parentId===box.id)).map(box=>`<div class="candidate" style="flex-wrap:wrap"><div style="flex:1;min-width:180px"><b>${escapeHtml(box.title)}</b><div class="manager-small">${missing.filter(entry=>entry.parentId===box.id).length} included titles missing language · Apply to all missing films</div></div><select data-box-language="${escapeHtml(box.id)}" aria-label="Apply language to films in ${escapeHtml(box.title)}" style="max-width:190px"><option value="">Choose language for set...</option>${BULK_LANGUAGE_OPTIONS.filter(([v])=>v).map(([v,label])=>`<option value="${v}">${label}</option>`).join('')}</select></div>`).join('')}
     <div class="bulk-language-scroll"><table class="bulk-language-table"><thead><tr><th>Movie / TV show</th><th>TMDB suggestion</th><th>Approve / change</th></tr></thead><tbody>
-      ${missing.map(m=>{const d=bulkLanguageDraft[m.id]||{};const valid=BULK_LANGUAGE_OPTIONS.some(([code])=>code===d.suggestion);const suggested=valid&&d.suggestion?languageName(d.suggestion):d.suggestion?`Code: ${d.suggestion}`:'—';return `<tr><td><b>${escapeHtml(m.title||'Untitled')}</b><div class="manager-small">${escapeHtml(m.year||'Year unknown')} · ${effectiveMediaType(m)==='tv'?'TV':'Movie'} · ${m.tmdbId?'TMDB '+m.tmdbId:'No TMDB ID'}</div></td><td>${escapeHtml(suggested)}<div class="manager-small">${escapeHtml(d.note||'')}</div></td><td><select data-language-id="${escapeHtml(m.id)}" aria-label="Language for ${escapeHtml(m.title||'movie')}">${BULK_LANGUAGE_OPTIONS.map(([v,label])=>`<option value="${v}" ${d.value===v?'selected':''}>${label}</option>`).join('')}${d.value&&!BULK_LANGUAGE_OPTIONS.some(([v])=>v===d.value)?`<option value="${escapeHtml(d.value)}" selected>${escapeHtml(d.value)}</option>`:''}</select></td></tr>`;}).join('')||'<tr><td colspan="3">All individual movies and TV shows have recorded languages.</td></tr>'}
+      ${missing.map(m=>{const d=bulkLanguageDraft[m.id]||{};const valid=BULK_LANGUAGE_OPTIONS.some(([code])=>code===d.suggestion);const suggested=valid&&d.suggestion?languageName(d.suggestion):d.suggestion?`Code: ${d.suggestion}`:'—';return `<tr><td><b>${escapeHtml(m.title||'Untitled')}</b><div class="manager-small">${m.parentId?escapeHtml('Box: '+m.boxTitle)+' · ':''}${escapeHtml(m.year||'Year unknown')} · ${effectiveMediaType(m)==='tv'?'TV':'Movie'} · ${m.tmdbId?'TMDB '+m.tmdbId:'No TMDB ID'}</div></td><td>${escapeHtml(suggested)}<div class="manager-small">${escapeHtml(d.note||'')}</div></td><td><select data-language-id="${escapeHtml(m.id)}" aria-label="Language for ${escapeHtml(m.title||'movie')}">${BULK_LANGUAGE_OPTIONS.map(([v,label])=>`<option value="${v}" ${d.value===v?'selected':''}>${label}</option>`).join('')}${d.value&&!BULK_LANGUAGE_OPTIONS.some(([v])=>v===d.value)?`<option value="${escapeHtml(d.value)}" selected>${escapeHtml(d.value)}</option>`:''}</select></td></tr>`;}).join('')||'<tr><td colspan="3">Every counted movie and TV title has a recorded language.</td></tr>'}
     </tbody></table></div>`;
+  body.querySelectorAll('[data-box-language]').forEach(sel=>sel.onchange=()=>{if(sel.value)applyBoxSetLanguage(sel.dataset.boxLanguage,sel.value);});
   body.querySelectorAll('[data-language-id]').forEach(sel=>sel.onchange=()=>{
     const id=sel.dataset.languageId;
     bulkLanguageDraft[id]={...(bulkLanguageDraft[id]||{}),value:sel.value};
@@ -797,7 +830,32 @@ async function saveBulkLanguages(){
   if(!selected.length){bulkLanguageProgress='Choose at least one language before saving.';renderBulkLanguageReview();return;}
   bulkLanguageBusy=true;
   const when=new Date().toISOString();
-  selected.forEach(m=>{const lang=bulkLanguageDraft[m.id].value;m.language=lang;m.languageOverride=lang;m.languageReviewedAt=when;markPending(m);});
+  selected.forEach(entry=>{
+    const lang=bulkLanguageDraft[entry.id].value;
+    const parent=movies.find(m=>m.id===(entry.parentId||entry.id));
+    if(!parent)return;
+    if(entry.parentId){
+      const raw=parent.includedMovies[entry.filmIndex];
+      const film=typeof raw==='string'?{title:raw}:raw;
+      parent.includedMovies[entry.filmIndex]={...film,language:lang,languageOverride:lang,languageReviewedAt:when};
+    }else{
+      parent.language=lang;parent.languageOverride=lang;parent.languageReviewedAt=when;
+    }
+    markPending(parent);
+  });
+  // A set with one consistent original language can display that language on its cover.
+  // Mixed-language sets keep the language on each film, without an incorrect set-wide label.
+  const touchedBoxIds=new Set(selected.filter(entry=>entry.parentId).map(entry=>entry.parentId));
+  touchedBoxIds.forEach(id=>{
+    const box=movies.find(m=>m.id===id);
+    if(!box)return;
+    const parts=(box.includedMovies||[]).map(raw=>typeof raw==='string'?{title:raw}:raw);
+    const languages=parts.map(f=>f.languageOverride||f.language).filter(Boolean);
+    if(parts.length && languages.length===parts.length && new Set(languages).size===1){
+      box.language=languages[0];
+      markPending(box);
+    }
+  });
   bulkLanguageProgress=`Saved ${selected.length} corrections locally; syncing to GitHub...`;
   // Capture this status outside the re-render which sync can trigger.
   renderBulkLanguageReview();
@@ -970,7 +1028,7 @@ async function enrichIncludedFilm(film, tmdbKey, omdbKey) {
     const detailRes=await fetch(`https://api.themoviedb.org/3/movie/${c.id}?api_key=${encodeURIComponent(tmdbKey)}`,{cache:'no-store'});
     if(!detailRes.ok) throw new Error('TMDB detail HTTP '+detailRes.status);
     const detail=await detailRes.json();
-    let result={...film,title,tmdbId:c.id,tmdbTitle:c.title,year:(c.release_date||'').slice(0,4)||null,posterUrl:c.poster_path?'https://image.tmdb.org/t/p/w500'+c.poster_path:null,language:c.original_language||null,genre:(detail.genres||[]).map(g=>g.name).join(', ')||null,overview:c.overview||null,imdbId:detail.imdb_id||null,matchNote:null};
+    let result={...film,title,tmdbId:c.id,tmdbTitle:c.title,year:(c.release_date||'').slice(0,4)||null,posterUrl:c.poster_path?'https://image.tmdb.org/t/p/w500'+c.poster_path:null,language:film.languageOverride||c.original_language||null,genre:(detail.genres||[]).map(g=>g.name).join(', ')||null,overview:c.overview||null,imdbId:detail.imdb_id||null,matchNote:null};
     if(omdbKey && result.imdbId) result=await retryOmdbOnly(result,omdbKey);
     return result;
   } catch(e) { return {...film,matchNote:'Lookup failed: '+e.message}; }
@@ -1136,7 +1194,7 @@ async function correctIncludedFilm(id,index) {
           let updated={...old,title:original,tmdbId:c.id,tmdbTitle:detail.title||c.title,
             year:(detail.release_date||c.release_date||'').slice(0,4)||null,
             posterUrl:detail.poster_path?'https://image.tmdb.org/t/p/w500'+detail.poster_path:null,
-            language:detail.original_language||c.original_language||null,
+            language:old.languageOverride||detail.original_language||c.original_language||null,
             genre:(detail.genres||[]).map(g=>g.name).join(', ')||null,
             overview:detail.overview||null,imdbId:detail.imdb_id||null,
             imdbRating:null,omdbNote:null,matchNote:null,matchedVia:'tmdb-manual'};
