@@ -1313,27 +1313,87 @@
       },
       {
         "title": "Annabelle (2014)",
-        "matchNote": "No exact title match on TMDB — review manually"
+        "matchNote": null,
+        "tmdbId": 250546,
+        "tmdbTitle": "Annabelle",
+        "year": "2014",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/yLsuU2P2SpDYFwtZQ7dtfVAf6TE.jpg",
+        "language": "en",
+        "genre": "Horror",
+        "overview": "A couple begins to experience terrifying supernatural occurrences involving a vintage doll shortly after their home is invaded by satanic cultists.",
+        "imdbId": "tt3322940",
+        "imdbRating": "5.5",
+        "omdbNote": null
       },
       {
         "title": "The Conjuring 2 (2016)",
-        "matchNote": "No exact title match on TMDB — review manually"
+        "matchNote": null,
+        "tmdbId": 259693,
+        "tmdbTitle": "The Conjuring 2",
+        "year": "2016",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/zEqyD0SBt6HL7W9JQoWwtd5Do1T.jpg",
+        "language": "en",
+        "genre": "Horror",
+        "overview": "Lorraine and Ed Warren travel to north London to help a single mother raising four children alone in a house plagued by malicious spirits.",
+        "imdbId": "tt3065204",
+        "imdbRating": "7.3",
+        "omdbNote": null
       },
       {
         "title": "Annabelle: Creation (2017)",
-        "matchNote": "No exact title match on TMDB — review manually"
+        "matchNote": null,
+        "tmdbId": 396422,
+        "tmdbTitle": "Annabelle: Creation",
+        "year": "2017",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/tb86j8jVCVsdZnzf8I6cIi65IeM.jpg",
+        "language": "en",
+        "genre": "Horror",
+        "overview": "Several years after the tragic death of their little girl, a doll maker and his wife welcome a nun and several girls from a shuttered orphanage into their home, soon becoming the target of the doll maker's possessed creation—Annabelle.",
+        "imdbId": "tt5140878",
+        "imdbRating": "6.5",
+        "omdbNote": null
       },
       {
         "title": "The Nun (2018)",
-        "matchNote": "No exact title match on TMDB — review manually"
+        "matchNote": null,
+        "tmdbId": 439079,
+        "tmdbTitle": "The Nun",
+        "year": "2018",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/sFC1ElvoKGdHJIWRpNB3xWJ9lJA.jpg",
+        "language": "en",
+        "genre": "Horror",
+        "overview": "A priest with a dark past and a novice nearing her final vows are sent by the Vatican to Romania to investigate a nun's death and face a demonic force.",
+        "imdbId": "tt5814060",
+        "imdbRating": "5.4",
+        "omdbNote": null
       },
       {
         "title": "Annabelle Comes Home (2019)",
-        "matchNote": "No exact title match on TMDB — review manually"
+        "matchNote": null,
+        "tmdbId": 521029,
+        "tmdbTitle": "Annabelle Comes Home",
+        "year": "2019",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/qWsHMrbg9DsBY3bCMk9jyYCRVRs.jpg",
+        "language": "en",
+        "genre": "Horror",
+        "overview": "Determined to keep Annabelle from wreaking more havoc, demonologists Ed and Lorraine Warren bring the possessed doll to the locked artifacts room in their home, placing her “safely” behind sacred glass and enlisting a priest’s holy blessing. But an unholy night of horror awaits as Annabelle awakens the evil spirits in the room, who all set their sights on a new target—the Warrens' ten-year-old daughter, Judy, and her friends.",
+        "imdbId": "tt8350360",
+        "imdbRating": "5.9",
+        "omdbNote": null
       },
       {
         "title": "The Conjuring: The Devil Made Me Do It (2021)",
-        "matchNote": "No exact title match on TMDB — review manually"
+        "matchNote": null,
+        "tmdbId": 423108,
+        "tmdbTitle": "The Conjuring: The Devil Made Me Do It",
+        "year": "2021",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/xbSuFiJbbBWCkyCCKIMfuDCA4yV.jpg",
+        "language": "en",
+        "genre": "Horror, Mystery, Thriller",
+        "overview": "Paranormal investigators Ed and Lorraine Warren encounter what would become one of the most sensational cases from their files. The fight for the soul of a young boy takes them beyond anything they'd ever seen before, to mark the first time in U.S. history that a murder suspect would claim demonic possession as a defense.",
+        "imdbId": "tt7069210",
+        "imdbRating": "6.2",
+        "omdbNote": null
       }
     ],
     "reviewStatus": "collection"
