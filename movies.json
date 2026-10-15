@@ -8386,7 +8386,18 @@
       },
       {
         "title": "X2: X-Men United (2003)",
-        "matchNote": "No exact title match on TMDB — review manually"
+        "matchNote": null,
+        "tmdbId": 36658,
+        "tmdbTitle": "X2",
+        "year": "2003",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/bst4alFUXCxISwdRUKSMhhkrX1M.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Science Fiction",
+        "overview": "Professor Charles Xavier and his team of genetically gifted superheroes face a rising tide of anti-mutant sentiment led by Col. William Stryker. Storm, Wolverine and Jean Grey must join Magneto and Mystique to unhinge Stryker's scheme to exterminate all mutants.",
+        "imdbId": "tt0290334",
+        "imdbRating": "7.4",
+        "omdbNote": null,
+        "matchedVia": "tmdb-manual"
       },
       {
         "title": "X-Men: The Last Stand (2006)",
