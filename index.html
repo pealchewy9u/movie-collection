@@ -116,6 +116,26 @@
   .stat-value { font-size: 26px; font-weight: 700; color: var(--brass); }
   .stat-label { font-size: 12px; color: var(--text-muted); }
 
+  /* ---- Data Manager ---- */
+  #manager-view { height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px 16px 40px; display:none; }
+  .manager-stats { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; margin-bottom:14px; }
+  .manager-stat { background:var(--surface); border:1px solid var(--groove); padding:12px; border-radius:11px; }
+  .manager-stat strong { display:block; font-size:24px; color:var(--brass); }
+  .manager-stat span { font-size:11px; color:var(--text-muted); }
+  .manager-controls { display:flex; gap:7px; margin:10px 0; }
+  .manager-controls select { flex:1; min-width:0; }
+  .manager-item { background:var(--surface); border:1px solid var(--groove); border-radius:11px; padding:12px; margin-bottom:9px; }
+  .manager-item-head { display:flex; justify-content:space-between; gap:8px; align-items:flex-start; }
+  .manager-item-title { font-size:14px; font-weight:700; }
+  .manager-small { font-size:11px; color:var(--text-muted); line-height:1.5; margin-top:4px; }
+  .manager-tag { display:inline-block; font-size:10px; font-weight:700; border-radius:5px; padding:4px 6px; background:var(--groove); white-space:nowrap; }
+  .manager-tag.warn { background:#FFF0D0; color:#915400; }
+  .manager-tag.bad { background:#FBE0DC; color:#A62222; }
+  .manager-tag.good { background:#DCEEDD; color:#286332; }
+  .manager-btn { border:0; border-radius:7px; background:var(--brass); color:#fff; font-size:12px; font-weight:700; padding:8px 11px; margin-top:9px; }
+  .manager-btn.secondary { background:var(--surface-raised); color:var(--text); }
+  .candidate { display:flex; gap:10px; padding:10px; border:1px solid var(--groove); border-radius:9px; margin:8px 0; align-items:center; }
+  .candidate img { width:46px; height:68px; object-fit:cover; border-radius:4px; background:var(--groove); }
   /* ---- Detail sheet ---- */
   #detail-overlay { position: fixed; inset: 0; background: rgba(58,38,21,0.4); display: none; align-items: flex-end; z-index: 50; }
   #detail-sheet { background: var(--background); width: 100%; max-height: 82vh; border-radius: 18px 18px 0 0; overflow-y: auto; padding: 20px 20px calc(30px + env(safe-area-inset-bottom)); }
@@ -162,6 +182,7 @@
     <div class="tab active" data-view="list">List</div>
     <div class="tab" data-view="coverflow">Cover Flow</div>
     <div class="tab" data-view="summary">Summary</div>
+    <div class="tab" data-view="manager">Data Manager</div>
   </div>
 
   <main>
@@ -171,6 +192,7 @@
       <div class="cf-caption" id="cf-caption"></div>
     </div>
     <div id="summary-view"></div>
+    <div id="manager-view"></div>
   </main>
 
   <div id="status-bar">
@@ -363,7 +385,8 @@ function coverHtml(movie, cls, placeholderCls) {
 function render() {
   if (currentView === 'list') renderList();
   else if (currentView === 'coverflow') renderCoverFlow();
-  else renderSummary();
+  else if (currentView === 'summary') renderSummary();
+  else renderManager();
 }
 
 function renderList() {
@@ -491,6 +514,101 @@ function renderSummary() {
   `;
 }
 
+// Data quality status is intentionally conservative: API success is not human confirmation.
+let managerFilter = 'review';
+let managerSearch = '';
+function dataIssues(m) {
+  const issues = [];
+  if (!m.genre && !m.imdbId && !m.posterUrl) issues.push('No successful match');
+  if (m.language && !['en','hi'].includes(m.language)) issues.push('Unexpected language: ' + languageName(m.language));
+  if (m.enrichNote && !m.genre) issues.push('Match error');
+  if (m.genre && !m.posterUrl) issues.push('Missing poster');
+  if (m.genre && !m.imdbRating && !isCollection(m)) issues.push('Missing IMDb rating');
+  return issues;
+}
+function matchStatus(m) {
+  if (m.reviewStatus === 'confirmed') return 'confirmed';
+  if (!m.genre && !m.imdbId && !m.posterUrl) return 'unmatched';
+  if (dataIssues(m).length) return 'review';
+  return 'matched';
+}
+function renderManager() {
+  const el = document.getElementById('manager-view');
+  const counts = {confirmed:0, matched:0, review:0, unmatched:0};
+  movies.forEach(m => counts[matchStatus(m)]++);
+  const shown = movies.filter(m => (managerFilter === 'all' || matchStatus(m) === managerFilter) &&
+    (!managerSearch || [m.title,m.studio,m.tmdbTitle].join(' ').toLowerCase().includes(managerSearch.toLowerCase())));
+  el.innerHTML = `
+    <h2 style="font-size:19px;margin:0 0 5px">Movie Data Manager</h2>
+    <p class="manager-small">API matches are provisional until you confirm them. Fix suspicious titles without changing your original Blu-ray.com title.</p>
+    <div class="manager-stats">
+      <div class="manager-stat"><strong>${movies.length}</strong><span>Total movies</span></div>
+      <div class="manager-stat"><strong>${counts.confirmed}</strong><span>Manually confirmed</span></div>
+      <div class="manager-stat"><strong>${counts.review}</strong><span>Needs review / incomplete</span></div>
+      <div class="manager-stat"><strong>${counts.unmatched}</strong><span>Unmatched</span></div>
+    </div>
+    <p class="manager-small">${movies.filter(m=>m.matchedVia==='upcmdb').length} barcode-sourced · ${movies.filter(m=>m.genre && m.matchedVia!=='upcmdb').length} other matches · ${movies.filter(m=>m.imdbRating).length} with IMDb ratings</p>
+    <div class="manager-controls"><select id="manager-filter">
+      ${[['review','Needs review'],['unmatched','Unmatched'],['matched','Provisional matches'],['confirmed','Confirmed'],['all','All movies']].map(([v,l])=>`<option value="${v}" ${managerFilter===v?'selected':''}>${l}</option>`).join('')}
+    </select></div>
+    <div class="search-row"><span>🔍</span><input id="manager-search" placeholder="Find a movie…" value="${escapeHtml(managerSearch)}"></div>
+    <p class="manager-small">Showing ${shown.length} movies. Check the original title against the matched title, language and artwork.</p>
+    <div id="manager-items">${shown.map(m=>{
+      const status=matchStatus(m), issues=dataIssues(m);
+      const label={confirmed:'Confirmed',matched:'Provisional',review:'Review',unmatched:'No match'}[status];
+      const tone=status==='confirmed'?'good':status==='unmatched'?'bad':status==='review'?'warn':'';
+      return `<div class="manager-item"><div class="manager-item-head"><div style="min-width:0"><div class="manager-item-title">${escapeHtml(m.title||'Untitled')}</div><div class="manager-small">Matched: ${escapeHtml(m.tmdbTitle||'Not recorded')} · ${escapeHtml(m.year||'Year unknown')} · ${escapeHtml(m.language?languageName(m.language):'Language unknown')}</div><div class="manager-small">Source: ${escapeHtml(m.matchedVia==='upcmdb'?'UPCMDB barcode':m.genre?'TMDB / legacy':'None')} · IMDb: ${escapeHtml(m.imdbRating||'Missing')}</div>${issues.length?`<div class="manager-small" style="color:#A65B13">⚠ ${escapeHtml(issues.join(' · '))}</div>`:''}</div><span class="manager-tag ${tone}">${label}</span></div><button class="manager-btn" data-fix="${escapeHtml(m.id)}">Review / Correct</button></div>`;
+    }).join('') || '<p class="empty-state">No movies in this category.</p>'}</div>`;
+  el.querySelector('#manager-filter').onchange=e=>{managerFilter=e.target.value;renderManager();};
+  el.querySelector('#manager-search').oninput=e=>{managerSearch=e.target.value; const pos=e.target.selectionStart; renderManager();const input=document.getElementById('manager-search');input.focus();input.setSelectionRange(pos,pos);};
+  el.querySelectorAll('[data-fix]').forEach(b=>b.onclick=()=>openDetail(b.dataset.fix));
+}
+function confirmMovie(id) {
+  const m=movies.find(x=>x.id===id); if(!m)return;
+  m.reviewStatus='confirmed'; m.reviewedAt=new Date().toISOString();
+  localStorage.setItem('movie-cache',JSON.stringify(movies));
+  render(); openDetail(id);
+  const owner=localStorage.getItem('ghOwner'),repo=localStorage.getItem('ghRepo'),token=localStorage.getItem('ghToken');
+  const status=document.getElementById('review-status');
+  if(owner&&repo&&token) saveToGitHub(owner,repo,token,movies).then(()=>{if(status)status.textContent='Confirmed and saved to GitHub.';}).catch(e=>{if(status)status.textContent='Confirmed locally; GitHub save failed: '+e.message;});
+  else if(status)status.textContent='Confirmed locally. Add GitHub credentials to persist it.';
+}
+async function findCandidates(id) {
+  const m=movies.find(x=>x.id===id),key=localStorage.getItem('tmdbKey');
+  const out=document.getElementById('candidate-results');
+  if(!key){out.textContent='Set your TMDB API key in Settings first.';return;}
+  const title=document.getElementById('rematch-title-input').value.trim()||cleanTitleForSearch(m.title);
+  out.textContent='Searching TMDB…';
+  try {
+    const res=await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${encodeURIComponent(key)}&query=${encodeURIComponent(title)}`);
+    if(!res.ok)throw new Error('TMDB HTTP '+res.status);
+    const data=await res.json();
+    const candidates=(data.results||[]).filter(x=>['movie','tv'].includes(x.media_type)).slice(0,8);
+    window.movieCandidates=candidates;
+    out.innerHTML=candidates.length?candidates.map((c,i)=>`<div class="candidate">${c.poster_path?`<img src="https://image.tmdb.org/t/p/w92${c.poster_path}" alt="">`:'<div style="width:46px">🎬</div>'}<div style="flex:1;min-width:0"><b>${escapeHtml(c.title||c.name||'Untitled')}</b><div class="manager-small">${escapeHtml((c.release_date||c.first_air_date||'').slice(0,4)||'Year unknown')} · ${escapeHtml(languageName(c.original_language||'?'))} · ${escapeHtml(c.media_type)}</div><button class="manager-btn" data-pick="${i}">Use this match</button></div></div>`).join(''):'No candidates found. Try a different title.';
+    out.querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>chooseCandidate(id,candidates[Number(b.dataset.pick)]));
+  } catch(e){out.textContent='Search failed: '+e.message;}
+}
+async function chooseCandidate(id,c) {
+  const key=localStorage.getItem('tmdbKey'),idx=movies.findIndex(m=>m.id===id),out=document.getElementById('candidate-results');
+  if(idx<0)return;
+  out.textContent='Saving selected match…';
+  try {
+    const type=c.media_type,genres=await getGenreMap(key,type);
+    const url=`https://api.themoviedb.org/3/${type}/${c.id}${type==='tv'?'/external_ids':''}?api_key=${encodeURIComponent(key)}`;
+    const res=await fetch(url);if(!res.ok)throw new Error('TMDB HTTP '+res.status);
+    const detail=await res.json();
+    const m=movies[idx];
+    movies[idx]={...m,mediaType:type,tmdbId:c.id,tmdbTitle:c.title||c.name,genre:(c.genre_ids||[]).map(g=>genres[g]).filter(Boolean)[0]||null,posterUrl:c.poster_path?'https://image.tmdb.org/t/p/w500'+c.poster_path:null,year:(c.release_date||c.first_air_date||'').slice(0,4)||null,overview:c.overview||null,language:c.original_language||null,imdbId:detail.imdb_id||null,imdbRating:null,omdbNote:null,enrichNote:null,matchedVia:'tmdb-manual',reviewStatus:'confirmed',reviewedAt:new Date().toISOString()};
+    const omdb=localStorage.getItem('omdbKey');if(omdb&&movies[idx].imdbId&&!isCollection(movies[idx]))movies[idx]=await retryOmdbOnly(movies[idx],omdb);
+    localStorage.setItem('movie-cache',JSON.stringify(movies));buildGenreFilter();buildLanguageFilter();render();openDetail(id);
+    const status=document.getElementById('review-status');
+    const owner=localStorage.getItem('ghOwner'),repo=localStorage.getItem('ghRepo'),token=localStorage.getItem('ghToken');
+    if(owner&&repo&&token){status.textContent='Corrected. Saving to GitHub…';await saveToGitHub(owner,repo,token,movies);status.textContent='Corrected and saved to GitHub.';}
+    else status.textContent='Corrected locally. Add GitHub credentials to persist.';
+  }catch(e){const status=document.getElementById('review-status');if(status)status.textContent='Correction/save issue: '+e.message;}
+}
+
 function openDetail(id) {
   const m = movies.find(x => x.id === id);
   if (!m) return;
@@ -520,6 +638,10 @@ function openDetail(id) {
       <input id="rematch-title-input" type="text" placeholder="${escapeHtml(m.title)}" style="width:100%; padding:8px; border-radius:8px; border:1px solid var(--groove); font-size:13px; margin-bottom:8px;">
     </div>
     <button onclick="rematchOne('${m.id}')" id="rematch-btn" style="padding:9px 14px; border-radius:8px; border:none; background:var(--maroon); color:#fff; font-weight:600; font-size:13px;">Re-match on TMDB</button>
+    <button class="manager-btn secondary" onclick="findCandidates('${m.id}')">Search & choose exact movie</button>
+    <button class="manager-btn secondary" onclick="confirmMovie('${m.id}')">✓ Confirm current match</button>
+    <p id="review-status" class="manager-small"></p>
+    <div id="candidate-results"></div>
     <p id="rematch-status" style="font-size:12px; color:var(--text-muted); margin-top:8px;"></p>
   `;
   document.getElementById('detail-overlay').style.display = 'flex';
@@ -591,6 +713,7 @@ document.querySelectorAll('.tab').forEach(tab => {
     document.getElementById('list-view').style.display = currentView === 'list' ? 'block' : 'none';
     document.getElementById('coverflow-view').style.display = currentView === 'coverflow' ? 'flex' : 'none';
     document.getElementById('summary-view').style.display = currentView === 'summary' ? 'block' : 'none';
+    document.getElementById('manager-view').style.display = currentView === 'manager' ? 'block' : 'none';
     render();
   });
 });
@@ -809,6 +932,9 @@ async function matchOnTmdb(item, tmdbKey, overrideTitle) {
     overview: match.overview || null,
     language: match.original_language || null,
     imdbId: imdbId,
+    tmdbId: match.id,
+    matchedVia: 'tmdb',
+    enrichNote: null,
     // Deliberately not touching imdbRating/omdbNote here -- fetching the rating
     // is now its own separate step (fetchAllImdbRatings), not bundled into matching.
     imdbRating: item.imdbRating || null,
@@ -878,7 +1004,7 @@ async function rematchAll() {
   const btn = document.getElementById('rematch-all-btn');
 
   if (!tmdbKey) { statusEl.textContent = 'Add your TMDB key above first.'; return; }
-  if (!confirm(`This re-matches all ${movies.length} movies from scratch, even ones already done. It'll take a while and can't be undone except by running it again. Continue?`)) return;
+  if (!confirm(`This re-matches unconfirmed non-barcode movies only. Confirmed and UPCMDB matches are protected. It'll take a while and can't be undone except by running it again. Continue?`)) return;
 
   btn.disabled = true;
   let successCount = 0;
@@ -887,6 +1013,7 @@ async function rematchAll() {
   for (let i = 0; i < movies.length; i++) {
     statusEl.textContent = `Re-matching ${i + 1} of ${movies.length}: ${movies[i].title}…`;
     try {
+      if (movies[i].reviewStatus === 'confirmed' || movies[i].matchedVia === 'upcmdb') { continue; }
       const reset = { ...movies[i], genre: null, posterUrl: null, year: null, overview: null,
                        language: null, imdbId: null, imdbRating: null, omdbNote: null, mediaType: null };
       let enriched = await matchOnTmdb(reset, tmdbKey);
@@ -996,13 +1123,14 @@ async function matchAllOnTmdb() {
   if (!tmdbKey) { statusEl.textContent = 'Add your TMDB key above first.'; return; }
 
   btn.disabled = true;
-  const targets = movies.filter(m => !m.genre);
+  const targets = movies.filter(m => !m.genre && m.reviewStatus !== 'confirmed');
   let successCount = 0;
 
   for (let i = 0; i < targets.length; i++) {
     statusEl.textContent = `Matching ${i + 1} of ${targets.length}: ${targets[i].title}…`;
     try {
       const enriched = await matchOnTmdb(targets[i], tmdbKey);
+      enriched.matchedVia = 'tmdb';
       const idx = movies.findIndex(m => m.id === targets[i].id);
       if (idx !== -1) movies[idx] = enriched;
       if (enriched.genre) successCount++;
