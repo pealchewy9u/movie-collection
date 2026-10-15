@@ -5895,22 +5895,88 @@
     "isBoxSet": true,
     "includedMovies": [
       {
-        "title": "• Iron Man (2008)"
+        "title": "• Iron Man (2008)",
+        "tmdbId": 1726,
+        "tmdbTitle": "Iron Man",
+        "year": "2008",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/78lPtwv72eTNqFW9COBYI0dWDJa.jpg",
+        "language": "en",
+        "genre": "Action, Science Fiction, Adventure",
+        "overview": "After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil.",
+        "imdbId": "tt0371746",
+        "matchNote": null,
+        "imdbRating": "7.9",
+        "omdbNote": null
       },
       {
-        "title": "• The Incredible Hulk (2008)"
+        "title": "• The Incredible Hulk (2008)",
+        "tmdbId": 1724,
+        "tmdbTitle": "The Incredible Hulk",
+        "year": "2008",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/gKzYx79y0AQTL4UAk1cBQJ3nvrm.jpg",
+        "language": "en",
+        "genre": "Science Fiction, Action, Adventure",
+        "overview": "Scientist Bruce Banner scours the planet for an antidote to the unbridled force of rage within him: the Hulk. But when the military masterminds who dream of exploiting his powers force him back to civilization, he finds himself coming face to face with a new, deadly foe.",
+        "imdbId": "tt0800080",
+        "matchNote": null,
+        "imdbRating": "6.6",
+        "omdbNote": null
       },
       {
-        "title": "• Iron Man 2 (2010)"
+        "title": "• Iron Man 2 (2010)",
+        "tmdbId": 10138,
+        "tmdbTitle": "Iron Man 2",
+        "year": "2010",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/6WBeq4fCfn7AN0o21W9qNcRF2l9.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Science Fiction",
+        "overview": "With the world now aware of his dual life as the armored superhero Iron Man, billionaire inventor Tony Stark faces pressure from the government, the press and the public to share his technology with the military. Unwilling to let go of his invention, Stark, with Pepper Potts and James 'Rhodey' Rhodes at his side, must forge new alliances – and confront powerful enemies.",
+        "imdbId": "tt1228705",
+        "matchNote": null,
+        "imdbRating": "6.9",
+        "omdbNote": null
       },
       {
-        "title": "• Thor (2011)"
+        "title": "• Thor (2011)",
+        "tmdbId": 10195,
+        "tmdbTitle": "Thor",
+        "year": "2011",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/prSfAi1xGrhLQNxVSUFh61xQ4Qy.jpg",
+        "language": "en",
+        "genre": "Adventure, Fantasy, Action",
+        "overview": "Against his father Odin's will, The Mighty Thor - a powerful but arrogant warrior god - recklessly reignites an ancient war. Thor is cast down to Earth and forced to live among humans as punishment. Once here, Thor learns what it takes to be a true hero when the most dangerous villain of his world sends the darkest forces of Asgard to invade Earth.",
+        "imdbId": "tt0800369",
+        "matchNote": null,
+        "imdbRating": "7.0",
+        "omdbNote": null
       },
       {
-        "title": "• Captain America: The First Avenger (2011)"
+        "title": "• Captain America: The First Avenger (2011)",
+        "tmdbId": 1771,
+        "tmdbTitle": "Captain America: The First Avenger",
+        "year": "2011",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/vSNxAJTlD0r02V9sPYpOjqDZXUK.jpg",
+        "language": "en",
+        "genre": "Action, Adventure, Science Fiction",
+        "overview": "During World War II, Steve Rogers is a sickly man from Brooklyn who's transformed into super-soldier Captain America to aid in the war effort. Rogers must stop the Red Skull – Adolf Hitler's ruthless head of weaponry, and the leader of an organization that intends to use a mysterious device of untold powers for world domination.",
+        "imdbId": "tt0458339",
+        "matchNote": null,
+        "imdbRating": "6.9",
+        "omdbNote": null
       },
       {
-        "title": "• The Avengers (2012)"
+        "title": "• The Avengers (2012)",
+        "tmdbId": 24428,
+        "tmdbTitle": "The Avengers",
+        "year": "2012",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/RYMX2wcKCBAr24UyPD7xwmjaTn.jpg",
+        "language": "en",
+        "genre": "Science Fiction, Action, Adventure",
+        "overview": "When an unexpected enemy emerges and threatens global safety and security, Nick Fury, director of the international peacekeeping agency known as S.H.I.E.L.D., finds himself in need of a team to pull the world back from the brink of disaster. Spanning the globe, a daring recruitment effort begins!",
+        "imdbId": "tt0848228",
+        "matchNote": null,
+        "imdbRating": "8.0",
+        "omdbNote": null
       }
     ],
     "reviewStatus": "collection",
