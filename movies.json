@@ -5299,7 +5299,18 @@
       },
       {
         "title": "Guardians of the Galaxy Vol. 2 (2017)",
-        "matchNote": "No exact title match on TMDB — review manually"
+        "matchNote": null,
+        "tmdbId": 283995,
+        "tmdbTitle": "Guardians of the Galaxy Vol. 2",
+        "year": "2017",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/y4MBh0EjBlMuOzv9axM4qJlmhzz.jpg",
+        "language": "en",
+        "genre": "Science Fiction, Adventure, Action",
+        "overview": "The Guardians must fight to keep their newfound family together as they unravel the mysteries of Peter Quill's true parentage.",
+        "imdbId": "tt3896198",
+        "imdbRating": "7.6",
+        "omdbNote": null,
+        "matchedVia": "tmdb-manual"
       },
       {
         "title": "Spider-Man: Homecoming (2017)",
