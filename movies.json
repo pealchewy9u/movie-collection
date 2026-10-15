@@ -2980,7 +2980,8 @@
         "omdbNote": null
       }
     ],
-    "reviewStatus": "collection"
+    "reviewStatus": "collection",
+    "boxCoverUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/box-covers/MOV-0098.jpg?v=a0ba8be0fd804c07b7e1e24f920256214173e23a"
   },
   {
     "id": "MOV-0099",
