@@ -8377,22 +8377,38 @@
     "isBoxSet": true,
     "includedMovies": [
       {
-        "title": "• X-Men (2000)"
+        "title": "• X-Men (2000)",
+        "matchNote": "No exact title match on TMDB — review manually"
       },
       {
-        "title": "• X2: X-Men United (2003)"
+        "title": "• X2: X-Men United (2003)",
+        "matchNote": "No exact title match on TMDB — review manually"
       },
       {
-        "title": "• X-Men: The Last Stand (2006)"
+        "title": "• X-Men: The Last Stand (2006)",
+        "matchNote": "No exact title match on TMDB — review manually"
       },
       {
-        "title": "• X-Men Origins: Wolverine (2009)"
+        "title": "• X-Men Origins: Wolverine (2009)",
+        "matchNote": "No exact title match on TMDB — review manually"
       },
       {
-        "title": "• X-Men: First Class (2011)"
+        "title": "• X-Men: First Class (2011)",
+        "matchNote": "No exact title match on TMDB — review manually"
       },
       {
-        "title": "• The Wolverine"
+        "title": "• The Wolverine",
+        "tmdbId": 76170,
+        "tmdbTitle": "The Wolverine",
+        "year": "2013",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/t2wVAcoRlKvEIVSbiYDb8d0QqqS.jpg",
+        "language": "en",
+        "genre": "Action, Science Fiction, Adventure",
+        "overview": "Wolverine faces his ultimate nemesis - and tests of his physical, emotional, and mortal limits - in a life-changing voyage to modern-day Japan.",
+        "imdbId": "tt1430132",
+        "matchNote": null,
+        "imdbRating": "6.7",
+        "omdbNote": null
       }
     ],
     "reviewStatus": "collection"
