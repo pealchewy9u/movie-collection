@@ -1120,20 +1120,18 @@ async function prepareCoverPhoto(file){
 }
 async function uploadBoxCoverToGitHub(id,blob){
   const cfg=githubConfig();if(!cfg)throw new Error('GitHub settings are required to upload a cover photo.');
-  const path='box-covers/'+encodeURIComponent(id)+'.jpg';
+  // Never overwrite an old image: Safari, GitHub Pages and image CDNs may retain
+  // an earlier version even if a query parameter changes.
+  const unique=Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,10);
+  const path='box-covers/'+encodeURIComponent(id)+'-'+unique+'.jpg';
   const api=`https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${path}`;
   const headers={Authorization:`Bearer ${cfg.token}`,Accept:'application/vnd.github+json'};
-  const prev=await fetch(api,{headers,cache:'no-store'});
-  if(prev.status!==404&&!prev.ok)throw new Error('Unable to check existing cover (HTTP '+prev.status+').');
-  const sha=prev.ok?(await prev.json()).sha:undefined;
   const bytes=new Uint8Array(await blob.arrayBuffer());
   let binary='';for(let i=0;i<bytes.length;i+=8192)binary+=String.fromCharCode(...bytes.subarray(i,i+8192));
   const content=btoa(binary);
-  const result=await fetch(api,{method:'PUT',headers:{...headers,'Content-Type':'application/json'},body:JSON.stringify({message:'Update box set cover '+id,content,sha,branch:'main'})});
+  const result=await fetch(api,{method:'PUT',headers:{...headers,'Content-Type':'application/json'},body:JSON.stringify({message:'Upload replacement box set cover '+id,content,branch:'main'})});
   if(!result.ok)throw new Error('Cover upload failed (HTTP '+result.status+'): '+(await result.text()).slice(0,140));
-  // Raw GitHub image URL with a unique revision query avoids stale cover caches.
-  const revision=(await result.json()).content?.sha||Date.now();
-  return `https://raw.githubusercontent.com/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/main/${path}?v=${encodeURIComponent(revision)}`;
+  return `https://raw.githubusercontent.com/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/main/${path}`;
 }
 async function saveBoxSet(id) {
   const m=movies.find(x=>x.id===id);if(!m)return;
@@ -2004,7 +2002,7 @@ function openAddMovie(){
  stopAddCamera();newItemCandidate=null;
  document.getElementById('add-sheet').innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0;font-size:20px">Add to collection</h2><button class="manager-btn secondary" id="add-close">Close</button></div>
  <p class="manager-small">Scan the barcode on your physical disc or enter it manually. Review every detail before saving.</p>
- <div class="add-actions"><button id="add-start-camera" class="primary">📷 Scan barcode</button><button id="add-photo">Scan photo</button><input type="file" id="add-photo-input" accept="image/*" style="display:none"></div>
+ <div class="add-actions"><button id="add-start-camera" class="primary">📷 Live scan</button><button id="add-capture-photo">Take barcode photo</button><button id="add-photo">Choose photo</button><input type="file" id="add-capture-input" accept="image/*" capture="environment" style="display:none"><input type="file" id="add-photo-input" accept="image/*" style="display:none"></div>
  <video id="add-camera" playsinline muted autoplay style="display:none"></video>
  <div class="add-actions"><button id="add-stop-camera" style="display:none">Stop camera</button></div>
  <div class="add-fields"><label class="add-wide">Barcode (UPC / EAN)<input id="add-barcode" inputmode="numeric" placeholder="Enter or scan 12/13 digits"></label></div>
@@ -2027,8 +2025,10 @@ function openAddMovie(){
  document.getElementById('add-close').onclick=closeAddMovie;
  document.getElementById('add-start-camera').onclick=startAddCamera;
  document.getElementById('add-stop-camera').onclick=stopAddCamera;
+ document.getElementById('add-capture-photo').onclick=()=>document.getElementById('add-capture-input').click();
+ document.getElementById('add-capture-input').onchange=e=>{if(e.target.files[0])scanBarcodeFile(e.target.files[0]);e.target.value='';};
  document.getElementById('add-photo').onclick=()=>document.getElementById('add-photo-input').click();
- document.getElementById('add-photo-input').onchange=e=>{if(e.target.files[0])scanBarcodeFile(e.target.files[0]);};
+ document.getElementById('add-photo-input').onchange=e=>{if(e.target.files[0])scanBarcodeFile(e.target.files[0]);e.target.value='';};
  document.getElementById('add-lookup').onclick=lookupNewBarcode;
  document.getElementById('add-clear').onclick=()=>{stopAddCamera();openAddMovie();};
  document.getElementById('add-search-tmdb').onclick=searchNewMovieTmdb;
@@ -2103,16 +2103,16 @@ async function loadBarcodeDecoder(){
  if(!window.ZXing?.BrowserMultiFormatReader)throw new Error('Barcode scanner unavailable; use manual entry.');addDecoder=new ZXing.BrowserMultiFormatReader();return 'zxing';
 }
 async function startAddCamera(){
- if(!navigator.mediaDevices?.getUserMedia){addMsg('Camera access needs HTTPS and a supported browser. Enter barcode manually instead.');return;}
+ if(!window.isSecureContext||!navigator.mediaDevices?.getUserMedia){addMsg('Live camera requires HTTPS and an unrestricted browser. Try Take barcode photo instead, or open the app directly in Safari/Chrome.');return;}
  const video=document.getElementById('add-camera');
  try{const engine=await loadBarcodeDecoder();addStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});video.style.display='block';video.srcObject=addStream;await video.play();document.getElementById('add-stop-camera').style.display='inline-block';addMsg('Point camera at UPC/EAN barcode.');
  if(engine==='zxing'){await addDecoder.decodeFromVideoElementContinuously(video,(result)=>{if(result?.getText)onAddDetected(result.getText());});}
  else{const tick=async()=>{if(!addStream)return;try{const found=await addDetector.detect(video);if(found.length)onAddDetected(found[0].rawValue);}catch(e){}if(addStream)addScanTimer=setTimeout(tick,180);};tick();}
- }catch(e){stopAddCamera();addMsg('Camera unavailable: '+e.message+' Use manual barcode entry or Scan photo.');}
+ }catch(e){stopAddCamera();const blocked=e?.name==='NotAllowedError'||/not allowed|permission denied|user agent|platform|current context/i.test(e?.message||'');addMsg(blocked?'Live camera blocked by this browser or app context. Tap Take barcode photo instead. For live scanning, open your GitHub Pages URL directly in Safari or Chrome and allow camera access.':'Live camera unavailable: '+e.message+'. Try Take barcode photo or Choose photo.');}
 }
 function stopAddCamera(){if(addScanTimer){clearTimeout(addScanTimer);addScanTimer=null;}if(addDecoder){try{addDecoder.reset();}catch(e){}}if(addStream){addStream.getTracks().forEach(t=>t.stop());addStream=null;}const video=document.getElementById('add-camera');if(video){video.pause();video.srcObject=null;video.style.display='none';}const stop=document.getElementById('add-stop-camera');if(stop)stop.style.display='none';}
 function onAddDetected(barcode){const digits=String(barcode||'').replace(/\D/g,'');if(!/^\d{8}$|^\d{12,14}$/.test(digits))return;stopAddCamera();document.getElementById('add-barcode').value=digits;showAddDuplicate();addMsg('Barcode scanned: '+digits+'. Looking up details…');lookupNewBarcode();}
-async function scanBarcodeFile(file){try{const engine=await loadBarcodeDecoder();if(engine==='native'){const bitmap=await createImageBitmap(file);try{const result=await addDetector.detect(bitmap);if(!result.length)throw new Error('No barcode found in photo');onAddDetected(result[0].rawValue);}finally{bitmap.close();}}
+async function scanBarcodeFile(file){addMsg('Reading barcode from photo…');try{const engine=await loadBarcodeDecoder();if(engine==='native'){const bitmap=await createImageBitmap(file);try{const result=await addDetector.detect(bitmap);if(!result.length)throw new Error('No barcode found in photo');onAddDetected(result[0].rawValue);}finally{bitmap.close();}}
  else{const url=URL.createObjectURL(file);try{const result=await addDecoder.decodeFromImageUrl(url);onAddDetected(result.getText());}finally{URL.revokeObjectURL(url);}}
  }catch(e){addMsg('Could not scan image: '+e.message+'. You can type the barcode manually.');}}
 document.getElementById('add-movie-btn').onclick=openAddMovie;
