@@ -5290,19 +5290,24 @@
     "isBoxSet": true,
     "includedMovies": [
       {
-        "title": "Captain America: Civil War (2016)"
+        "title": "Captain America: Civil War (2016)",
+        "matchNote": "No exact title match on TMDB — review manually"
       },
       {
-        "title": "Doctor Strange (2016)"
+        "title": "Doctor Strange (2016)",
+        "matchNote": "No exact title match on TMDB — review manually"
       },
       {
-        "title": "Guardians of the Galaxy Vol. 2 (2017)"
+        "title": "Guardians of the Galaxy Vol. 2 (2017)",
+        "matchNote": "No exact title match on TMDB — review manually"
       },
       {
-        "title": "Spider-Man: Homecoming (2017)"
+        "title": "Spider-Man: Homecoming (2017)",
+        "matchNote": "No exact title match on TMDB — review manually"
       },
       {
-        "title": "Thor: Ragnarok (2017)"
+        "title": "Thor: Ragnarok (2017)",
+        "matchNote": "No exact title match on TMDB — review manually"
       }
     ],
     "reviewStatus": "collection",
