@@ -246,13 +246,17 @@
     "posterUrl": "https://image.tmdb.org/t/p/w500/z6O1KDhfWDTm5ZBr6Ovr0eg8LqO.jpg",
     "year": "2013",
     "overview": "A conman and his seductive partner are forced to work for a wild FBI agent, who pushes them into a world of Jersey power-brokers and the Mafia.",
-    "enrichNote": "UPCMDB HTTP 404: {\"error\":\"Not Found\",\"message\":\"No record found for UPC: 774212108471\"}",
+    "enrichNote": null,
     "mediaType": "movie",
     "tmdbTitle": "American Hustle",
     "language": "en",
     "imdbId": "tt1800241",
-    "imdbRating": null,
-    "omdbNote": null
+    "imdbRating": "7.2",
+    "omdbNote": null,
+    "tmdbId": 168672,
+    "matchedVia": "tmdb-manual",
+    "reviewStatus": "confirmed",
+    "reviewedAt": "2026-10-15T19:19:37.959Z"
   },
   {
     "id": "MOV-0011",
