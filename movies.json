@@ -6547,7 +6547,24 @@
     "year": null,
     "overview": null,
     "enrichNote": "No TMDB match found",
-    "matchedVia": "tmdb"
+    "matchedVia": "tmdb",
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "The Purge"
+      },
+      {
+        "title": "The Purge: Anarchy"
+      },
+      {
+        "title": "The Purge: Election Year"
+      },
+      {
+        "title": "The First Purge"
+      }
+    ],
+    "reviewStatus": "collection",
+    "imdbRating": null
   },
   {
     "id": "MOV-0249",
