@@ -202,6 +202,17 @@
   .cover-upload-zone .cover-preview.visible{display:block}
   .cover-upload-zone .cover-upload-buttons{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
   .cover-upload-zone input[type=file]{max-width:100%;font-size:12px}
+  .bulk-language{margin:18px 0;background:var(--surface);border:1px solid var(--groove);border-radius:12px;padding:14px}
+  .bulk-language summary{cursor:pointer;font-weight:700;font-size:14px}
+  .bulk-language-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+  .bulk-language-actions button{margin-top:0}
+  .bulk-language-scroll{max-height:440px;overflow:auto;border:1px solid var(--groove);border-radius:9px}
+  .bulk-language-table{width:100%;border-collapse:collapse;font-size:12px}
+  .bulk-language-table td,.bulk-language-table th{padding:9px 7px;border-bottom:1px solid var(--groove);text-align:left;vertical-align:middle}
+  .bulk-language-table th{background:var(--background);position:sticky;top:0;z-index:1}
+  .bulk-language-table select{margin:0;min-width:108px}
+  .bulk-language-table .manager-small{margin:2px 0}
+  @media(max-width:560px){.bulk-language-table td,.bulk-language-table th{padding:7px 4px}.bulk-language-table select{min-width:95px}}
 </style>
 </head>
 <body>
@@ -675,6 +686,10 @@ function renderManager(){
     <p class="manager-small" style="margin-bottom:14px">Physical collection entries are counted once. Movies inside box sets are not counted as separate entries.</p>
     <div class="manager-stats">${stats.map(([label,n])=>`<div class="manager-stat"><strong>${n}</strong><span>${label}</span></div>`).join('')}</div>
     <div class="manager-sync" id="sync-status">${Object.keys(pendingEdits()).length} local edits pending · <button class="manager-btn secondary" id="sync-now">Sync with GitHub</button></div>
+    <details class="bulk-language" id="bulk-language-panel" ${bulkLanguageOpen?'open':''}>
+      <summary>Bulk language review · ${movies.filter(m=>!m.isBoxSet&&!m.language&&!m.languageOverride).length} missing</summary>
+      <div id="bulk-language-body"></div>
+    </details>
     <h3 style="font-size:17px;margin:24px 0 6px">Needs attention</h3>
     <p class="manager-small">Only items with missing or suspicious information appear here. An API match does not automatically mean a verified match.</p>
     <div class="manager-controls"><select id="manager-filter">${[['attention','Needs attention'],['movie','Individual movies'],['tv','TV shows'],['collection','Box sets'],['confirmed','Manually confirmed'],['all','All entries']].map(([v,l])=>`<option value="${v}" ${managerFilter===v?'selected':''}>${l}</option>`).join('')}</select></div>
@@ -685,10 +700,110 @@ function renderManager(){
       return `<div class="manager-item manager-clean"><div class="manager-item-head"><div style="min-width:0;flex:1"><div class="manager-item-title">${escapeHtml(m.title||'Untitled')}</div><div class="manager-small">${escapeHtml(m.tmdbTitle||'No matched title')} · ${escapeHtml(m.year||'Year unknown')} · ${escapeHtml(m.language?languageName(m.language):'Language unknown')}</div>
       ${issues.length?`<div class="issue-list">${issues.map(x=>`<span>${escapeHtml(x)}</span>`).join('')}</div>`:'<div class="manager-small">No current data-quality warnings</div>'}</div><button class="manager-btn" data-fix="${escapeHtml(m.id)}">${issues.length?'Fix':'View'}</button></div></div>`;
     }).join('')||'<p class="empty-state">Nothing needs attention in this view.</p>'}</div>`;
+  renderBulkLanguageReview();
+  el.querySelector('#bulk-language-panel').ontoggle=e=>{bulkLanguageOpen=e.target.open;};
   el.querySelector('#sync-now').onclick=async()=>{const e=el.querySelector('#sync-status');e.textContent='Syncing…';try{e.textContent=await syncPendingEdits();}catch(err){e.textContent='Not synced: '+err.message;}};
   el.querySelector('#manager-filter').onchange=e=>{managerFilter=e.target.value;renderManager();};
   el.querySelector('#manager-search').oninput=e=>{managerSearch=e.target.value;const pos=e.target.selectionStart;renderManager();const input=document.getElementById('manager-search');input.focus();input.setSelectionRange(pos,pos);};
   el.querySelectorAll('[data-fix]').forEach(b=>b.onclick=()=>openDetail(b.dataset.fix));
+}
+
+// Bulk language review: suggestions remain drafts until explicitly approved and saved.
+let bulkLanguageOpen=false;
+let bulkLanguageDraft={};
+let bulkLanguageProgress='';
+let bulkLanguageBusy=false;
+const BULK_LANGUAGE_OPTIONS=[['','Unresolved'],['en','English'],['hi','Hindi'],['pa','Punjabi'],['ta','Tamil'],['te','Telugu'],['bn','Bengali'],['ur','Urdu'],['fr','French'],['es','Spanish'],['ja','Japanese'],['ko','Korean'],['zh','Chinese'],['de','German'],['it','Italian'],['ru','Russian'],['other','Other / unknown']];
+function missingLanguageEntries(){return movies.filter(m=>!m.isBoxSet&&!m.language&&!m.languageOverride);}
+function renderBulkLanguageReview(){
+  const body=document.getElementById('bulk-language-body');if(!body)return;
+  const missing=missingLanguageEntries();
+  const validIds=new Set(missing.map(m=>m.id));
+  Object.keys(bulkLanguageDraft).forEach(id=>{if(!validIds.has(id))delete bulkLanguageDraft[id];});
+  const proposed=missing.filter(m=>bulkLanguageDraft[m.id]?.value).length;
+  body.innerHTML=`<p class="manager-small">Suggestions use TMDB's original language. Review each choice; nothing changes in your collection until you save. Physical box sets are excluded.</p>
+    <div class="manager-small">${missing.length} missing · ${proposed} selected for saving</div>
+    <div class="bulk-language-actions">
+      <button class="manager-btn secondary" id="bulk-fetch-language" ${bulkLanguageBusy?'disabled':''}>Suggest from TMDB</button>
+      <button class="manager-btn secondary" id="bulk-accept-language" ${bulkLanguageBusy?'disabled':''}>Select all suggestions</button>
+      <button class="manager-btn secondary" id="bulk-export-language">Export missing CSV</button>
+      <button class="manager-btn" id="bulk-save-language" ${bulkLanguageBusy?'disabled':''}>Save selected languages (${proposed})</button>
+    </div>
+    <p class="manager-small" id="bulk-language-status" role="status">${escapeHtml(bulkLanguageProgress)}</p>
+    <div class="bulk-language-scroll"><table class="bulk-language-table"><thead><tr><th>Movie / TV show</th><th>TMDB suggestion</th><th>Approve / change</th></tr></thead><tbody>
+      ${missing.map(m=>{const d=bulkLanguageDraft[m.id]||{};const valid=BULK_LANGUAGE_OPTIONS.some(([code])=>code===d.suggestion);const suggested=valid&&d.suggestion?languageName(d.suggestion):d.suggestion?`Code: ${d.suggestion}`:'—';return `<tr><td><b>${escapeHtml(m.title||'Untitled')}</b><div class="manager-small">${escapeHtml(m.year||'Year unknown')} · ${effectiveMediaType(m)==='tv'?'TV':'Movie'} · ${m.tmdbId?'TMDB '+m.tmdbId:'No TMDB ID'}</div></td><td>${escapeHtml(suggested)}<div class="manager-small">${escapeHtml(d.note||'')}</div></td><td><select data-language-id="${escapeHtml(m.id)}" aria-label="Language for ${escapeHtml(m.title||'movie')}">${BULK_LANGUAGE_OPTIONS.map(([v,label])=>`<option value="${v}" ${d.value===v?'selected':''}>${label}</option>`).join('')}${d.value&&!BULK_LANGUAGE_OPTIONS.some(([v])=>v===d.value)?`<option value="${escapeHtml(d.value)}" selected>${escapeHtml(d.value)}</option>`:''}</select></td></tr>`;}).join('')||'<tr><td colspan="3">All individual movies and TV shows have recorded languages.</td></tr>'}
+    </tbody></table></div>`;
+  body.querySelectorAll('[data-language-id]').forEach(sel=>sel.onchange=()=>{
+    const id=sel.dataset.languageId;
+    bulkLanguageDraft[id]={...(bulkLanguageDraft[id]||{}),value:sel.value};
+    body.querySelector('#bulk-save-language').textContent=`Save selected languages (${missingLanguageEntries().filter(m=>bulkLanguageDraft[m.id]?.value).length})`;
+  });
+  body.querySelector('#bulk-fetch-language').onclick=fetchBulkLanguageSuggestions;
+  body.querySelector('#bulk-accept-language').onclick=()=>{missing.forEach(m=>{const d=bulkLanguageDraft[m.id];if(d?.suggestion&&BULK_LANGUAGE_OPTIONS.some(([v])=>v===d.suggestion))d.value=d.suggestion;});renderBulkLanguageReview();};
+  body.querySelector('#bulk-export-language').onclick=exportMissingLanguagesCSV;
+  body.querySelector('#bulk-save-language').onclick=saveBulkLanguages;
+}
+async function fetchBulkLanguageSuggestions(){
+  const key=localStorage.getItem('tmdbKey');
+  if(!key){bulkLanguageProgress='Set your TMDB API key in Settings first.';renderBulkLanguageReview();return;}
+  const target=missingLanguageEntries();
+  bulkLanguageBusy=true;renderBulkLanguageReview();
+  let found=0,unresolved=0;
+  for(let i=0;i<target.length;i++){
+    const m=target[i];
+    bulkLanguageProgress=`Checking ${i+1} of ${target.length}: ${m.title}`;
+    const status=document.getElementById('bulk-language-status');if(status)status.textContent=bulkLanguageProgress;
+    const old=bulkLanguageDraft[m.id]||{};
+    try{
+      const kind=effectiveMediaType(m)==='tv'?'tv':'movie';
+      let detail;
+      if(m.tmdbId){
+        const response=await fetch(`https://api.themoviedb.org/3/${kind}/${encodeURIComponent(m.tmdbId)}?api_key=${encodeURIComponent(key)}`,{cache:'no-store'});
+        if(!response.ok)throw new Error('TMDB HTTP '+response.status);
+        detail=await response.json();
+      }else{
+        // Without an ID, only suggest language when one unambiguous exact title matches.
+        // This never changes the film's identity or its saved metadata.
+        const title=cleanTitleForSearch(m.tmdbTitle||m.title||'');
+        if(!title)throw new Error('No title available for lookup');
+        const response=await fetch(`https://api.themoviedb.org/3/search/${kind}?api_key=${encodeURIComponent(key)}&query=${encodeURIComponent(title)}`,{cache:'no-store'});
+        if(!response.ok)throw new Error('TMDB search HTTP '+response.status);
+        const data=await response.json();
+        const exact=(data.results||[]).filter(x=>normalizeFilmTitle(x.title||x.name)===normalizeFilmTitle(title)||normalizeFilmTitle(x.original_title||x.original_name)===normalizeFilmTitle(title));
+        const sameYear=m.year?exact.filter(x=>String(x.release_date||x.first_air_date||'').slice(0,4)===String(m.year)):[];
+        const matches=sameYear.length?sameYear:exact;
+        if(matches.length!==1)throw new Error('Ambiguous or no exact match; select manually');
+        detail=matches[0];
+      }
+      const language=detail.original_language||'';
+      if(!language)throw new Error('No original language on TMDB');
+      bulkLanguageDraft[m.id]={...old,suggestion:language,note:'Suggested from TMDB; review before saving'};
+      found++;
+    }catch(e){bulkLanguageDraft[m.id]={...old,note:e.message};unresolved++;}
+  }
+  bulkLanguageBusy=false;
+  bulkLanguageProgress=`${found} suggestion(s) found; ${unresolved} need manual review. Choose Select all suggestions, review, then save.`;
+  renderBulkLanguageReview();
+}
+function exportMissingLanguagesCSV(){
+  const quote=x=>'"'+String(x??'').replace(/"/g,'""')+'"';
+  const rows=[['Collection ID','Original title','Matched title','Year','Type','TMDB ID','Suggested language','Selected language','Status']];
+  missingLanguageEntries().forEach(m=>{const d=bulkLanguageDraft[m.id]||{};rows.push([m.id,m.title,m.tmdbTitle||'',m.year||'',effectiveMediaType(m),m.tmdbId||'',d.suggestion||'',d.value||'',d.note||'']);});
+  const blob=new Blob(['\ufeff'+rows.map(r=>r.map(quote).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='missing-movie-languages.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);
+}
+async function saveBulkLanguages(){
+  const selected=missingLanguageEntries().filter(m=>bulkLanguageDraft[m.id]?.value);
+  if(!selected.length){bulkLanguageProgress='Choose at least one language before saving.';renderBulkLanguageReview();return;}
+  bulkLanguageBusy=true;
+  const when=new Date().toISOString();
+  selected.forEach(m=>{const lang=bulkLanguageDraft[m.id].value;m.language=lang;m.languageOverride=lang;m.languageReviewedAt=when;markPending(m);});
+  bulkLanguageProgress=`Saved ${selected.length} corrections locally; syncing to GitHub...`;
+  // Capture this status outside the re-render which sync can trigger.
+  renderBulkLanguageReview();
+  try{const result=await syncPendingEdits();bulkLanguageProgress=`${selected.length} languages updated. ${result}`;}
+  catch(e){bulkLanguageProgress=`${selected.length} saved locally, GitHub sync failed: ${e.message}. Use Sync with GitHub to retry.`;}
+  finally{selected.forEach(m=>delete bulkLanguageDraft[m.id]);bulkLanguageBusy=false;buildLanguageFilter();renderManager();}
 }
 
 // A user-chosen language is authoritative until explicitly changed again.
