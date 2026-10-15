@@ -469,8 +469,10 @@ function openSettings() {
 function updatePendingCount() {
   const done = movies.filter(m => m.genre).length;
   const withImdb = movies.filter(m => m.imdbRating).length;
+  const retryable = movies.filter(m => m.genre && !m.imdbRating && m.imdbId).length;
   document.getElementById('pending-count').textContent =
-    `${done} of ${movies.length} enriched so far (${withImdb} have an IMDB rating) -- ${movies.length - done} still pending.`;
+    `${done} of ${movies.length} matched on TMDB (${movies.length - done} pending). ` +
+    `${withImdb} of ${movies.length} have an IMDB rating (${retryable} already matched but still missing one -- these get retried automatically on the next run).`;
 }
 function closeSettings() { document.getElementById('settings-overlay').style.display = 'none'; }
 
@@ -584,6 +586,26 @@ async function enrichOne(item, tmdbKey, omdbKey) {
   };
 }
 
+// Retries just the IMDB-rating half for a movie that already has a TMDB match --
+// reuses the imdbId we already found rather than re-doing the TMDB search, since
+// that part already succeeded and doesn't need repeating.
+async function retryOmdbOnly(item, omdbKey) {
+  if (!item.imdbId) return { ...item, omdbNote: 'No IMDB id on file -- needs a full re-enrich, not just a retry' };
+  try {
+    const omdbRes = await fetch(`https://www.omdbapi.com/?i=${item.imdbId}&apikey=${omdbKey}`, { cache: 'no-store' });
+    const omdbData = await omdbRes.json();
+    if (omdbData.Response === 'False') {
+      return { ...item, omdbNote: `OMDb: ${omdbData.Error || 'unknown error'}` };
+    }
+    if (!omdbData.imdbRating || omdbData.imdbRating === 'N/A') {
+      return { ...item, omdbNote: 'OMDb had no rating for this title' };
+    }
+    return { ...item, imdbRating: omdbData.imdbRating, omdbNote: null };
+  } catch (e) {
+    return { ...item, omdbNote: `OMDb request failed: ${e.message}` };
+  }
+}
+
 async function enrichAll() {
   const tmdbKey = localStorage.getItem('tmdbKey');
   const omdbKey = localStorage.getItem('omdbKey');
@@ -596,30 +618,50 @@ async function enrichAll() {
   }
 
   btn.disabled = true;
-  const targets = movies.filter(m => !m.genre); // only enrich what's not already done
+
+  // Pass 1: full TMDB + OMDb enrichment for anything that's never matched at all.
+  const needsFullEnrich = movies.filter(m => !m.genre);
   let successCount = 0;
   let imdbSuccessCount = 0;
 
-  for (let i = 0; i < targets.length; i++) {
-    statusEl.textContent = `Enriching ${i + 1} of ${targets.length}: ${targets[i].title}…`;
+  for (let i = 0; i < needsFullEnrich.length; i++) {
+    statusEl.textContent = `Matching ${i + 1} of ${needsFullEnrich.length}: ${needsFullEnrich[i].title}…`;
     try {
-      const enriched = await enrichOne(targets[i], tmdbKey, omdbKey);
-      const idx = movies.findIndex(m => m.id === targets[i].id);
+      const enriched = await enrichOne(needsFullEnrich[i], tmdbKey, omdbKey);
+      const idx = movies.findIndex(m => m.id === needsFullEnrich[i].id);
       if (idx !== -1) movies[idx] = enriched;
       if (enriched.genre) successCount++;
       if (enriched.imdbRating) imdbSuccessCount++;
     } catch (e) {
-      console.error('Enrich failed for', targets[i].title, e);
+      console.error('Enrich failed for', needsFullEnrich[i].title, e);
     }
-    // Be polite to both free APIs across a batch this size.
     await new Promise(r => setTimeout(r, 300));
+  }
+
+  // Pass 2: retry just the OMDb half for movies that already matched TMDB but
+  // never got a rating -- this is what actually lets fixing an API key (like
+  // the activation issue) retroactively fix everything that failed before,
+  // instead of those movies being silently skipped forever.
+  const needsOmdbRetry = movies.filter(m => m.genre && !m.imdbRating && m.imdbId);
+  let imdbRetrySuccessCount = 0;
+
+  if (omdbKey) {
+    for (let i = 0; i < needsOmdbRetry.length; i++) {
+      statusEl.textContent = `Retrying IMDB rating ${i + 1} of ${needsOmdbRetry.length}: ${needsOmdbRetry[i].title}…`;
+      const retried = await retryOmdbOnly(needsOmdbRetry[i], omdbKey);
+      const idx = movies.findIndex(m => m.id === needsOmdbRetry[i].id);
+      if (idx !== -1) movies[idx] = retried;
+      if (retried.imdbRating) imdbRetrySuccessCount++;
+      await new Promise(r => setTimeout(r, 300));
+    }
   }
 
   buildGenreFilter();
   render();
   localStorage.setItem('movie-cache', JSON.stringify(movies));
 
-  const summaryLine = `${successCount} of ${targets.length} matched on TMDB -- ${imdbSuccessCount} of those got an IMDB rating.`;
+  const totalImdbNow = movies.filter(m => m.imdbRating).length;
+  const summaryLine = `${successCount} of ${needsFullEnrich.length} new matches on TMDB. Retried IMDB for ${needsOmdbRetry.length} already-matched movies, ${imdbRetrySuccessCount} succeeded. ${totalImdbNow} of ${movies.length} total now have an IMDB rating.`;
   statusEl.textContent = `${summaryLine} Saving to GitHub…`;
 
   const ghOwner = localStorage.getItem('ghOwner');
