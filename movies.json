@@ -2414,7 +2414,9 @@
     "imdbRating": "8.8",
     "omdbNote": null,
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T21:28:30.740Z"
+    "languageReviewedAt": "2026-10-15T21:28:30.740Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0077-main-mvb621dx.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/oQ5CnVj3TRifXl2bIOri6H6rfNe.jpg"
   },
   {
     "id": "MOV-0078",
