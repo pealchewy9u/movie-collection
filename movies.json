@@ -8332,7 +8332,9 @@
     "language": "en",
     "imdbId": "tt0253474",
     "imdbRating": "8.5",
-    "omdbNote": null
+    "omdbNote": null,
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0245-main-mvb7ava9.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/2hFvxCCWrTmCYwfy7yum0GKRi3Y.jpg"
   },
   {
     "id": "MOV-0246",
