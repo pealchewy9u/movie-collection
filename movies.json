@@ -5099,7 +5099,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Action",
-    "posterUrl": "https://imagestorage.org/883929168682.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/xlaY2zyzMfkhk0HSC5VUwzoZPU1.jpg",
     "year": "2010",
     "overview": "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O., but his tragic past may doom the project and his team to disaster.",
     "mediaType": "movie",
@@ -5110,7 +5110,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0149-main-mvb9ka92-glwxyu.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/xlaY2zyzMfkhk0HSC5VUwzoZPU1.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0150",
