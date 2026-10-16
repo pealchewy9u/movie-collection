@@ -1746,7 +1746,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Biography",
-    "posterUrl": "https://imagestorage.org/025192211416.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/7Fdh7gUq3plvQqxRbNYhWvDABXA.jpg",
     "year": "2013",
     "overview": "In 1985 Dallas, electrician and hustler Ron Woodroof works around the system to help AIDS patients get the medication they need after he is diagnosed with the disease.",
     "mediaType": "movie",
@@ -1757,7 +1757,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0054-main-mvb98b9y-ukpson.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/7Fdh7gUq3plvQqxRbNYhWvDABXA.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0055",
