@@ -4018,7 +4018,9 @@
     "language": "hi",
     "imdbId": "tt2574698",
     "imdbRating": "2.8",
-    "omdbNote": null
+    "omdbNote": null,
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0125-main-mvb6isyd.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/JMjQWxnVSI9BrMCFlzdEqC0y4o.jpg"
   },
   {
     "id": "MOV-0126",
