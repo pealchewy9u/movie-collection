@@ -8870,7 +8870,9 @@
     "language": "hi",
     "imdbId": "tt5165344",
     "imdbRating": "7.0",
-    "omdbNote": null
+    "omdbNote": null,
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0262-main-mvb7dm8t.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/xwf74VcrHu1etzOsRVx7nckPPLR.jpg"
   },
   {
     "id": "MOV-0263",
