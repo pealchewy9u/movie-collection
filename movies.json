@@ -3072,7 +3072,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Drama",
-    "posterUrl": "https://imagestorage.org/025192369742.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/jjPJ4s3DWZZvI4vw8Xfi4Vqa1Q8.jpg",
     "year": "2018",
     "overview": "Anastasia and Christian get married, but Jack Hyde continues to threaten their relationship.",
     "mediaType": "movie",
@@ -3083,7 +3083,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0095-main-mvb9d0m3-3zqs08.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/jjPJ4s3DWZZvI4vw8Xfi4Vqa1Q8.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0096",
