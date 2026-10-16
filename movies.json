@@ -1776,7 +1776,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Adventure",
-    "posterUrl": "https://imagestorage.org/715515063319.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/oSW5OVXTulaIXcoNwJAp5YEKpbP.jpg",
     "year": "2007",
     "overview": "A year after their father's funeral, three brothers travel across India by train in an attempt to bond with each other.",
     "mediaType": "movie",
@@ -1787,7 +1787,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0055-main-mvb98feh-brttqw.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/oSW5OVXTulaIXcoNwJAp5YEKpbP.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0056",
