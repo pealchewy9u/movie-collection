@@ -7072,7 +7072,9 @@
     "tmdbId": 27582,
     "enrichNote": null,
     "reviewStatus": "confirmed",
-    "reviewedAt": "2026-10-15T22:31:08.147Z"
+    "reviewedAt": "2026-10-15T22:31:08.147Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0207-main-mvb76fmt.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/k37axEHszFP9WOVvbozxF0r7X7g.jpg"
   },
   {
     "id": "MOV-0208",
