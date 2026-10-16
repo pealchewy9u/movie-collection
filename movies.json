@@ -4244,7 +4244,7 @@
     "dvdDiscs": 0,
     "digitalCopy": true,
     "genre": "Comedy",
-    "posterUrl": "https://imagestorage.org/883929058037.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/A0uS9rHR56FeBtpjVki16M5xxSW.jpg",
     "year": "2009",
     "overview": "Three buddies wake up from a bachelor party in Las Vegas with no memory of the previous night and the bachelor missing. They must make their way around the city in order to find their friend in time for his wedding.",
     "mediaType": "movie",
@@ -4255,7 +4255,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0128-main-mvb9ec51-d1pp4v.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/A0uS9rHR56FeBtpjVki16M5xxSW.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0129",
