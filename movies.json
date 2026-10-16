@@ -3959,7 +3959,7 @@
     "dvdDiscs": 0,
     "digitalCopy": true,
     "genre": "Crime",
-    "posterUrl": "https://imagestorage.org/0031398273431.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/vlBY2EaiVje34O0jIT6P3kVQ2di.jpg",
     "year": "2017",
     "overview": "After a botched bank robbery lands his younger brother in prison, Connie Nikas embarks on a twisted odyssey through New York City's underworld to get his brother Nick out of jail.",
     "mediaType": "movie",
@@ -3970,7 +3970,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0119-main-mvb9mdbl-8snwfa.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/vlBY2EaiVje34O0jIT6P3kVQ2di.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0120",
