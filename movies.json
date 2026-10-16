@@ -10118,7 +10118,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Biography",
-    "posterUrl": "https://imagestorage.org/025192328237.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/8DPGG400FgaFWaqcv11n8mRd2NG.jpg",
     "year": "2015",
     "overview": "The true story of how the Boston Globe uncovered the massive scandal of child molestation and cover-up within the local Catholic Archdiocese, shaking the entire Catholic Church to its core.",
     "mediaType": "movie",
@@ -10129,7 +10129,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0280-main-mvba0t3s-dqyol6.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/8DPGG400FgaFWaqcv11n8mRd2NG.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0281",
