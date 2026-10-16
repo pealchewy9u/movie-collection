@@ -9049,7 +9049,7 @@
     "dvdDiscs": -1,
     "digitalCopy": false,
     "genre": "Biography",
-    "posterUrl": "https://imagestorage.org/025192102691.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/3KgtekisQBrHRsm2cD5UOB6Ce3k.jpg",
     "year": "2009",
     "overview": "The Feds try to take down notorious American gangsters John Dillinger, Baby Face Nelson, and Pretty Boy Floyd during a booming crime wave in the 1930s.",
     "mediaType": "movie",
@@ -9060,7 +9060,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0247-main-mvb9xk26-jpzgar.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/3KgtekisQBrHRsm2cD5UOB6Ce3k.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0248",
