@@ -9997,7 +9997,9 @@
     "tmdbId": 40720,
     "matchedVia": "tmdb-manual",
     "reviewStatus": "confirmed",
-    "reviewedAt": "2026-10-15T21:38:19.831Z"
+    "reviewedAt": "2026-10-15T21:38:19.831Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0299-main-mvb7gde5.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/cGcoACE6AQQWekvHMr4TVd5KOpH.jpg"
   },
   {
     "id": "MOV-0300",
