@@ -3483,7 +3483,9 @@
     "tmdbTitle": "Gangs of Wasseypur - Part 2",
     "tmdbId": 126400,
     "reviewStatus": "confirmed",
-    "reviewedAt": "2026-10-15T23:05:47.557Z"
+    "reviewedAt": "2026-10-15T23:05:47.557Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0110-main-mvb6hefz.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/4CVPyT10Cvw9BCgWNKXiRcXntuc.jpg"
   },
   {
     "id": "MOV-0111",
