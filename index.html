@@ -1088,12 +1088,21 @@ function bulkPosterStatus(message){
   const node=document.getElementById('bulk-poster-status');if(node)node.textContent=message;
 }
 function bulkPosterNormalize(v){return String(v||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/&/g,'and').replace(/[^a-z0-9]+/g,' ').trim().replace(/^(the|a) /,'');}
+function pruneCompletedBulkPosterRows(){
+  // Keep incomplete reviews between batches; completed archives no longer need approval.
+  for(const [key,row] of bulkPosterCandidates){
+    let archived=false;
+    try{archived=!!getPosterTarget(row.id,row.index).item.archivedPosterUrl;}catch(e){}
+    if(row.saved||archived)bulkPosterCandidates.delete(key);
+  }
+}
 function renderBulkPosterResults(){
   const out=document.getElementById('bulk-poster-results');if(!out)return;
+  pruneCompletedBulkPosterRows();
   const rows=[...bulkPosterCandidates.values()];
   if(!rows.length){out.innerHTML='<p class="manager-small">No suggestions loaded yet.</p>';return;}
   const good=rows.filter(r=>r.poster&&r.confident&&!r.saved);
-  out.innerHTML=`<p class="manager-small">${rows.length} reviewed · ${good.length} confident candidates · ${rows.filter(r=>r.saved).length} saved. Only checked rows will be uploaded.</p>
+  out.innerHTML=`<p class="manager-small">${rows.length} pending review · ${good.length} confident candidates. Saved and locked posters are removed automatically. Only checked rows will be uploaded.</p>
   <div style="display:flex;gap:8px;margin-bottom:8px"><button class="manager-btn secondary" id="bulk-approve-confident">Select confident matches</button><button class="manager-btn secondary" id="bulk-clear-selection">Clear selection</button></div>
   <div style="max-height:550px;overflow:auto">${rows.map(r=>`<div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid #ead9c4">
     <input type="checkbox" data-bulk-poster-check="${escapeHtml(r.key)}" ${r.approved?'checked':''} ${!r.poster||r.saved?'disabled':''} aria-label="Approve ${escapeHtml(r.title)}">
@@ -1110,6 +1119,7 @@ async function bulkFindPosters(){
   if(bulkPosterBusy)return;
   const key=localStorage.getItem('tmdbKey');if(!key){bulkPosterStatus('Enter your TMDB API key in Settings first.');return;}
   bulkPosterBusy=true;bulkPosterStop=false;posterBackupOpen=true;
+  pruneCompletedBulkPosterRows();
   let found=0,uncertain=0;
   try{
     const queue=posterBackupItems().filter(x=>!x.done&&!bulkPosterReviewed.has(bulkPosterKey(x.id,x.index))).slice(0,25);
