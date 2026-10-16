@@ -7755,7 +7755,9 @@
     "languageOverride": "en",
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "tmdbId": 370172,
-    "enrichNote": null
+    "enrichNote": null,
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0226-main-mvb797h2.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/iUgygt3fscRoKWCV1d0C7FbM9TP.jpg"
   },
   {
     "id": "MOV-0227",
