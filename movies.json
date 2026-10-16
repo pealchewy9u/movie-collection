@@ -7717,7 +7717,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Drama",
-    "posterUrl": "https://imagestorage.org/025192112300.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/fDPAjvfPMomkKF7cMRmL5Anak61.jpg",
     "year": "1998",
     "overview": "Death, who takes the form of a young man killed in an accident, asks a media mogul to act as his guide to teach him about life on Earth and, in the process, he falls in love with the mogul's daughter.",
     "mediaType": "movie",
@@ -7728,7 +7728,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0208-main-mvb9snul-qzx5a2.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/fDPAjvfPMomkKF7cMRmL5Anak61.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0209",
