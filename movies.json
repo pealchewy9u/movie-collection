@@ -11497,7 +11497,10 @@
         "imdbId": "tt0087800",
         "imdbRating": "7.4",
         "omdbNote": null,
-        "matchedVia": "tmdb-manual"
+        "matchedVia": "tmdb-manual",
+        "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1792182202314-quiws-film-0-mvbf3acw-y9kk57.jpg",
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/wGTpGGRMZmyFCcrY2YoxVTIBlli.jpg",
+        "posterLocked": true
       },
       {
         "title": "A Nightmare on Elm Street Part 2: Freddy's Revenge",
