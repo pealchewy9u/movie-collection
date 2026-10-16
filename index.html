@@ -461,16 +461,23 @@ function filteredMovies() {
     .sort((a, b) => (a.title || '').localeCompare(b.title || ''));
 }
 
+// A saved 780px poster takes priority only while it matches the current TMDB poster.
+// This prevents an old archived image from appearing after a movie is re-matched.
+function displayPoster(m){
+  if(!m)return null;
+  if(m.archivedPosterUrl && (!m.archivedSourcePosterUrl || m.archivedSourcePosterUrl===m.posterUrl))return m.archivedPosterUrl;
+  return m.posterUrl||null;
+}
 function coverHtml(movie, cls, placeholderCls) {
   const custom = movie.isBoxSet && movie.boxCoverUrl ? movie.boxCoverUrl : null;
-  const artwork = custom || movie.posterUrl;
+  const artwork = custom || displayPoster(movie);
   if (artwork) {
     const safeSrc=escapeHtml(artwork);
     // If a remote cover fails to load, retain a fallback instead of an empty frame.
     return `<div class="${cls}"><img src="${safeSrc}" loading="lazy" alt="${escapeHtml(movie.title||'Cover')}" onerror="this.style.display='none';this.parentElement.style.background='var(--surface-raised)';this.parentElement.textContent='🎬'"></div>`;
   }
   if (movie.isBoxSet) {
-    const posters=(movie.includedMovies||[]).map(f=>typeof f==='string'?null:f.posterUrl).filter(Boolean).slice(0,4);
+    const posters=(movie.includedMovies||[]).map(f=>typeof f==='string'?null:displayPoster(f)).filter(Boolean).slice(0,4);
     if(posters.length) {
       const tiles=Array.from({length:4},(_,i)=>`<img src="${escapeHtml(posters[i%posters.length])}" alt="" loading="lazy">`).join('');
       return `<div class="${cls} box-cover-mosaic" title="Composite of included films; not original box artwork">${tiles}<span class="mosaic-label">BOX SET</span></div>`;
@@ -706,6 +713,16 @@ function renderManager(){
       <summary>Bulk language review · ${missingLanguageEntries().length} missing</summary>
       <div id="bulk-language-body"></div>
     </details>
+    <details class="bulk-language" id="poster-backup-panel" ${posterBackupOpen?'open':''}>
+      <summary>Backup TMDB posters · ${posterBackupStats().done} saved / ${posterBackupStats().eligible} available</summary>
+      <div style="padding:12px 3px">
+        <p class="manager-small">Archive TMDB movie and box-set film posters as 780px images in your GitHub <b>posters/</b> folder. Custom box covers are never replaced. Existing archived posters are skipped. You can safely run this again later.</p>
+        <p class="manager-small">Saves up to 25 posters per run to avoid exhausting GitHub's upload limits. Keep this tab open while a batch is running. Only posters successfully saved and recorded in movies.json count as complete.</p>
+        <button class="manager-btn" id="poster-backup-start" ${posterBackupRunning?'disabled':''}>${posterBackupRunning?'Backing up…':'Backup next 25 posters'}</button>
+        <button class="manager-btn secondary" id="poster-backup-stop" ${posterBackupRunning?'':'disabled'}>Stop after current poster</button>
+        <p class="manager-small" id="poster-backup-status" role="status">${escapeHtml(posterBackupMessage||'No upload in progress.')}</p>
+      </div>
+    </details>
     <h3 style="font-size:17px;margin:24px 0 6px">Needs attention</h3>
     <p class="manager-small">Only items with missing or suspicious information appear here. An API match does not automatically mean a verified match.</p>
     <div class="manager-controls"><select id="manager-filter">${[['attention','Needs attention'],['movie','Individual movies'],['tv','TV shows'],['collection','Box sets'],['confirmed','Manually confirmed'],['all','All entries']].map(([v,l])=>`<option value="${v}" ${managerFilter===v?'selected':''}>${l}</option>`).join('')}</select></div>
@@ -718,10 +735,102 @@ function renderManager(){
     }).join('')||'<p class="empty-state">Nothing needs attention in this view.</p>'}</div>`;
   renderBulkLanguageReview();
   el.querySelector('#bulk-language-panel').ontoggle=e=>{bulkLanguageOpen=e.target.open;};
+  el.querySelector('#poster-backup-panel').ontoggle=e=>{posterBackupOpen=e.target.open;};
+  el.querySelector('#poster-backup-start').onclick=backupNextPosters;
+  el.querySelector('#poster-backup-stop').onclick=()=>{posterBackupStop=true;setPosterBackupMessage('Stopping after current poster…');};
   el.querySelector('#sync-now').onclick=async()=>{const e=el.querySelector('#sync-status');e.textContent='Syncing…';try{e.textContent=await syncPendingEdits();}catch(err){e.textContent='Not synced: '+err.message;}};
   el.querySelector('#manager-filter').onchange=e=>{managerFilter=e.target.value;renderManager();};
   el.querySelector('#manager-search').oninput=e=>{managerSearch=e.target.value;const pos=e.target.selectionStart;renderManager();const input=document.getElementById('manager-search');input.focus();input.setSelectionRange(pos,pos);};
   el.querySelectorAll('[data-fix]').forEach(b=>b.onclick=()=>openDetail(b.dataset.fix));
+}
+
+// Persist TMDB poster image bytes in GitHub; separate from physical box-cover photos.
+let posterBackupOpen=false,posterBackupRunning=false,posterBackupStop=false,posterBackupMessage='';
+function tmdbPosterSource(m){
+  const value=String(m?.posterUrl||'');
+  // Only archive TMDB artwork, never arbitrary UPCMDB or user-provided URLs.
+  const found=value.match(/^https:\/\/image\.tmdb\.org\/t\/p\/(?:w\d+|original)(\/[^?#]+)$/i);
+  return found ? 'https://image.tmdb.org/t/p/w780'+found[1] : null;
+}
+function posterBackupItems(){
+  const result=[];
+  movies.forEach(m=>{
+    if(m.isBoxSet){
+      (m.includedMovies||[]).forEach((raw,index)=>{
+        const film=typeof raw==='string'?{title:raw}:raw;
+        if(tmdbPosterSource(film))result.push({id:m.id,index,title:film.title||m.title,source:film.posterUrl,done:!!(film.archivedPosterUrl && film.archivedSourcePosterUrl===film.posterUrl)});
+      });
+    }else if(tmdbPosterSource(m))result.push({id:m.id,index:null,title:m.title,source:m.posterUrl,done:!!(m.archivedPosterUrl && m.archivedSourcePosterUrl===m.posterUrl)});
+  });
+  return result;
+}
+function posterBackupStats(){const list=posterBackupItems();return {eligible:list.length,done:list.filter(x=>x.done).length};}
+function setPosterBackupMessage(msg){
+  posterBackupMessage=msg;
+  const el=document.getElementById('poster-backup-status');if(el)el.textContent=msg;
+}
+async function uploadArchivedPoster(c,path,blob){
+  const bytes=new Uint8Array(await blob.arrayBuffer());
+  let binary='';for(let i=0;i<bytes.length;i+=8192)binary+=String.fromCharCode(...bytes.subarray(i,i+8192));
+  const api=`https://api.github.com/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/contents/${path}`;
+  const response=await fetch(api,{method:'PUT',headers:{Authorization:`Bearer ${c.token}`,Accept:'application/vnd.github+json','Content-Type':'application/json'},body:JSON.stringify({message:'Archive TMDB poster at 780px',content:btoa(binary),branch:'main'})});
+  if(!response.ok)throw new Error(`GitHub poster upload HTTP ${response.status}: ${(await response.text()).slice(0,120)}`);
+  return `https://raw.githubusercontent.com/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/main/${path}`;
+}
+async function backupNextPosters(){
+  if(posterBackupRunning)return;
+  const cfg=githubConfig();
+  if(!cfg){setPosterBackupMessage('Add your GitHub username, repository and token in Settings first.');return;}
+  posterBackupRunning=true;posterBackupStop=false;posterBackupOpen=true;
+  let completed=0,errors=0,processed=0;
+  try{
+    // Snapshot only the next 25 missing items. Refresh snapshots each run; completed
+    // posters are never uploaded again, including when a previous run was interrupted.
+    const items=posterBackupItems().filter(x=>!x.done).slice(0,25);
+    if(!items.length){setPosterBackupMessage('All currently available TMDB posters are archived.');return;}
+    setPosterBackupMessage(`Starting batch of ${items.length} posters…`);
+    for(const entry of items){
+      if(posterBackupStop)break;
+      processed++;
+      setPosterBackupMessage(`Backing up ${processed}/${items.length}: ${entry.title} (${completed} saved, ${errors} failed)…`);
+      try{
+        const parent=movies.find(m=>m.id===entry.id);
+        if(!parent)throw new Error('Collection entry no longer exists');
+        const film=entry.index===null?parent:parent.includedMovies?.[entry.index];
+        if(!film || typeof film==='string' || film.posterUrl!==entry.source)throw new Error('Poster changed; skipped');
+        const image=await fetch(tmdbPosterSource(film),{mode:'cors'});
+        if(!image.ok)throw new Error(`TMDB download HTTP ${image.status}`);
+        const blob=await image.blob();
+        if(!blob.type.startsWith('image/'))throw new Error('TMDB returned a non-image response');
+        if(blob.size>3*1024*1024)throw new Error('Poster exceeds 3 MB; skipped');
+        const slug=String(entry.id).replace(/[^a-zA-Z0-9_-]/g,'_');
+        const filmSlug=entry.index===null?'main':'film-'+entry.index;
+        const path=`posters/${slug}-${filmSlug}-${Date.now().toString(36)}.jpg`;
+        const url=await uploadArchivedPoster(cfg,path,blob);
+        film.archivedPosterUrl=url;
+        film.archivedSourcePosterUrl=film.posterUrl;
+        markPending(parent);
+        // Commit movie JSON after each image: makes every successful poster resumable
+        // across refreshes and devices, and reports metadata persistence failures.
+        await syncPendingEdits();
+        completed++;
+      }catch(err){
+        errors++;
+        setPosterBackupMessage(`Could not archive ${entry.title}: ${err.message}. Continuing if possible…`);
+        if(/GitHub poster upload HTTP (403|429)|GitHub save HTTP (403|429)|GitHub read HTTP (403|429)/.test(err.message)){
+          posterBackupStop=true;
+          setPosterBackupMessage(`GitHub rate limit / permissions error: ${err.message}. Pause before retrying.`);
+          break;
+        }
+      }
+      if(!posterBackupStop)await new Promise(resolve=>setTimeout(resolve,900));
+    }
+    const st=posterBackupStats();
+    setPosterBackupMessage(`${completed} posters archived this run, ${errors} errors. Total: ${st.done}/${st.eligible} backed up. ${posterBackupStop?'Stopped. ':''}${st.done<st.eligible?'Use Backup next 25 posters to continue.':'Backup complete for available TMDB posters.'}`);
+  }finally{
+    posterBackupRunning=false;posterBackupStop=false;
+    if(currentView==='manager')renderManager();
+  }
 }
 
 // Bulk language review: suggestions remain drafts until explicitly approved and saved.
@@ -1048,7 +1157,7 @@ function includedFilmCards(m) {
   if(!m.isBoxSet) return '';
   return `<section style="margin-top:16px"><b>Included movies (${films.length})</b><div class="included-grid">${films.map((f,i)=>{
     const film=typeof f==='string'?{title:f}:f;
-    return `<div class="included-card">${film.posterUrl?`<img loading="lazy" src="${escapeHtml(film.posterUrl)}" alt="${escapeHtml(film.title||'Movie poster')}">`:'<div class="poster-empty">🎬</div>'}<strong>${escapeHtml(film.tmdbTitle||film.title||'Untitled')}</strong><small>${escapeHtml(film.year||'Year unknown')}${film.imdbRating?' · ★ '+escapeHtml(film.imdbRating):''}</small>${film.genre?`<small>${escapeHtml(film.genre)}</small>`:''}${film.matchNote?`<small style="color:#A65B13">⚠ ${escapeHtml(film.matchNote)}</small>`:''}<button class="manager-btn secondary" data-film-index="${i}" style="width:100%">Find / correct</button></div>`;
+    return `<div class="included-card">${displayPoster(film)?`<img loading="lazy" src="${escapeHtml(displayPoster(film))}" alt="${escapeHtml(film.title||'Movie poster')}">`:'<div class="poster-empty">🎬</div>'}<strong>${escapeHtml(film.tmdbTitle||film.title||'Untitled')}</strong><small>${escapeHtml(film.year||'Year unknown')}${film.imdbRating?' · ★ '+escapeHtml(film.imdbRating):''}</small>${film.genre?`<small>${escapeHtml(film.genre)}</small>`:''}${film.matchNote?`<small style="color:#A65B13">⚠ ${escapeHtml(film.matchNote)}</small>`:''}<button class="manager-btn secondary" data-film-index="${i}" style="width:100%">Find / correct</button></div>`;
   }).join('')}</div><button class="manager-btn secondary" onclick="refreshBoxSetFilms('${escapeHtml(m.id)}')">Refresh missing movie details</button><p id="film-refresh-status" class="manager-small"></p></section>`;
 }
 async function resolveBoxSetFilms(id, force=false) {
