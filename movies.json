@@ -10461,7 +10461,9 @@
         "imdbId": "tt0120903",
         "imdbRating": "7.3",
         "omdbNote": null,
-        "matchedVia": "tmdb-manual"
+        "matchedVia": "tmdb-manual",
+        "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0315-film-0-mvb7hia9.jpg",
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/bRDAc4GogyS9ci3ow7UnInOcriN.jpg"
       },
       {
         "title": "X2: X-Men United (2003)",
