@@ -9909,7 +9909,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Crime",
-    "posterUrl": "https://imagestorage.org/715515210317.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/5mFh1xsgP4eLaREyKwoHbwvFm1B.jpg",
     "year": "1991",
     "overview": "A young F.B.I. cadet must receive the help of an incarcerated and manipulative cannibal killer to help catch another serial killer, a madman who skins his victims.",
     "mediaType": "movie",
@@ -9920,7 +9920,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0275-main-mvb9z3y3-98v0bn.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/5mFh1xsgP4eLaREyKwoHbwvFm1B.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0276",
