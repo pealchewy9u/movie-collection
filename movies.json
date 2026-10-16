@@ -1778,7 +1778,9 @@
         "imdbId": "tt0468569",
         "imdbRating": "9.1",
         "omdbNote": null,
-        "matchedVia": "tmdb-manual"
+        "matchedVia": "tmdb-manual",
+        "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0056-film-1-mvb60gke.jpg",
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg"
       },
       {
         "title": "The Dark Knight Rises",
