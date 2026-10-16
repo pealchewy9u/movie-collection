@@ -8247,7 +8247,8 @@
         "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/A3acM1lX5PNWQa6r5qeMAJOxbnT.jpg"
       }
     ],
-    "reviewStatus": "collection"
+    "reviewStatus": "collection",
+    "boxCoverUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/box-covers/MOV-0220-mvbg5hjc-rdm9emyo.jpg"
   },
   {
     "id": "MOV-0221",
