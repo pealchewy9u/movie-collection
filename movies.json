@@ -3436,7 +3436,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Animation",
-    "posterUrl": "https://imagestorage.org/0786936838923.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/itAKcobTYGpYT8Phwjd8c9hleTo.jpg",
     "year": "2013",
     "overview": "Fearless optimist Anna teams up with rugged mountain man Kristoff and his loyal reindeer Sven in an epic journey to find Anna's sister Elsa, whose icy powers have trapped the kingdom of Arendelle in eternal winter.",
     "mediaType": "movie",
@@ -3447,7 +3447,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0104-main-mvb9dpuw-q8l9qk.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/itAKcobTYGpYT8Phwjd8c9hleTo.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0105",
