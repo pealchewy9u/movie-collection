@@ -8170,7 +8170,9 @@
     "tmdbTitle": "Pad Man",
     "tmdbId": 447856,
     "reviewStatus": "confirmed",
-    "reviewedAt": "2026-10-15T19:23:18.547Z"
+    "reviewedAt": "2026-10-15T19:23:18.547Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0239-main-mvb7ana2.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/guI9SEqpZ6A0mhYpngb1gwAy6N2.jpg"
   },
   {
     "id": "MOV-0240",
