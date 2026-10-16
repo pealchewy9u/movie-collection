@@ -6313,7 +6313,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Comedy",
-    "posterUrl": "https://imagestorage.org/0031398314899.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/pThyQovXQrw2m0s9x82twj48Jq4.jpg",
     "year": "2019",
     "overview": "When renowned crime novelist Harlan Thrombey is found dead at his estate just after his 85th birthday, the inquisitive and debonair Detective Benoit Blanc is mysteriously enlisted to investigate.",
     "mediaType": "movie",
@@ -6324,7 +6324,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0177-main-mvb9s5d8-4yq6dp.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/pThyQovXQrw2m0s9x82twj48Jq4.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0178",
