@@ -61,8 +61,10 @@
   }
   .cover-thumb img { width: 100%; height: 100%; object-fit: cover; }
   .movie-meta { flex: 1; min-width: 0; }
-  .movie-title { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .movie-title { font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .movie-studio { font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .movie-genre { font-size: 8px; font-weight: 700; color: var(--text-muted); background: var(--groove); border-radius: 4px; padding: 2px 5px; text-align: right; max-width: min(220px, 38vw); line-height: 1.25; white-space: normal; overflow-wrap: anywhere; letter-spacing: 0.02em; }
+  @media (max-width: 520px) { .movie-genre { max-width: 115px; font-size: 8px; } .movie-row { gap: 9px; } }
   .format-badge { font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; letter-spacing: 0.02em; }
   .format-4k { color: #fff; background: var(--maroon); }
   .format-bluray { color: var(--text-muted); background: var(--groove); }
@@ -100,9 +102,10 @@
     mask-image: linear-gradient(to bottom, rgba(0,0,0,0.28), transparent);
   }
   .cf-reflection img { width: 100%; height: 220px; object-fit: cover; display: block; }
-  .cf-caption { text-align: center; padding: 10px 20px 0; flex-shrink: 0; height: 92px; display: flex; flex-direction: column; justify-content: flex-start; }
-  .cf-title { font-size: 17px; font-weight: 700; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .cf-caption { text-align: center; padding: 10px 20px 0; flex-shrink: 0; height: 116px; display: flex; flex-direction: column; justify-content: flex-start; }
+  .cf-title { font-size: 18px; font-weight: 700; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .cf-studio { font-size: 12px; color: var(--text-muted); margin-top: 3px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+  .cf-genre { font-size: 12px; color: var(--brass); margin-top: 4px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
   /* ---- Summary view ---- */
   #summary-view { height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 4px 16px 30px; display: none; }
@@ -460,9 +463,37 @@ function buildLanguageFilter() {
     langs.map(l => `<option value="${l}">${languageName(l)}</option>`).join('');
 }
 
+// Display-only genres: box sets inherit their most frequent included-film genres.
+// A manually entered box-set genre continues to take precedence.
+function genreParts(value) {
+  return String(value || '').split(',').map(s => s.trim()).filter(Boolean);
+}
+function displayGenre(item) {
+  if (!item) return '';
+  if (!item.isBoxSet || genreParts(item.genre).length) return item.genre || '';
+  const counts = new Map();
+  for (const raw of (item.includedMovies || [])) {
+    if (!raw || typeof raw === 'string') continue;
+    const seen = new Set();
+    for (const genre of genreParts(raw.genre)) {
+      const key = genre.toLocaleLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const existing = counts.get(key);
+      counts.set(key, {name: existing ? existing.name : genre, count: (existing?.count || 0) + 1});
+    }
+  }
+  return [...counts.values()]
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
+    .slice(0, 3).map(x => x.name).join(', ');
+}
+function hasGenre(item, selected) {
+  return !selected || genreParts(displayGenre(item)).some(g => g.toLocaleLowerCase() === selected.toLocaleLowerCase());
+}
+
 function buildGenreFilter() {
   const sel = document.getElementById('genre-select');
-  const genres = [...new Set(movies.map(m => m.genre).filter(Boolean))].sort();
+  const genres = [...new Set(movies.flatMap(m => genreParts(displayGenre(m))))].sort();
   sel.innerHTML = '<option value="">All Genres</option>' +
     genres.map(g => `<option value="${g}">${g}</option>`).join('');
 }
@@ -496,7 +527,7 @@ function filteredMovies() {
   const type = document.getElementById('type-select').value;
   const language = document.getElementById('language-select').value;
   return movies
-    .filter(m => !genre || m.genre === genre)
+    .filter(m => hasGenre(m, genre))
     .filter(m => !type || (type === 'boxset' ? m.isBoxSet === true : !m.isBoxSet && effectiveMediaType(m) === type))
     .filter(m => !language || m.language === language)
     .filter(m => {
@@ -565,7 +596,6 @@ function renderList() {
       ${coverHtml(m, 'cover-thumb', 'cover-placeholder')}
       <div class="movie-meta">
         <div class="movie-title">${escapeHtml(m.title || 'Untitled')}</div>
-        <div class="movie-studio">${escapeHtml(m.studio || '')}</div>
       </div>
       <div class="badge-stack">
         ${effectiveMediaType(m) === 'tv' ? '<div class="format-badge format-tv">TV</div>' : ''}
@@ -575,6 +605,7 @@ function renderList() {
           ? `<div class="format-badge imdb-badge">★ ${escapeHtml(m.imdbRating)}</div>`
           : (isCollection(m) ? `<div class="format-badge collection-badge">COLLECTION</div>`
              : (m.genre ? `<div class="format-badge imdb-missing">No IMDB</div>` : ''))}
+        ${displayGenre(m) ? `<div class="movie-genre">${escapeHtml(displayGenre(m))}</div>` : ''}
       </div>
     </div>
   `).join('');
@@ -615,10 +646,10 @@ function renderCoverFlow() {
     const m = items[closestIdx];
     const caption = document.getElementById('cf-caption');
     if (!m) { caption.innerHTML = ''; return; }
-    const subtitle = m.imdbRating ? `★ ${m.imdbRating} IMDB` : (m.studio || '');
+    const subtitle = m.imdbRating ? `★ ${m.imdbRating} IMDB` : '';
     caption.innerHTML = `
       <div class="cf-title">${escapeHtml(m.title || 'Untitled')}</div>
-      <div class="cf-studio">${escapeHtml(subtitle)}</div>
+      ${subtitle ? `<div class="cf-studio">${escapeHtml(subtitle)}</div>` : ''}
     `;
   }
   scroll.onscroll = () => requestAnimationFrame(updateTiltAndCaption);
@@ -681,7 +712,7 @@ function renderSummary() {
 
   const genreCounts = {};
   movies.forEach(m => {
-    const g = m.genre || 'Genre not recorded';
+    const g = displayGenre(m) || 'Genre not recorded';
     genreCounts[g] = (genreCounts[g] || 0) + 1;
   });
 
@@ -1828,7 +1859,7 @@ function openDetail(id) {
     <div class="sheet-fields">
       <div><div class="field-label">Type</div><div class="field-value">${effectiveMediaType(m) === 'tv' ? 'TV Show' : 'Movie'}</div></div>
       <div><div class="field-label">Format</div><div class="field-value">${isUHD(m) ? '4K UHD' : 'Blu-ray'}</div></div>
-      <div><div class="field-label">Genre</div><div class="field-value">${escapeHtml(m.genre || '—')}</div></div>
+      <div><div class="field-label">Genre</div><div class="field-value">${escapeHtml(displayGenre(m) || '—')}</div></div>
       <div><div class="field-label">Year</div><div class="field-value">${escapeHtml(m.year || '—')}</div></div>
       <div><div class="field-label">IMDB Rating</div><div class="field-value">${m.imdbRating ? '★ ' + escapeHtml(m.imdbRating) : (isCollection(m) ? 'Multi-film set -- no single rating applies' : (m.omdbNote ? escapeHtml(m.omdbNote) : '—'))}</div></div>
       <div><div class="field-label">Language</div><div class="field-value">${escapeHtml(m.language || '—')}</div></div>
