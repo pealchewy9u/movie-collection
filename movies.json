@@ -5578,7 +5578,8 @@
         "omdbNote": null
       }
     ],
-    "reviewStatus": "collection"
+    "reviewStatus": "confirmed",
+    "reviewedAt": "2026-10-16T16:58:01.786Z"
   },
   {
     "id": "MOV-0161",
