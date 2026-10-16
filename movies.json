@@ -2671,7 +2671,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Documentary",
-    "posterUrl": "https://imagestorage.org/876964000475.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/zezeOElCxlPui9SFGj5ToZ4W1Nh.jpg",
     "year": "2005",
     "overview": "A documentary about the Enron corporation, its faulty and corrupt business practices, and how they led to its fall.",
     "mediaType": "movie",
@@ -2682,7 +2682,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0083-main-mvb99hia-qjnx1l.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/zezeOElCxlPui9SFGj5ToZ4W1Nh.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0084",
