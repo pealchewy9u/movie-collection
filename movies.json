@@ -10466,7 +10466,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Action",
-    "posterUrl": "https://imagestorage.org/097361305646.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/xUuHj3CgmZQ9P2cMaqQs4J0d4Zc.jpg",
     "year": "1986",
     "overview": "The Top Gun Naval Fighter Weapons School is where the best of the best train to refine their elite flying skills. When hotshot fighter pilot Maverick is sent to the school, his reckless attitude and cocky demeanor put him at odds ...",
     "mediaType": "movie",
@@ -10477,7 +10477,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0291-main-mvba0wuu-s6v6ih.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/xUuHj3CgmZQ9P2cMaqQs4J0d4Zc.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0292",
