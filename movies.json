@@ -3379,7 +3379,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Comedy",
-    "posterUrl": "https://imagestorage.org/025195046213.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/d4elOzyhNWVlxpG7BwigrumkFTe.jpg",
     "year": "2008",
     "overview": "Devastated Peter takes a Hawaiian vacation in order to deal with the recent break-up with his TV star girlfriend, Sarah. Little does he know, Sarah's traveling to the same resort as her ex - and she's bringing along her new boyfri...",
     "mediaType": "movie",
@@ -3390,7 +3390,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0102-main-mvb9dmba-of0iyx.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/d4elOzyhNWVlxpG7BwigrumkFTe.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0103",
