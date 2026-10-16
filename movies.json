@@ -5341,7 +5341,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Comedy",
-    "posterUrl": "https://imagestorage.org/025192074295.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/hQE4q8Szeaae4davgB7o8MTLmwr.jpg",
     "year": "2010",
     "overview": "A clinically-depressed teenager gets a new start after he checks himself into an adult psychiatric ward.",
     "mediaType": "movie",
@@ -5352,7 +5352,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0157-main-mvb9ri6k-k052nr.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/hQE4q8Szeaae4davgB7o8MTLmwr.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0158",
