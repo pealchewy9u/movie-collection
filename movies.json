@@ -1971,7 +1971,9 @@
     "imdbRating": "6.0",
     "omdbNote": null,
     "tmdbId": 13018,
-    "matchedVia": "tmdb"
+    "matchedVia": "tmdb",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0061-main-mvb60ymw.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/lfkdTvfmaqlGiHymJl6EAdIaN1J.jpg"
   },
   {
     "id": "MOV-0062",
