@@ -1975,7 +1975,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Action",
-    "posterUrl": "https://imagestorage.org/024543104346.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/3E53WEZJqP6aM84D8CckXx4pIHw.jpg",
     "year": "2016",
     "overview": "A wisecracking mercenary gets experimented on and becomes immortal yet hideously scarred, and sets out to track down the man who ruined his looks.",
     "mediaType": "movie",
@@ -1986,7 +1986,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0059-main-mvb98j4q-jmqf6p.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/3E53WEZJqP6aM84D8CckXx4pIHw.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0060",
