@@ -901,18 +901,22 @@ async function archiveSelectedPoster(parent,index,sourceOverride=null,blobOverri
   return url;
 }
 async function openPosterPicker(id,index){
-  try{getPosterTarget(id,index);}catch(e){alert(e.message);return;}
+  let target;
+  try{target=getPosterTarget(id,index);}catch(e){alert(e.message);return;}
   posterPickerState={id,index};
   document.getElementById('poster-picker-overlay')?.remove();
   const overlay=document.createElement('div');overlay.id='poster-picker-overlay';
   overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:99999;display:flex;justify-content:center;align-items:center;padding:16px';
-  overlay.innerHTML=`<section style="background:var(--surface,#fff);color:var(--text);border-radius:14px;padding:18px;width:min(560px,100%);max-height:90vh;overflow:auto"><div style="display:flex;justify-content:space-between;align-items:center"><b>Manage Poster</b><button class="manager-btn secondary" id="poster-picker-close">Close</button></div><p class="manager-small" id="poster-current-status"></p><p class="manager-small">Your saved artwork changes only when you explicitly choose and save a new poster. Browse TMDB or upload your own image.</p><button class="manager-btn" id="poster-find-alternatives">Browse TMDB posters</button><p class="manager-small">Or choose an image from your device:</p><input type="file" id="poster-custom-file" accept="image/*"><div id="poster-picker-results" style="margin-top:12px"></div><p class="manager-small" id="poster-picker-status"></p></section>`;
+  const title=target.item.tmdbTitle||target.item.title||target.parent.title||'';
+  overlay.innerHTML=`<section style="background:var(--surface,#fff);color:var(--text);border-radius:14px;padding:18px;width:min(620px,100%);max-height:90vh;overflow:auto"><div style="display:flex;justify-content:space-between;align-items:center"><b>Manage Poster</b><button class="manager-btn secondary" id="poster-picker-close">Close</button></div><p class="manager-small" id="poster-current-status"></p><p class="manager-small">Choose artwork without changing the movie match, title, language, rating or barcode. The selected image is saved to GitHub and locked.</p><label class="manager-small" for="poster-search-title">Search TMDB for posters</label><div style="display:flex;gap:7px;flex-wrap:wrap;margin:6px 0 10px"><input id="poster-search-title" style="flex:1;min-width:170px" value="${escapeHtml(title)}" placeholder="Movie title"><input id="poster-search-year" style="width:80px" value="${escapeHtml(String(target.item.year||''))}" placeholder="Year" inputmode="numeric"><button class="manager-btn" id="poster-find-alternatives">Find posters</button></div><p class="manager-small">Or choose an image from your device:</p><input type="file" id="poster-custom-file" accept="image/*"><div id="poster-picker-results" style="margin-top:12px"></div><p class="manager-small" id="poster-picker-status"></p></section>`;
   document.body.appendChild(overlay);
-  overlay.querySelector('#poster-current-status').textContent=posterStatusText(getPosterTarget(id,index).item);
+  overlay.querySelector('#poster-current-status').textContent=posterStatusText(target.item);
   const close=()=>overlay.remove();
   overlay.querySelector('#poster-picker-close').onclick=close;
   overlay.onclick=e=>{if(e.target===overlay)close();};
   overlay.querySelector('#poster-find-alternatives').onclick=()=>loadPosterAlternatives(id,index);
+  overlay.querySelector('#poster-search-title').onkeydown=e=>{if(e.key==='Enter')loadPosterAlternatives(id,index);};
+  overlay.querySelector('#poster-search-year').onkeydown=e=>{if(e.key==='Enter')loadPosterAlternatives(id,index);};
   overlay.querySelector('#poster-custom-file').onchange=async e=>{
     const file=e.target.files?.[0];if(!file)return;
     const status=overlay.querySelector('#poster-picker-status');
@@ -930,20 +934,64 @@ async function loadPosterAlternatives(id,index){
   const overlay=document.getElementById('poster-picker-overlay');if(!overlay)return;
   const out=overlay.querySelector('#poster-picker-results'),status=overlay.querySelector('#poster-picker-status');
   const {item}=getPosterTarget(id,index),key=localStorage.getItem('tmdbKey');
-  if(!key||!item.tmdbId){status.textContent='This movie needs a confirmed TMDB match and TMDB API key first.';return;}
+  if(!key){status.textContent='Add your TMDB API key in Settings first.';return;}
   const type=index!==null?'movie':item.mediaType==='tv'?'tv':'movie';
-  status.textContent='Loading alternative posters…';
+  const title=overlay.querySelector('#poster-search-title').value.trim();
+  const year=overlay.querySelector('#poster-search-year').value.trim();
+  if(!title&&!item.tmdbId){status.textContent='Enter a title to search TMDB.';return;}
+  if(year&&!/^\d{4}$/.test(year)){status.textContent='Enter a four-digit year or leave it blank.';return;}
+  status.textContent='Finding TMDB posters…';out.innerHTML='';
   try{
-    const response=await fetch(`https://api.themoviedb.org/3/${type}/${item.tmdbId}/images?api_key=${encodeURIComponent(key)}&include_image_language=en,null,hi`,{cache:'no-store'});
+    // A UPCMDB title often has no tmdbId. Search without altering its existing match.
+    // For existing TMDB matches, use the exact ID when the search has not been changed.
+    const originalTitle=(item.tmdbTitle||item.title||'').trim();
+    const originalYear=String(item.year||'').trim();
+    const useExact=!!item.tmdbId&&title.toLowerCase()===originalTitle.toLowerCase()&&year===originalYear;
+    let candidates=[];
+    if(useExact){
+      candidates=[{id:item.tmdbId,media_type:type,title:originalTitle,name:originalTitle,release_date:originalYear+'-01-01'}];
+    }else{
+      const url=`https://api.themoviedb.org/3/search/${type}?api_key=${encodeURIComponent(key)}&query=${encodeURIComponent(title)}${year?'&'+(type==='tv'?'first_air_date_year':'year')+'='+encodeURIComponent(year):''}`;
+      const response=await fetch(url,{cache:'no-store'});
+      if(!response.ok)throw new Error('TMDB search HTTP '+response.status);
+      candidates=(await response.json()).results||[];
+      if(!candidates.length&&year){
+        // Release years can differ between the physical disc and the movie.
+        const retry=await fetch(`https://api.themoviedb.org/3/search/${type}?api_key=${encodeURIComponent(key)}&query=${encodeURIComponent(title)}`,{cache:'no-store'});
+        if(!retry.ok)throw new Error('TMDB search HTTP '+retry.status);
+        candidates=(await retry.json()).results||[];
+      }
+    }
+    if(!candidates.length){status.textContent='No TMDB results. Try a shorter title or remove the year.';return;}
+    if(candidates.length===1&&useExact){
+      await showTmdbPosterChoices(id,index,type,candidates[0].id,originalTitle);
+      return;
+    }
+    status.textContent='Choose the correct TMDB title below. This only selects where to browse posters; it will not rematch your movie.';
+    out.innerHTML='<div style="display:grid;gap:8px">'+candidates.slice(0,20).map((c,i)=>`<button type="button" data-poster-title="${i}" style="display:flex;align-items:center;gap:10px;text-align:left;padding:7px;border:1px solid #d4c3a9;background:transparent;border-radius:8px;cursor:pointer">${c.poster_path?`<img alt="" src="https://image.tmdb.org/t/p/w92${escapeHtml(c.poster_path)}" style="width:42px;height:63px;object-fit:cover">`:''}<span><b>${escapeHtml(c.title||c.name||'Untitled')}</b><br><small>${escapeHtml((c.release_date||c.first_air_date||'').slice(0,4)||'Year unknown')} · ${escapeHtml(String(c.original_language||'').toUpperCase())} · TMDB ${c.id}</small></span></button>`).join('')+'</div>';
+    out.querySelectorAll('[data-poster-title]').forEach(b=>b.onclick=()=>{
+      const c=candidates[Number(b.dataset.posterTitle)];
+      showTmdbPosterChoices(id,index,type,c.id,c.title||c.name);
+    });
+  }catch(e){status.textContent='Could not search TMDB: '+e.message;}
+}
+async function showTmdbPosterChoices(id,index,type,tmdbId,title){
+  const overlay=document.getElementById('poster-picker-overlay');if(!overlay)return;
+  const out=overlay.querySelector('#poster-picker-results'),status=overlay.querySelector('#poster-picker-status');
+  const key=localStorage.getItem('tmdbKey');
+  status.textContent=`Loading posters for ${title}…`;out.innerHTML='';
+  try{
+    const response=await fetch(`https://api.themoviedb.org/3/${type}/${tmdbId}/images?api_key=${encodeURIComponent(key)}&include_image_language=en,null,hi`,{cache:'no-store'});
     if(!response.ok)throw new Error('TMDB HTTP '+response.status);
     const images=(await response.json()).posters||[];
-    if(!images.length){status.textContent='No alternate posters found.';return;}
-    out.innerHTML='<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">'+images.slice(0,24).map((im,i)=>`<button type="button" data-poster-choice="${i}" style="padding:4px;border:1px solid #aaa;border-radius:8px;background:transparent;cursor:pointer"><img loading="lazy" alt="TMDB poster option ${i+1}" style="width:100%;border-radius:5px" src="https://image.tmdb.org/t/p/w185${escapeHtml(im.file_path)}"></button>`).join('')+'</div>';
-    status.textContent='Tap a poster to save it to GitHub and lock it.';
+    if(!images.length){status.textContent='No posters found for this TMDB title. Try another search result.';return;}
+    out.innerHTML=`<p class="manager-small"><b>${escapeHtml(title)}</b> · <button class="manager-btn secondary" id="poster-back-to-search">Back to search</button></p>`+'<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">'+images.slice(0,36).map((im,i)=>`<button type="button" data-poster-choice="${i}" style="padding:4px;border:1px solid #aaa;border-radius:8px;background:transparent;cursor:pointer"><img loading="lazy" alt="TMDB poster option ${i+1}" style="width:100%;border-radius:5px" src="https://image.tmdb.org/t/p/w185${escapeHtml(im.file_path)}"></button>`).join('')+'</div>';
+    out.querySelector('#poster-back-to-search').onclick=()=>loadPosterAlternatives(id,index);
+    status.textContent='Tap a poster to save it at 780px in GitHub and lock it. Movie metadata will not change.';
     out.querySelectorAll('[data-poster-choice]').forEach(b=>b.onclick=async()=>{
       const im=images[Number(b.dataset.posterChoice)];
-      if(!confirm('Save this TMDB poster as the new locked cover?'))return;
-      status.textContent='Saving selected 780px poster…';
+      if(!confirm('Save this TMDB poster as the new locked cover? Movie metadata will stay unchanged.'))return;
+      status.textContent='Saving selected 780px poster to GitHub…';
       try{
         const {parent}=getPosterTarget(id,index);
         await archiveSelectedPoster(parent,index,'https://image.tmdb.org/t/p/w500'+im.file_path);
