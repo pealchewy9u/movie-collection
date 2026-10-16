@@ -515,7 +515,8 @@ function displayPoster(m){
   return m.posterUrl||m.archivedPosterUrl||null;
 }
 function posterStatusText(item){
-  return item?.archivedPosterUrl && item?.posterLocked!==false ? '🔒 Locked · saved to GitHub' : 'Not backed up';
+  if(item?.archivedPosterUrl && item?.posterLocked!==false)return '🔒 Locked · saved to GitHub';
+  return backupImageSource(item)?'Not backed up · available for poster backup':'No poster URL · choose artwork to archive';
 }
 function preservePosterChoice(previous,updated){
   if(previous?.archivedPosterUrl && previous.posterLocked!==false){
@@ -772,9 +773,12 @@ function renderManager(){
       <div id="bulk-language-body"></div>
     </details>
     <details class="bulk-language" id="poster-backup-panel" ${posterBackupOpen?'open':''}>
-      <summary>Backup TMDB posters · ${posterBackupStats().done} saved / ${posterBackupStats().eligible} available</summary>
+      <summary>Backup all movie posters · ${posterBackupStats().done} / ${posterBackupStats().eligible} archived</summary>
       <div style="padding:12px 3px">
-        <p class="manager-small">Archive TMDB movie and box-set film posters as 780px images in your GitHub <b>posters/</b> folder. Custom box covers are never replaced. Existing archived posters are skipped. You can safely run this again later.</p>
+        <p class="manager-small">Save every displayed movie/TV poster into your GitHub <b>posters/</b> folder — including TMDB (780px), UPCMDB/imagestorage.org, and Amazon. Existing GitHub backups are skipped and stay locked. Custom physical box-set covers are never changed.</p>
+        <p class="manager-small"><b>${posterBackupStats().missing}</b> posters still need archiving; <b>${posterBackupStats().withoutImage}</b> titles have no poster URL. External websites can block browser downloads; failures are listed below and are never silently replaced with different artwork.</p>
+        <details><summary style="cursor:pointer">Show unarchived titles (${posterBackupStats().missing})</summary><div style="max-height:260px;overflow:auto;padding:8px">${posterBackupExcluded().filter(x=>x.reason!=='No poster').map(x=>`<div style="margin:7px 0"><button class="manager-btn secondary" data-unbacked-id="${escapeHtml(x.id)}">${escapeHtml(x.title)}</button> <span class="manager-small">${escapeHtml(x.reason)}</span></div>`).join('')||'None'}</div></details>
+        <details ${posterBackupFailures.size?'open':''}><summary style="cursor:pointer">Download failures this session (${posterBackupFailures.size})</summary><div style="max-height:260px;overflow:auto;padding:8px">${[...posterBackupFailures.values()].map(x=>`<div style="margin:7px 0"><button class="manager-btn secondary" data-unbacked-id="${escapeHtml(x.id)}">${escapeHtml(x.title)}</button> <span class="manager-small">${escapeHtml(x.error)}</span></div>`).join('')||'No failures.'}</div><button class="manager-btn secondary" id="poster-retry-failed">Retry failed downloads</button></details>
         <p class="manager-small">Saves up to 25 posters per run to avoid exhausting GitHub's upload limits. Keep this tab open while a batch is running. Only posters successfully saved and recorded in movies.json count as complete.</p>
         <button class="manager-btn" id="poster-backup-start" ${posterBackupRunning?'disabled':''}>${posterBackupRunning?'Backing up…':'Backup next 25 posters'}</button>
         <button class="manager-btn secondary" id="poster-backup-stop" ${posterBackupRunning?'':'disabled'}>Stop after current poster</button>
@@ -794,7 +798,9 @@ function renderManager(){
   renderBulkLanguageReview();
   el.querySelector('#bulk-language-panel').ontoggle=e=>{bulkLanguageOpen=e.target.open;};
   el.querySelector('#poster-backup-panel').ontoggle=e=>{posterBackupOpen=e.target.open;};
+  el.querySelectorAll('[data-unbacked-id]').forEach(b=>b.onclick=()=>openDetail(b.dataset.unbackedId));
   el.querySelector('#poster-backup-start').onclick=backupNextPosters;
+  const retryPosterBtn=el.querySelector('#poster-retry-failed');if(retryPosterBtn)retryPosterBtn.onclick=()=>{posterBackupFailures.clear();backupNextPosters();};
   el.querySelector('#poster-backup-stop').onclick=()=>{posterBackupStop=true;setPosterBackupMessage('Stopping after current poster…');};
   el.querySelector('#sync-now').onclick=async()=>{const e=el.querySelector('#sync-status');e.textContent='Syncing…';try{e.textContent=await syncPendingEdits();}catch(err){e.textContent='Not synced: '+err.message;}};
   el.querySelector('#manager-filter').onchange=e=>{managerFilter=e.target.value;renderManager();};
@@ -804,25 +810,45 @@ function renderManager(){
 
 // Persist TMDB poster image bytes in GitHub; separate from physical box-cover photos.
 let posterBackupOpen=false,posterBackupRunning=false,posterBackupStop=false,posterBackupMessage='';
+const posterBackupFailures=new Map();
 function tmdbPosterSource(m){
   const value=String(m?.posterUrl||'');
-  // Only archive TMDB artwork, never arbitrary UPCMDB or user-provided URLs.
   const found=value.match(/^https:\/\/image\.tmdb\.org\/t\/p\/(?:w\d+|original)(\/[^?#]+)$/i);
   return found ? 'https://image.tmdb.org/t/p/w780'+found[1] : null;
+}
+function backupImageSource(item){
+  const url=String(item?.posterUrl||'').trim();
+  if(!/^https:\/\//i.test(url))return null;
+  // Only well-formed HTTPS URLs. Never back up custom box-set physical covers here.
+  return tmdbPosterSource(item)||url;
 }
 function posterBackupItems(){
   const result=[];
   movies.forEach(m=>{
-    if(m.isBoxSet){
-      (m.includedMovies||[]).forEach((raw,index)=>{
-        const film=typeof raw==='string'?{title:raw}:raw;
-        if(tmdbPosterSource(film))result.push({id:m.id,index,title:film.title||m.title,source:film.posterUrl,done:!!film.archivedPosterUrl});
-      });
-    }else if(tmdbPosterSource(m))result.push({id:m.id,index:null,title:m.title,source:m.posterUrl,done:!!m.archivedPosterUrl});
+    const slots=m.isBoxSet?(m.includedMovies||[]).map((film,index)=>({film,index})):[{film:m,index:null}];
+    slots.forEach(({film:raw,index})=>{
+      const item=typeof raw==='string'?{title:raw}:raw;
+      if(!item||(!backupImageSource(item)&&!item.archivedPosterUrl))return;
+      result.push({id:m.id,index,title:index===null?(m.title||'Untitled'):`${m.title} — ${item.title||'Untitled'}`,source:item.posterUrl,download:backupImageSource(item),done:!!item.archivedPosterUrl});
+    });
   });
   return result;
 }
-function posterBackupStats(){const list=posterBackupItems();return {eligible:list.length,done:list.filter(x=>x.done).length};}
+function posterBackupExcluded(){
+  const result=[];
+  movies.forEach(m=>{
+    const slots=m.isBoxSet?(m.includedMovies||[]).map((film,index)=>({film,index})):[{film:m,index:null}];
+    slots.forEach(({film:raw,index})=>{
+      const item=typeof raw==='string'?{title:raw}:raw;
+      if(!item||item.archivedPosterUrl)return;
+      result.push({id:m.id,title:index===null?(m.title||'Untitled'):`${m.title} — ${item.title||'Untitled'}`,reason:backupImageSource(item)?(tmdbPosterSource(item)?'TMDB (780px)':'External image — may block download'):'No poster'});
+    });
+  });return result;
+}
+function posterBackupStats(){
+  const list=posterBackupItems();
+  return {eligible:list.length,done:list.filter(x=>x.done).length,missing:list.filter(x=>!x.done).length,withoutImage:posterBackupExcluded().filter(x=>x.reason==='No poster').length};
+}
 function setPosterBackupMessage(msg){
   posterBackupMessage=msg;
   const el=document.getElementById('poster-backup-status');if(el)el.textContent=msg;
@@ -831,7 +857,7 @@ async function uploadArchivedPoster(c,path,blob){
   const bytes=new Uint8Array(await blob.arrayBuffer());
   let binary='';for(let i=0;i<bytes.length;i+=8192)binary+=String.fromCharCode(...bytes.subarray(i,i+8192));
   const api=`https://api.github.com/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/contents/${path}`;
-  const response=await fetch(api,{method:'PUT',headers:{Authorization:`Bearer ${c.token}`,Accept:'application/vnd.github+json','Content-Type':'application/json'},body:JSON.stringify({message:'Archive TMDB poster at 780px',content:btoa(binary),branch:'main'})});
+  const response=await fetch(api,{method:'PUT',headers:{Authorization:`Bearer ${c.token}`,Accept:'application/vnd.github+json','Content-Type':'application/json'},body:JSON.stringify({message:'Archive collection poster',content:btoa(binary),branch:'main'})});
   if(!response.ok)throw new Error(`GitHub poster upload HTTP ${response.status}: ${(await response.text()).slice(0,120)}`);
   return `https://raw.githubusercontent.com/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/main/${path}`;
 }
@@ -934,10 +960,10 @@ async function backupNextPosters(){
   posterBackupRunning=true;posterBackupStop=false;posterBackupOpen=true;
   let completed=0,errors=0,processed=0;
   try{
-    // Snapshot only the next 25 missing items. Refresh snapshots each run; completed
-    // posters are never uploaded again, including when a previous run was interrupted.
-    const items=posterBackupItems().filter(x=>!x.done).slice(0,25);
-    if(!items.length){setPosterBackupMessage('All currently available TMDB posters are archived.');return;}
+    // Skip failures during this browser session so one blocked host cannot
+    // prevent the rest of the collection being archived. Retry explicitly.
+    const items=posterBackupItems().filter(x=>!x.done&&x.download&&!posterBackupFailures.has(x.id+'|'+x.index)).slice(0,25);
+    if(!items.length){setPosterBackupMessage(posterBackupStats().missing?'No remaining downloadable candidates in this session. Review failures and choose Retry failed downloads, or use Manage Poster.':'All posters with a source URL are archived.');return;}
     setPosterBackupMessage(`Starting batch of ${items.length} posters…`);
     for(const entry of items){
       if(posterBackupStop)break;
@@ -947,37 +973,43 @@ async function backupNextPosters(){
         const parent=movies.find(m=>m.id===entry.id);
         if(!parent)throw new Error('Collection entry no longer exists');
         const film=entry.index===null?parent:parent.includedMovies?.[entry.index];
-        if(!film || typeof film==='string' || film.posterUrl!==entry.source)throw new Error('Poster changed; skipped');
-        const image=await fetch(tmdbPosterSource(film),{mode:'cors'});
-        if(!image.ok)throw new Error(`TMDB download HTTP ${image.status}`);
+        if(!film||typeof film==='string'||film.posterUrl!==entry.source)throw new Error('Poster changed; skipped');
+        if(film.archivedPosterUrl)continue;
+        let image;
+        try{image=await fetch(entry.download,{mode:'cors',cache:'no-store'});}
+        catch(err){throw new Error('Browser blocked external image download (CORS/network). Use Manage Poster to upload an image or choose a TMDB poster.');}
+        if(!image.ok)throw new Error(`Poster download HTTP ${image.status}`);
         const blob=await image.blob();
-        if(!blob.type.startsWith('image/'))throw new Error('TMDB returned a non-image response');
-        if(blob.size>3*1024*1024)throw new Error('Poster exceeds 3 MB; skipped');
+        if(!blob.type.startsWith('image/'))throw new Error('Source returned a non-image response');
+        if(blob.size>3*1024*1024)throw new Error('Poster exceeds 3 MB; use Manage Poster to upload a compressed image');
+        // Match the file extension to the actual MIME type. Preserve the original
+        // external artwork without introducing a replacement from another source.
+        const mime=blob.type.toLowerCase();
+        const ext=mime.includes('png')?'png':mime.includes('webp')?'webp':mime.includes('gif')?'gif':mime.includes('jpeg')||mime.includes('jpg')?'jpg':null;
+        if(!ext)throw new Error('Unsupported image type: '+mime);
         const slug=String(entry.id).replace(/[^a-zA-Z0-9_-]/g,'_');
         const filmSlug=entry.index===null?'main':'film-'+entry.index;
-        const path=`posters/${slug}-${filmSlug}-${Date.now().toString(36)}.jpg`;
+        const path=`posters/${slug}-${filmSlug}-${Date.now().toString(36)}.${ext}`;
         const url=await uploadArchivedPoster(cfg,path,blob);
         film.archivedPosterUrl=url;
         film.archivedSourcePosterUrl=film.posterUrl;
         film.posterLocked=true;
         markPending(parent);
-        // Commit movie JSON after each image: makes every successful poster resumable
-        // across refreshes and devices, and reports metadata persistence failures.
         await syncPendingEdits();
+        posterBackupFailures.delete(entry.id+'|'+entry.index);
         completed++;
       }catch(err){
         errors++;
-        setPosterBackupMessage(`Could not archive ${entry.title}: ${err.message}. Continuing if possible…`);
+        posterBackupFailures.set(entry.id+'|'+entry.index,{id:entry.id,title:entry.title,error:String(err.message||err)});
+        setPosterBackupMessage(`Could not archive ${entry.title}: ${err.message}. Continuing…`);
         if(/GitHub poster upload HTTP (403|429)|GitHub save HTTP (403|429)|GitHub read HTTP (403|429)/.test(err.message)){
-          posterBackupStop=true;
-          setPosterBackupMessage(`GitHub rate limit / permissions error: ${err.message}. Pause before retrying.`);
-          break;
+          posterBackupStop=true;break;
         }
       }
       if(!posterBackupStop)await new Promise(resolve=>setTimeout(resolve,900));
     }
     const st=posterBackupStats();
-    setPosterBackupMessage(`${completed} posters archived this run, ${errors} errors. Total: ${st.done}/${st.eligible} backed up. ${posterBackupStop?'Stopped. ':''}${st.done<st.eligible?'Use Backup next 25 posters to continue.':'Backup complete for available TMDB posters.'}`);
+    setPosterBackupMessage(`${completed} saved this run, ${errors} failed. ${st.done}/${st.eligible} posters archived, ${st.missing} remaining. ${posterBackupFailures.size?'Review failure list for blocked images. ':''}${posterBackupStop?'Stopped. ':''}${st.missing?'Run next batch or retry failed downloads.':'All available posters archived.'}`);
   }finally{
     posterBackupRunning=false;posterBackupStop=false;
     if(currentView==='manager')renderManager();
