@@ -1452,7 +1452,7 @@
     "dvdDiscs": 0,
     "digitalCopy": true,
     "genre": "Biography",
-    "posterUrl": "https://imagestorage.org/0043396642256.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/llWl3GtNoXosbvYboelmoT459NM.jpg",
     "year": "2024",
     "overview": "In 1961, an unknown 19-year-old Bob Dylan arrives in New York City with his guitar and forges relationships with musical icons on his meteoric rise, culminating in a groundbreaking performance that reverberates around the world.",
     "mediaType": "movie",
@@ -1463,7 +1463,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0048-main-mvb97wal-sljn6o.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/llWl3GtNoXosbvYboelmoT459NM.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0049",
