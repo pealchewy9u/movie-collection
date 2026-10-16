@@ -57,9 +57,10 @@
   }
   .cover-thumb img { width: 100%; height: 100%; object-fit: cover; }
   .movie-meta { flex: 1; min-width: 0; }
-  .movie-title { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .movie-title { font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .movie-studio { font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .movie-genre { font-size: 11px; color: var(--brass); line-height: 1.35; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .movie-genre { flex: 0 1 33%; max-width: 340px; min-width: 0; font-size: 12px; color: var(--brass); line-height: 1.4; text-align: right; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  @media (max-width: 520px) { .movie-genre { flex-basis: 35%; font-size: 11px; } .movie-row { gap: 9px; } }
   .format-badge { font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; letter-spacing: 0.02em; }
   .format-4k { color: #fff; background: var(--maroon); }
   .format-bluray { color: var(--text-muted); background: var(--groove); }
@@ -98,7 +99,7 @@
   }
   .cf-reflection img { width: 100%; height: 220px; object-fit: cover; display: block; }
   .cf-caption { text-align: center; padding: 10px 20px 0; flex-shrink: 0; height: 116px; display: flex; flex-direction: column; justify-content: flex-start; }
-  .cf-title { font-size: 17px; font-weight: 700; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .cf-title { font-size: 18px; font-weight: 700; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .cf-studio { font-size: 12px; color: var(--text-muted); margin-top: 3px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
   .cf-genre { font-size: 12px; color: var(--brass); margin-top: 4px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
@@ -311,14 +312,14 @@ function filtered(){
 }
 function render(){if(currentView==='list')renderList();else if(currentView==='coverflow')renderFlow();else renderSummary();}
 function renderList(){const list=$('list-view'),items=filtered();
- list.innerHTML=items.length?items.map(m=>`<div class="movie-row" data-id="${esc(m.id)}">${cover(m,'cover-thumb','cover-placeholder')}<div class="movie-meta"><div class="movie-title">${esc(m.title||'Untitled')}</div><div class="movie-studio">${esc(m.studio||'')}${m.isBoxSet?' · Box set':''}</div>${displayGenre(m)?`<div class="movie-genre">${esc(displayGenre(m))}</div>`:''}</div><div class="badge-stack">${mediaType(m)==='tv'?'<div class="format-badge format-tv">TV</div>':''}<div class="format-badge ${isUHD(m)?'format-4k':'format-bluray'}">${isUHD(m)?'4K UHD':'BLU-RAY'}</div>${m.imdbRating?`<div class="format-badge imdb-badge">★ ${esc(m.imdbRating)}</div>`:m.isBoxSet?'<div class="format-badge collection-badge">COLLECTION</div>':''}</div></div>`).join(''):'<div class="empty-state">No movies match.</div>';
+ list.innerHTML=items.length?items.map(m=>`<div class="movie-row" data-id="${esc(m.id)}">${cover(m,'cover-thumb','cover-placeholder')}<div class="movie-meta"><div class="movie-title">${esc(m.title||'Untitled')}</div></div>${displayGenre(m)?`<div class="movie-genre">${esc(displayGenre(m))}</div>`:''}<div class="badge-stack">${mediaType(m)==='tv'?'<div class="format-badge format-tv">TV</div>':''}<div class="format-badge ${isUHD(m)?'format-4k':'format-bluray'}">${isUHD(m)?'4K UHD':'BLU-RAY'}</div>${m.imdbRating?`<div class="format-badge imdb-badge">★ ${esc(m.imdbRating)}</div>`:m.isBoxSet?'<div class="format-badge collection-badge">COLLECTION</div>':''}</div></div>`).join(''):'<div class="empty-state">No movies match.</div>';
  list.querySelectorAll('[data-id]').forEach(el=>el.addEventListener('click',()=>openDetail(el.dataset.id)));
 }
 function renderFlow(){const scroll=$('cf-scroll'),items=filtered();
  scroll.innerHTML=items.map(m=>`<div class="cf-card" data-id="${esc(m.id)}">${cover(m,'cf-cover','cf-cover-placeholder')}${cover(m,'cf-reflection','cf-reflection-placeholder')}</div>`).join('');
  function update(){const rect=scroll.getBoundingClientRect(),center=rect.left+rect.width/2;let best=Infinity,bestIndex=0;
  scroll.querySelectorAll('.cf-card').forEach((el,i)=>{const r=el.getBoundingClientRect(),dist=(r.left+r.width/2-center)/170,d=Math.max(-3,Math.min(3,dist));el.style.transform=`scale(${Math.max(.6,1-Math.abs(d)*.18)}) rotateY(${d*-50}deg)`;el.style.opacity=Math.abs(d)>2.6?'0':'1';el.style.zIndex=Math.round(10-Math.abs(d));if(Math.abs(dist)<best){best=Math.abs(dist);bestIndex=i;}});
- const m=items[bestIndex];$('cf-caption').innerHTML=m?`<div class="cf-title">${esc(m.title)}</div><div class="cf-studio">${esc(m.imdbRating?'★ '+m.imdbRating+' IMDb':m.studio||'')}</div>${displayGenre(m)?`<div class="cf-genre">${esc(displayGenre(m))}</div>`:''}`:'';}
+ const m=items[bestIndex];$('cf-caption').innerHTML=m?`<div class="cf-title">${esc(m.title)}</div>${m.imdbRating?`<div class="cf-studio">★ ${esc(m.imdbRating)} IMDb</div>`:''}`:'';}
  scroll.onscroll=()=>requestAnimationFrame(update);scroll.querySelectorAll('[data-id]').forEach(el=>el.addEventListener('click',()=>openDetail(el.dataset.id)));requestAnimationFrame(update);
 }
 function renderSummary(){const singles=movies.filter(m=>!m.isBoxSet),sets=movies.filter(m=>m.isBoxSet),included=sets.flatMap(m=>(m.includedMovies||[]).map(f=>typeof f==='string'?{title:f}:f)),all=[...singles,...included];
