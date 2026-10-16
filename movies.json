@@ -9486,7 +9486,9 @@
     "tmdbId": 376812,
     "matchedVia": "tmdb-manual",
     "reviewStatus": "confirmed",
-    "reviewedAt": "2026-10-15T20:42:49.547Z"
+    "reviewedAt": "2026-10-15T20:42:49.547Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0282-main-mvb7f3b6.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/oarT8LL2XE0aPU9kXqrD249Z4rM.jpg"
   },
   {
     "id": "MOV-0283",
