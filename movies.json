@@ -10512,7 +10512,9 @@
         "imdbId": "tt0458525",
         "imdbRating": "6.5",
         "omdbNote": null,
-        "matchedVia": "tmdb-manual"
+        "matchedVia": "tmdb-manual",
+        "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0315-film-3-mvb7hsyd.jpg",
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/yj8LbTju1p7CUJg7US2unSBk33s.jpg"
       },
       {
         "title": "X-Men: First Class (2011)",
