@@ -963,7 +963,9 @@
     "tmdbId": 128280,
     "enrichNote": null,
     "reviewStatus": "confirmed",
-    "reviewedAt": "2026-10-15T21:32:49.653Z"
+    "reviewedAt": "2026-10-15T21:32:49.653Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0032-main-mvb5vkor.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/cmh10BywovOEOlYF5gboYdEi5fY.jpg"
   },
   {
     "id": "MOV-0033",
