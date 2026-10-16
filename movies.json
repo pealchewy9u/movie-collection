@@ -6433,7 +6433,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Biography",
-    "posterUrl": "https://imagestorage.org/032429352644.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/jr528gGK1RrOW6YAZHUj5lF9RrO.jpg",
     "year": "1972",
     "overview": "The story of the troubled life and career of the legendary Jazz singer, Billie Holiday.",
     "mediaType": "movie",
@@ -6444,7 +6444,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:54.573Z"
+    "languageReviewedAt": "2026-10-15T22:54:54.573Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0181-main-mvba31c8-uojggn.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/jr528gGK1RrOW6YAZHUj5lF9RrO.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0182",
