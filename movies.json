@@ -520,7 +520,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Mystery",
-    "posterUrl": "https://imagestorage.org/043396292178.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/tFZQAuulEOtFTp0gHbVdEXwGrYe.jpg",
     "year": "2009",
     "overview": "Harvard symbologist Robert Langdon works with a nuclear physicist to solve a murder and prevent a terrorist act against the Vatican during one of the significant events within the church.",
     "mediaType": "movie",
@@ -531,7 +531,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0016-main-mvb97e7x-322kqw.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/tFZQAuulEOtFTp0gHbVdEXwGrYe.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0017",
