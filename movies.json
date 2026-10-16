@@ -611,7 +611,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Adventure",
-    "posterUrl": "https://imagestorage.org/031398343448.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/gxVcBc4VM0kAg9wX4HVg6KJHG46.jpg",
     "year": "2024",
     "overview": "An adventure racer adopts a stray dog named Arthur to join him in an epic endurance race.",
     "mediaType": "movie",
@@ -622,7 +622,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0019-main-mvb9azfr-qabepl.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/gxVcBc4VM0kAg9wX4HVg6KJHG46.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0020",
