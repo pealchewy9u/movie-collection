@@ -2070,7 +2070,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Crime",
-    "posterUrl": "https://imagestorage.org/0085391117292.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/aqfeqtqnuCk2zCG7QxVkvm7kf1O.jpg",
     "year": "2006",
     "overview": "An undercover cop and a mole in the police attempt to identify each other while infiltrating an Irish gang in South Boston.",
     "mediaType": "movie",
@@ -2081,7 +2081,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0062-main-mvb9nuqh-woa0u1.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/aqfeqtqnuCk2zCG7QxVkvm7kf1O.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0063",
