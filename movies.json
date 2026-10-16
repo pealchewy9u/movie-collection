@@ -2463,7 +2463,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Drama",
-    "posterUrl": "https://imagestorage.org/760137109587.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/j2AtZFsflxiluaNtajMTI0Avm8C.jpg",
     "year": "2001",
     "overview": "After narrowly escaping a bizarre accident, a troubled teenager is plagued by visions of a man in a large rabbit suit who manipulates him to commit a series of crimes.",
     "mediaType": "movie",
@@ -2474,7 +2474,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0076-main-mvb996mp-oxeaqo.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/j2AtZFsflxiluaNtajMTI0Avm8C.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0077",
