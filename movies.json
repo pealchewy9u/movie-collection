@@ -3102,7 +3102,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Drama",
-    "posterUrl": "https://imagestorage.org/025192222306.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/63kGofUkt1Mx0SIL4XI4Z5AoSgt.jpg",
     "year": "2015",
     "overview": "Literature student Anastasia Steele's life changes forever when she meets handsome, yet tormented, billionaire Christian Grey.",
     "mediaType": "movie",
@@ -3113,7 +3113,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0096-main-mvb9d49w-pvh836.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/63kGofUkt1Mx0SIL4XI4Z5AoSgt.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0097",
