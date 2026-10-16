@@ -9581,7 +9581,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Action",
-    "posterUrl": "https://imagestorage.org/025192124716.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/7SYBPjv5ywF6cI4BSFFtlDyChT2.jpg",
     "year": "2012",
     "overview": "A young CIA agent is tasked with looking after a fugitive in a safe house. But when the safe house is attacked, he finds himself on the run with his charge.",
     "mediaType": "movie",
@@ -9592,7 +9592,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0263-main-mvbcfx4w-ozrvbc.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/7SYBPjv5ywF6cI4BSFFtlDyChT2.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0264",
