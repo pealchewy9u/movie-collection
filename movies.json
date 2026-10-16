@@ -10085,13 +10085,46 @@
     "isBoxSet": true,
     "includedMovies": [
       {
-        "title": "The Hobbit: An Unexpected Journey"
+        "title": "The Hobbit: An Unexpected Journey",
+        "tmdbId": 49051,
+        "tmdbTitle": "The Hobbit: An Unexpected Journey",
+        "year": "2012",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/yHA9Fc37VmpUA5UncTxxo3rTGVA.jpg",
+        "language": "en",
+        "genre": "Adventure, Fantasy, Action",
+        "overview": "Bilbo Baggins, a hobbit enjoying his quiet life, is swept into an epic quest by Gandalf the Grey and thirteen dwarves who seek to reclaim their mountain home from Smaug, the dragon.",
+        "imdbId": "tt0903624",
+        "matchNote": null,
+        "imdbRating": "7.8",
+        "omdbNote": null
       },
       {
-        "title": "The Hobbit: The Desolation of Smaug"
+        "title": "The Hobbit: The Desolation of Smaug",
+        "tmdbId": 57158,
+        "tmdbTitle": "The Hobbit: The Desolation of Smaug",
+        "year": "2013",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/xQYiXsheRCDBA39DOrmaw1aSpbk.jpg",
+        "language": "en",
+        "genre": "Fantasy, Adventure, Action",
+        "overview": "The Dwarves, Bilbo and Gandalf have successfully escaped the Misty Mountains, and Bilbo has gained the One Ring. They all continue their journey to get their gold back from the Dragon, Smaug.",
+        "imdbId": "tt1170358",
+        "matchNote": null,
+        "imdbRating": "7.8",
+        "omdbNote": null
       },
       {
-        "title": "The Hobbit: The Battle of the Five Armies"
+        "title": "The Hobbit: The Battle of the Five Armies",
+        "tmdbId": 122917,
+        "tmdbTitle": "The Hobbit: The Battle of the Five Armies",
+        "year": "2014",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/xT98tLqatZPQApyRmlPL12LtiWp.jpg",
+        "language": "en",
+        "genre": "Action, Adventure, Fantasy",
+        "overview": "Following Smaug's attack on Laketown, Bilbo and the dwarves try to defend Erebor's mountain of treasure from others who claim it: the men of the ruined Laketown and the elves of Mirkwood. Meanwhile an army of Orcs led by Azog the Defiler is marching on Erebor, fueled by the rise of the dark lord Sauron. Dwarves, elves and men must unite, and the hope for Middle-Earth falls into Bilbo's hands.",
+        "imdbId": "tt2310332",
+        "matchNote": null,
+        "imdbRating": "7.4",
+        "omdbNote": null
       }
     ],
     "languageOverride": "en",
