@@ -2203,7 +2203,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Animation",
-    "posterUrl": "https://imagestorage.org/0025192367663.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/e72KCMHNkbZ6USRJmABeqwmaJ5n.jpg",
     "year": "2017",
     "overview": "Gru meets his long-lost, charming, cheerful, and more successful twin brother Dru, who wants to team up with him for one last criminal heist.",
     "mediaType": "movie",
@@ -2214,7 +2214,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0067-main-mvb98uxx-qnla6n.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/e72KCMHNkbZ6USRJmABeqwmaJ5n.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0068",
