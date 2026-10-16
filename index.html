@@ -779,6 +779,15 @@ function renderManager(){
         <p class="manager-small"><b>${posterBackupStats().missing}</b> posters still need archiving; <b>${posterBackupStats().withoutImage}</b> titles have no poster URL. External websites can block browser downloads; failures are listed below and are never silently replaced with different artwork.</p>
         <details><summary style="cursor:pointer">Show unarchived titles (${posterBackupStats().missing})</summary><div style="max-height:260px;overflow:auto;padding:8px">${posterBackupExcluded().filter(x=>x.reason!=='No poster').map(x=>`<div style="margin:7px 0"><button class="manager-btn secondary" data-unbacked-id="${escapeHtml(x.id)}">${escapeHtml(x.title)}</button> <span class="manager-small">${escapeHtml(x.reason)}</span></div>`).join('')||'None'}</div></details>
         <details ${posterBackupFailures.size?'open':''}><summary style="cursor:pointer">Download failures this session (${posterBackupFailures.size})</summary><div style="max-height:260px;overflow:auto;padding:8px">${[...posterBackupFailures.values()].map(x=>`<div style="margin:7px 0"><button class="manager-btn secondary" data-unbacked-id="${escapeHtml(x.id)}">${escapeHtml(x.title)}</button> <span class="manager-small">${escapeHtml(x.error)}</span></div>`).join('')||'No failures.'}</div><button class="manager-btn secondary" id="poster-retry-failed">Retry failed downloads</button></details>
+        <div style="margin:15px 0;padding:13px;border:1px solid #e5d3b5;border-radius:10px" id="bulk-poster-recovery">
+          <b>Bulk Poster Recovery</b>
+          <p class="manager-small">Find TMDB replacements for missing archives. Existing poster choices, movie matches, and metadata are not changed until you approve. Already archived posters are never touched.</p>
+          <button class="manager-btn secondary" id="bulk-poster-find" ${bulkPosterBusy?'disabled':''}>${bulkPosterBusy?'Working…':'Find next 25 TMDB posters'}</button>
+          <button class="manager-btn" id="bulk-poster-save" ${bulkPosterBusy?'disabled':''}>Save & lock approved posters</button>
+          <button class="manager-btn secondary" id="bulk-poster-stop" ${bulkPosterBusy?'':'disabled'}>Stop after current</button>
+          <p class="manager-small" id="bulk-poster-status" role="status">${escapeHtml(bulkPosterMessage||'Searches by IMDb ID where available, then verifies title and year. Review the suggestions before saving.')}</p>
+          <div id="bulk-poster-results"></div>
+        </div>
         <p class="manager-small">Saves up to 25 posters per run to avoid exhausting GitHub's upload limits. Keep this tab open while a batch is running. Only posters successfully saved and recorded in movies.json count as complete.</p>
         <button class="manager-btn" id="poster-backup-start" ${posterBackupRunning?'disabled':''}>${posterBackupRunning?'Backing up…':'Backup next 25 posters'}</button>
         <button class="manager-btn secondary" id="poster-backup-stop" ${posterBackupRunning?'':'disabled'}>Stop after current poster</button>
@@ -802,6 +811,10 @@ function renderManager(){
   el.querySelector('#poster-backup-start').onclick=backupNextPosters;
   const retryPosterBtn=el.querySelector('#poster-retry-failed');if(retryPosterBtn)retryPosterBtn.onclick=()=>{posterBackupFailures.clear();backupNextPosters();};
   el.querySelector('#poster-backup-stop').onclick=()=>{posterBackupStop=true;setPosterBackupMessage('Stopping after current poster…');};
+  el.querySelector('#bulk-poster-find').onclick=bulkFindPosters;
+  el.querySelector('#bulk-poster-save').onclick=bulkSavePosters;
+  el.querySelector('#bulk-poster-stop').onclick=()=>{bulkPosterStop=true;bulkPosterStatus('Stopping after current poster…');};
+  renderBulkPosterResults();
   el.querySelector('#sync-now').onclick=async()=>{const e=el.querySelector('#sync-status');e.textContent='Syncing…';try{e.textContent=await syncPendingEdits();}catch(err){e.textContent='Not synced: '+err.message;}};
   el.querySelector('#manager-filter').onchange=e=>{managerFilter=e.target.value;renderManager();};
   el.querySelector('#manager-search').oninput=e=>{managerSearch=e.target.value;const pos=e.target.selectionStart;renderManager();const input=document.getElementById('manager-search');input.focus();input.setSelectionRange(pos,pos);};
@@ -1062,6 +1075,107 @@ async function backupNextPosters(){
     posterBackupRunning=false;posterBackupStop=false;
     if(currentView==='manager')renderManager();
   }
+}
+
+// Bulk poster recovery deliberately separates finding matches from user approval.
+// No movie metadata is written during candidate discovery.
+let bulkPosterBusy=false,bulkPosterStop=false,bulkPosterMessage='';
+const bulkPosterCandidates=new Map();
+const bulkPosterReviewed=new Set();
+function bulkPosterKey(id,index){return id+'|'+(index===null?'main':index);}
+function bulkPosterStatus(message){
+  bulkPosterMessage=message;
+  const node=document.getElementById('bulk-poster-status');if(node)node.textContent=message;
+}
+function bulkPosterNormalize(v){return String(v||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/&/g,'and').replace(/[^a-z0-9]+/g,' ').trim().replace(/^(the|a) /,'');}
+function renderBulkPosterResults(){
+  const out=document.getElementById('bulk-poster-results');if(!out)return;
+  const rows=[...bulkPosterCandidates.values()];
+  if(!rows.length){out.innerHTML='<p class="manager-small">No suggestions loaded yet.</p>';return;}
+  const good=rows.filter(r=>r.poster&&r.confident&&!r.saved);
+  out.innerHTML=`<p class="manager-small">${rows.length} reviewed · ${good.length} confident candidates · ${rows.filter(r=>r.saved).length} saved. Only checked rows will be uploaded.</p>
+  <div style="display:flex;gap:8px;margin-bottom:8px"><button class="manager-btn secondary" id="bulk-approve-confident">Select confident matches</button><button class="manager-btn secondary" id="bulk-clear-selection">Clear selection</button></div>
+  <div style="max-height:550px;overflow:auto">${rows.map(r=>`<div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid #ead9c4">
+    <input type="checkbox" data-bulk-poster-check="${escapeHtml(r.key)}" ${r.approved?'checked':''} ${!r.poster||r.saved?'disabled':''} aria-label="Approve ${escapeHtml(r.title)}">
+    ${r.poster?`<img src="${escapeHtml(r.poster.replace('/w780/','/w185/'))}" loading="lazy" style="height:94px;width:63px;object-fit:cover;border-radius:4px">`:'<div style="width:63px"></div>'}
+    <div style="flex:1;min-width:0"><b>${escapeHtml(r.title)}</b><div class="manager-small">${escapeHtml(r.year||'Year unknown')} → ${escapeHtml(r.foundTitle||'No confident TMDB match')} ${r.foundYear?'('+escapeHtml(r.foundYear)+')':''}</div><div class="manager-small">${escapeHtml(r.saved?'Saved & locked':r.error|| (r.confident?'Exact match suggested — review image':'Uncertain match — review manually'))}</div></div>
+    ${!r.saved?`<button class="manager-btn secondary" data-bulk-manual="${escapeHtml(r.id)}">Review</button>`:''}
+  </div>`).join('')}</div>`;
+  out.querySelectorAll('[data-bulk-poster-check]').forEach(ch=>ch.onchange=()=>{const r=bulkPosterCandidates.get(ch.dataset.bulkPosterCheck);if(r)r.approved=ch.checked;});
+  out.querySelectorAll('[data-bulk-manual]').forEach(b=>b.onclick=()=>openDetail(b.dataset.bulkManual));
+  out.querySelector('#bulk-approve-confident').onclick=()=>{rows.forEach(r=>{if(r.poster&&r.confident&&!r.saved)r.approved=true;});renderBulkPosterResults();};
+  out.querySelector('#bulk-clear-selection').onclick=()=>{rows.forEach(r=>r.approved=false);renderBulkPosterResults();};
+}
+async function bulkFindPosters(){
+  if(bulkPosterBusy)return;
+  const key=localStorage.getItem('tmdbKey');if(!key){bulkPosterStatus('Enter your TMDB API key in Settings first.');return;}
+  bulkPosterBusy=true;bulkPosterStop=false;posterBackupOpen=true;
+  let found=0,uncertain=0;
+  try{
+    const queue=posterBackupItems().filter(x=>!x.done&&!bulkPosterReviewed.has(bulkPosterKey(x.id,x.index))).slice(0,25);
+    if(!queue.length){bulkPosterStatus('No more new missing posters to search. Review the results or refresh to restart search.');return;}
+    for(let n=0;n<queue.length;n++){
+      if(bulkPosterStop)break;
+      const entry=queue[n],id=entry.id,index=entry.index,k=bulkPosterKey(id,index);
+      bulkPosterReviewed.add(k);
+      const target=getPosterTarget(id,index),item=target.item;
+      const type=item.mediaType==='tv'?'tv':'movie';
+      const title=String(item.tmdbTitle||item.title||target.parent.title||'').trim();
+      const year=String(item.year||'').match(/\d{4}/)?.[0]||'';
+      const row={key:k,id,index,title:entry.title,year,poster:null,confident:false,approved:false};
+      bulkPosterCandidates.set(k,row);
+      bulkPosterStatus(`Finding ${n+1}/${queue.length}: ${entry.title}…`);
+      try{
+        let result=null;
+        if(item.imdbId&&/^tt\d+$/.test(item.imdbId)){
+          const resp=await fetch(`https://api.themoviedb.org/3/find/${encodeURIComponent(item.imdbId)}?api_key=${encodeURIComponent(key)}&external_source=imdb_id`,{cache:'no-store'});
+          if(resp.ok){const data=await resp.json();result=(type==='tv'?data.tv_results:data.movie_results)?.[0]||null;}
+        }
+        if(!result){
+          const query=`https://api.themoviedb.org/3/search/${type}?api_key=${encodeURIComponent(key)}&query=${encodeURIComponent(title)}${year?'&'+(type==='tv'?'first_air_date_year':'year')+'='+year:''}`;
+          const resp=await fetch(query,{cache:'no-store'});
+          if(!resp.ok)throw new Error('TMDB HTTP '+resp.status);
+          const results=(await resp.json()).results||[];
+          result=results.find(c=>bulkPosterNormalize(c.title||c.name)===bulkPosterNormalize(title)&&(!year||String(c.release_date||c.first_air_date||'').slice(0,4)===year))||results[0]||null;
+        }
+        if(!result)throw new Error('No TMDB result found');
+        row.foundTitle=result.title||result.name||'';
+        row.foundYear=String(result.release_date||result.first_air_date||'').slice(0,4);
+        row.confident=(bulkPosterNormalize(row.foundTitle)===bulkPosterNormalize(title))&&(!year||year===row.foundYear);
+        // IMDb-based results are still subjected to the same title/year sanity checks.
+        if(!result.poster_path)throw new Error('TMDB result has no poster');
+        row.poster='https://image.tmdb.org/t/p/w780'+result.poster_path;
+        if(row.confident)found++;else uncertain++;
+      }catch(err){row.error=err.message;uncertain++;}
+      renderBulkPosterResults();
+      if(!bulkPosterStop)await new Promise(resolve=>setTimeout(resolve,230));
+    }
+    bulkPosterStatus(`Search complete: ${found} confident matches, ${uncertain} need review. Inspect artwork, select candidates, then Save & lock approved posters. No movie data has been changed.`);
+  }finally{bulkPosterBusy=false;bulkPosterStop=false;renderBulkPosterResults();}
+}
+async function bulkSavePosters(){
+  if(bulkPosterBusy)return;
+  const cfg=githubConfig();if(!cfg){bulkPosterStatus('Configure GitHub in Settings first.');return;}
+  const selection=[...bulkPosterCandidates.values()].filter(r=>r.approved&&r.poster&&!r.saved).slice(0,25);
+  if(!selection.length){bulkPosterStatus('Select at least one proposed poster first.');return;}
+  if(!confirm(`Save and lock ${selection.length} selected posters on GitHub? Your existing movie metadata will remain unchanged.`))return;
+  bulkPosterBusy=true;bulkPosterStop=false;let saved=0,failed=0;
+  try{
+    for(const [i,r] of selection.entries()){
+      if(bulkPosterStop)break;
+      bulkPosterStatus(`Saving ${i+1}/${selection.length}: ${r.title} (${saved} complete)…`);
+      try{
+        const {parent,item}=getPosterTarget(r.id,r.index);
+        if(item.archivedPosterUrl){r.saved=true;r.approved=false;continue;}
+        await archiveSelectedPoster(parent,r.index,r.poster);
+        r.saved=true;r.approved=false;r.error='';saved++;
+        posterBackupFailures.delete(r.id+'|'+r.index);
+      }catch(err){r.error='Upload failed: '+err.message;failed++;if(/HTTP (403|429)/.test(err.message)){bulkPosterStop=true;}}
+      renderBulkPosterResults();
+      if(!bulkPosterStop)await new Promise(resolve=>setTimeout(resolve,800));
+    }
+    bulkPosterStatus(`${saved} saved and locked; ${failed} failed. ${bulkPosterStop?'Stopped early. ':''}Already archived posters were skipped. You can retry unchecked failures.`);
+  }finally{bulkPosterBusy=false;bulkPosterStop=false;renderBulkPosterResults();}
 }
 
 // Bulk language review: suggestions remain drafts until explicitly approved and saved.
