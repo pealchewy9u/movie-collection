@@ -6531,7 +6531,7 @@
     "dvdDiscs": 0,
     "digitalCopy": true,
     "genre": "Drama",
-    "posterUrl": "https://imagestorage.org/031398313892.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/dwXmOYJVM1VIkkSXHY5zYSaLJLC.jpg",
     "year": "2019",
     "overview": "Two lighthouse keepers try to maintain their sanity while living on a remote and mysterious New England island in the 1890s.",
     "mediaType": "movie",
@@ -6542,7 +6542,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0185-main-mvb9s8r7-1vmfza.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/dwXmOYJVM1VIkkSXHY5zYSaLJLC.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0186",
