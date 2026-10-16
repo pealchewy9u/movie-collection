@@ -6096,7 +6096,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Action",
-    "posterUrl": "https://imagestorage.org/0031398341710.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/sLDXX6HP7Y0qG33yjwlgJOkdXI9.jpg",
     "year": "2003",
     "overview": "After waking from a four-year coma, a former assassin wreaks vengeance on the team of assassins who betrayed her.",
     "mediaType": "movie",
@@ -6107,7 +6107,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0170-main-mvb9pg12-yoxuqq.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/sLDXX6HP7Y0qG33yjwlgJOkdXI9.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0171",
