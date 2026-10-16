@@ -11485,25 +11485,92 @@
     "isBoxSet": true,
     "includedMovies": [
       {
-        "title": "A Nightmare on Elm Street"
+        "title": "A Nightmare on Elm Street",
+        "matchNote": "Multiple possible movies — choose manually"
       },
       {
-        "title": "A Nightmare on Elm Street Part 2: Freddy's Revenge"
+        "title": "A Nightmare on Elm Street Part 2: Freddy's Revenge",
+        "tmdbId": 10014,
+        "tmdbTitle": "A Nightmare on Elm Street Part 2: Freddy's Revenge",
+        "year": "1985",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/53kxYw0G3o55yJ23K7s7KMaOyAM.jpg",
+        "language": "en",
+        "genre": "Horror",
+        "overview": "A teenage boy is haunted in his dreams by deceased child murderer Freddy Krueger, who is out to possess him in order to continue his reign of terror in the real world.",
+        "imdbId": "tt0089686",
+        "matchNote": null,
+        "imdbRating": "5.5",
+        "omdbNote": null
       },
       {
-        "title": "A Nightmare on Elm Street 3: Dream Warriors"
+        "title": "A Nightmare on Elm Street 3: Dream Warriors",
+        "tmdbId": 10072,
+        "tmdbTitle": "A Nightmare on Elm Street 3: Dream Warriors",
+        "year": "1987",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/qbtZewU6EGvxi8yFVzwZ31NijLX.jpg",
+        "language": "en",
+        "genre": "Horror, Thriller, Fantasy",
+        "overview": "A psychiatrist, familiar with the knife-wielding dream demon Freddy Krueger, helps teens at a mental hospital battle the killer who is invading their dreams.",
+        "imdbId": "tt0093629",
+        "matchNote": null,
+        "imdbRating": "6.7",
+        "omdbNote": null
       },
       {
-        "title": "A Nightmare on Elm Street 4: The Dream Master"
+        "title": "A Nightmare on Elm Street 4: The Dream Master",
+        "tmdbId": 10131,
+        "tmdbTitle": "A Nightmare on Elm Street 4: The Dream Master",
+        "year": "1988",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/boStYG7jKdoIZTduiOOsUVknD13.jpg",
+        "language": "en",
+        "genre": "Horror, Thriller",
+        "overview": "Freddy Krueger returns once again to terrorize the dreams of the remaining Dream Warriors, as well as those of a young woman who may be able to defeat him for good.",
+        "imdbId": "tt0095742",
+        "matchNote": null,
+        "imdbRating": "5.6",
+        "omdbNote": null
       },
       {
-        "title": "A Nightmare on Elm Street: The Dream Child"
+        "title": "A Nightmare on Elm Street: The Dream Child",
+        "tmdbId": 10160,
+        "tmdbTitle": "A Nightmare on Elm Street: The Dream Child",
+        "year": "1989",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/kizvpgXQfrAgN8FhOd87LbKk6kO.jpg",
+        "language": "en",
+        "genre": "Horror, Thriller",
+        "overview": "The pregnant Alice finds Freddy Krueger striking through the sleeping mind of her unborn child, hoping to be reborn into the real world.",
+        "imdbId": "tt0097981",
+        "matchNote": null,
+        "imdbRating": "5.1",
+        "omdbNote": null
       },
       {
-        "title": "Freddy's Dead: The Final Nightmare"
+        "title": "Freddy's Dead: The Final Nightmare",
+        "tmdbId": 11284,
+        "tmdbTitle": "Freddy's Dead: The Final Nightmare",
+        "year": "1991",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/e4qh58n2WaG4Gyh9VhjOUeN9Mhv.jpg",
+        "language": "en",
+        "genre": "Horror, Fantasy",
+        "overview": "Just when you thought it was safe to sleep, Freddy Krueger returns in this sixth installment of the Nightmare on Elm Street films, as psychologist Maggie Burroughs, tormented by recurring nightmares, meets a patient with the same horrific dreams. Their quest for answers leads to a certain house on Elm Street -- where the nightmares become reality.",
+        "imdbId": "tt0101917",
+        "matchNote": null,
+        "imdbRating": "4.7",
+        "omdbNote": null
       },
       {
-        "title": "Wes Craven's New Nightmare"
+        "title": "Wes Craven's New Nightmare",
+        "tmdbId": 11596,
+        "tmdbTitle": "Wes Craven's New Nightmare",
+        "year": "1994",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/q5BWxfL1x34nyYSvA3Qo5odleGW.jpg",
+        "language": "en",
+        "genre": "Horror, Mystery, Fantasy",
+        "overview": "A demonic force has chosen Freddy Krueger as its portal to the real world. Can Heather Langenkamp play the part of Nancy one last time and trap the evil trying to enter our world?",
+        "imdbId": "tt0111686",
+        "matchNote": null,
+        "imdbRating": "6.4",
+        "omdbNote": null
       }
     ],
     "year": "2012",
