@@ -1625,7 +1625,7 @@
     "dvdDiscs": 0,
     "digitalCopy": true,
     "genre": "Action",
-    "posterUrl": "https://imagestorage.org/0085391156802.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/vPYgvd2MwHlxTamAOjwVQp4qs1W.jpg",
     "year": "2005",
     "overview": "Detective Angela approaches Constantine, a demon hunter, to help her investigate her twin sister's mysterious death. As he digs deeper, he realizes that demons are trying to enter the human world.",
     "mediaType": "movie",
@@ -1636,7 +1636,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0050-main-mvb97zvd-f4eq6m.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/vPYgvd2MwHlxTamAOjwVQp4qs1W.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0051",
