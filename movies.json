@@ -150,7 +150,9 @@
         "overview": "A story very loosely based the 480 B.C. Battle of Thermopylae, where the King of Sparta led his army against the advancing Persians.",
         "imdbId": "tt0416449",
         "imdbRating": "7.6",
-        "omdbNote": null
+        "omdbNote": null,
+        "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0005-film-0-mvb5tnoe.jpg",
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/h7Lcio0c9ohxPhSZg42eTlKIVVY.jpg"
       },
       {
         "title": "300: Rise of an Empire",
