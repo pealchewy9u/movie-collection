@@ -1157,7 +1157,9 @@
     "omdbNote": null,
     "matchedVia": "tmdb",
     "tmdbId": 109424,
-    "enrichNote": null
+    "enrichNote": null,
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0039-main-mvb5vzyz.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/8Td0kkocW6sD3uRpzwfMfkqMWhx.jpg"
   },
   {
     "id": "MOV-0040",
