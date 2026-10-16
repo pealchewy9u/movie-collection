@@ -6510,7 +6510,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Drama",
-    "posterUrl": "https://imagestorage.org/0843501636701.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/reMosvnsgjXk1fU40KYx5vKjzGS.jpg",
     "year": "2025",
     "overview": "A life-affirming, genre-bending story about three chapters in the life of an ordinary man named Charles Krantz.",
     "mediaType": "movie",
@@ -6521,7 +6521,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0184-main-mvb9uwix-lczs7s.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/reMosvnsgjXk1fU40KYx5vKjzGS.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0185",
