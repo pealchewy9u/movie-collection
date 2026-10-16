@@ -729,7 +729,9 @@
     "imdbRating": "6.4",
     "omdbNote": null,
     "tmdbId": 209112,
-    "matchedVia": "tmdb"
+    "matchedVia": "tmdb",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0024-main-mvb5uo51.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/5UsK3grJvtQrtzEgqNlDljJW96w.jpg"
   },
   {
     "id": "MOV-0025",
