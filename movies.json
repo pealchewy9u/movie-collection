@@ -6126,7 +6126,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Action",
-    "posterUrl": "https://imagestorage.org/0031398341734.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/5GzlpdpxISI5vmKyfh7J1kuLf3W.jpg",
     "year": "2004",
     "overview": "The Bride continues her quest of vengeance against her former boss and lover Bill, the reclusive bouncer Budd, and the treacherous, one-eyed Elle.",
     "mediaType": "movie",
@@ -6137,7 +6137,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0171-main-mvb9q9cf-v0x3ij.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/5GzlpdpxISI5vmKyfh7J1kuLf3W.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0172",
