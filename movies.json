@@ -2402,7 +2402,7 @@
     "dvdDiscs": 1,
     "digitalCopy": false,
     "genre": "Drama",
-    "posterUrl": "https://imagestorage.org/857533003929.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/89fJ4hV9fCB01EvhhLOgjMJI4A6.jpg",
     "year": "2015",
     "overview": "When a pastor is shaken by the visible faith of a street-corner preacher, he is reminded that true belief always requires action. His response ignites a journey that impacts everyone it touches in ways that only God could orchestr...",
     "mediaType": "movie",
@@ -2413,7 +2413,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0074-main-mvb992l8-1gn761.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/89fJ4hV9fCB01EvhhLOgjMJI4A6.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0075",
