@@ -7566,7 +7566,9 @@
         "imdbId": "tt0209163",
         "imdbRating": "6.4",
         "omdbNote": null,
-        "matchedVia": "tmdb-manual"
+        "matchedVia": "tmdb-manual",
+        "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0220-film-1-mvb789a7.jpg",
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/kdJsW7hcy1lrj7tdMPycTAQPAiR.jpg"
       },
       {
         "title": "The Mummy: Tomb of the Dragon Emperor",
