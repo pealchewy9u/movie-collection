@@ -4631,7 +4631,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Biography",
-    "posterUrl": "https://imagestorage.org/024543275374.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/9lfz2W2uGjyow3am00rsPJ8iOyq.jpg",
     "year": "2016",
     "overview": "Three female African-American mathematicians play a pivotal role in astronaut John Glenn's launch into orbit while dealing with racial and gender discrimination.",
     "mediaType": "movie",
@@ -4642,7 +4642,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0137-main-mvb9emw1-34s5kb.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/9lfz2W2uGjyow3am00rsPJ8iOyq.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0138",
