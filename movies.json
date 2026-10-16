@@ -1361,7 +1361,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Comedy",
-    "posterUrl": "https://imagestorage.org/0786936824018.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/jFRhEPhtsln9tDwzMdZN3OlhUob.jpg",
     "year": "1988",
     "overview": "A talented New York City bartender takes a job at a bar in Jamaica and falls in love.",
     "mediaType": "movie",
@@ -1372,7 +1372,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0045-main-mvb97p4q-moca85.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/jFRhEPhtsln9tDwzMdZN3OlhUob.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0046",
