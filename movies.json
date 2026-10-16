@@ -3767,7 +3767,9 @@
     "languageOverride": "en",
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "tmdbId": 124905,
-    "enrichNote": null
+    "enrichNote": null,
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0117-main-mvb6iah0.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/tphkjmQq8WebuVwNXelmjLUXuPJ.jpg"
   },
   {
     "id": "MOV-0118",
