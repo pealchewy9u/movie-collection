@@ -3545,7 +3545,9 @@
     "tmdbId": 442405,
     "matchedVia": "tmdb",
     "languageOverride": "hi",
-    "languageReviewedAt": "2026-10-15T21:26:57.334Z"
+    "languageReviewedAt": "2026-10-15T21:26:57.334Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0112-main-mvb6hmva.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/i7lITQa1v7dZZgLIdE8vZRnPhOC.jpg"
   },
   {
     "id": "MOV-0113",
