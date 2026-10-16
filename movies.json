@@ -7253,7 +7253,9 @@
         "language": "en",
         "genre": "Adventure, Action, Thriller",
         "overview": "When Ethan Hunt, the leader of a crack espionage team whose perilous operation has gone awry with no explanation, discovers that a mole has penetrated the CIA, he's surprised to learn that he's the prime suspect. To clear his name, Hunt now must ferret out the real double agent and, in the process, even the score.",
-        "omdbNote": null
+        "omdbNote": null,
+        "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0213-film-0-mvb76wjj.jpg",
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/l5uxY5m5OInWpcExIpKG6AR3rgL.jpg"
       },
       {
         "title": "Mission: Impossible II",
