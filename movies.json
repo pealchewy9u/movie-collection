@@ -10161,7 +10161,9 @@
     "language": "hi",
     "imdbId": "tt1324059",
     "imdbRating": "7.6",
-    "omdbNote": null
+    "omdbNote": null,
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0305-main-mvb7gqfe.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/1UpgW67W6Do0xizTuE26bMQFLdL.jpg"
   },
   {
     "id": "MOV-0306",
