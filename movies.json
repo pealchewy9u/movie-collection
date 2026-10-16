@@ -2961,7 +2961,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Action",
-    "posterUrl": "https://imagestorage.org/025192170911.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/thSmnRdrzPBBospIOJjLZBReqzo.jpg",
     "year": "2013",
     "overview": "Hobbs has Dominic and Brian reassemble their crew to take down a team of mercenaries, but Dominic unexpectedly gets sidetracked with facing his presumed deceased girlfriend, Letty.",
     "mediaType": "movie",
@@ -2972,7 +2972,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0091-main-mvb9cx0y-xxxm8b.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/thSmnRdrzPBBospIOJjLZBReqzo.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0092",
