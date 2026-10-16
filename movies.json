@@ -10082,10 +10082,23 @@
     "dateAdded": "2026-10-16",
     "releaseDate": null,
     "countryCode": null,
-    "isBoxSet": false,
-    "includedMovies": [],
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "The Hobbit: An Unexpected Journey"
+      },
+      {
+        "title": "The Hobbit: The Desolation of Smaug"
+      },
+      {
+        "title": "The Hobbit: The Battle of the Five Armies"
+      }
+    ],
     "languageOverride": "en",
     "language": "en",
-    "languageReviewedAt": "2026-10-16T01:40:24.708Z"
+    "languageReviewedAt": "2026-10-16T01:40:24.708Z",
+    "boxCoverUrl": null,
+    "reviewStatus": "collection",
+    "imdbRating": null
   }
 ]
