@@ -4459,7 +4459,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Crime",
-    "posterUrl": "https://imagestorage.org/013132638485.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/jIywvdPjia2t3eKYbjVTcwBQlG8.jpg",
     "year": "2015",
     "overview": "In the dead of a Wyoming winter, a bounty hunter and his prisoner find shelter in a cabin currently inhabited by a collection of nefarious characters.",
     "mediaType": "movie",
@@ -4470,7 +4470,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0131-main-mvb9efmc-0qx9d0.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/jIywvdPjia2t3eKYbjVTcwBQlG8.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0132",
