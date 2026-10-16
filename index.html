@@ -461,13 +461,22 @@ function filteredMovies() {
     .sort((a, b) => (a.title || '').localeCompare(b.title || ''));
 }
 
-// A saved 780px poster takes priority only while it matches the current TMDB poster.
-// This prevents an old archived image from appearing after a movie is re-matched.
+// Previously backed-up posters are locked by default, including backups made
+// before this version. Rematching can update metadata, never the chosen artwork.
 function displayPoster(m){
   if(!m)return null;
-  if(m.archivedPosterUrl && (!m.archivedSourcePosterUrl || m.archivedSourcePosterUrl===m.posterUrl))return m.archivedPosterUrl;
-  return m.posterUrl||null;
+  if(m.archivedPosterUrl && m.posterLocked!==false)return m.archivedPosterUrl;
+  return m.posterUrl||m.archivedPosterUrl||null;
 }
+function preservePosterChoice(previous,updated){
+  if(previous?.archivedPosterUrl && previous.posterLocked!==false){
+    updated.archivedPosterUrl=previous.archivedPosterUrl;
+    updated.archivedSourcePosterUrl=previous.archivedSourcePosterUrl||previous.posterUrl||null;
+    updated.posterLocked=true;
+  }
+  return updated;
+}
+
 function coverHtml(movie, cls, placeholderCls) {
   const custom = movie.isBoxSet && movie.boxCoverUrl ? movie.boxCoverUrl : null;
   const artwork = custom || displayPoster(movie);
@@ -758,9 +767,9 @@ function posterBackupItems(){
     if(m.isBoxSet){
       (m.includedMovies||[]).forEach((raw,index)=>{
         const film=typeof raw==='string'?{title:raw}:raw;
-        if(tmdbPosterSource(film))result.push({id:m.id,index,title:film.title||m.title,source:film.posterUrl,done:!!(film.archivedPosterUrl && film.archivedSourcePosterUrl===film.posterUrl)});
+        if(tmdbPosterSource(film))result.push({id:m.id,index,title:film.title||m.title,source:film.posterUrl,done:!!film.archivedPosterUrl});
       });
-    }else if(tmdbPosterSource(m))result.push({id:m.id,index:null,title:m.title,source:m.posterUrl,done:!!(m.archivedPosterUrl && m.archivedSourcePosterUrl===m.posterUrl)});
+    }else if(tmdbPosterSource(m))result.push({id:m.id,index:null,title:m.title,source:m.posterUrl,done:!!m.archivedPosterUrl});
   });
   return result;
 }
@@ -777,6 +786,97 @@ async function uploadArchivedPoster(c,path,blob){
   if(!response.ok)throw new Error(`GitHub poster upload HTTP ${response.status}: ${(await response.text()).slice(0,120)}`);
   return `https://raw.githubusercontent.com/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/main/${path}`;
 }
+
+// Explicit poster replacement. Replacing is the ONLY path that changes a locked
+// poster. The original image file is retained in repository history.
+let posterPickerState=null;
+function getPosterTarget(id,index){
+  const parent=movies.find(m=>m.id===id);
+  if(!parent)throw new Error('Collection entry not found');
+  const item=index===null?parent:parent.includedMovies?.[index];
+  if(!item || typeof item==='string')throw new Error('Match this included film before selecting a poster');
+  return {parent,item};
+}
+async function archiveSelectedPoster(parent,index,sourceOverride=null,blobOverride=null){
+  const cfg=githubConfig();if(!cfg)throw new Error('GitHub settings required');
+  const item=index===null?parent:parent.includedMovies?.[index];
+  if(!item || typeof item==='string')throw new Error('Missing matched movie');
+  const source=sourceOverride||item.posterUrl;
+  let blob=blobOverride;
+  if(!blob){
+    const original=tmdbPosterSource({posterUrl:source});
+    if(!original)throw new Error('Selected poster is not from TMDB');
+    const response=await fetch(original,{mode:'cors'});
+    if(!response.ok)throw new Error('Poster download HTTP '+response.status);
+    blob=await response.blob();
+  }
+  if(!blob.type.startsWith('image/'))throw new Error('Not an image');
+  if(blob.size>3*1024*1024)throw new Error('Poster exceeds 3 MB');
+  const idSlug=String(parent.id).replace(/[^a-zA-Z0-9_-]/g,'_');
+  const slot=index===null?'main':'film-'+index;
+  const unique=Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8);
+  const path=`posters/${idSlug}-${slot}-${unique}.jpg`;
+  const url=await uploadArchivedPoster(cfg,path,blob);
+  item.archivedPosterUrl=url;
+  item.archivedSourcePosterUrl=source;
+  item.posterLocked=true;
+  if(sourceOverride)item.posterUrl=sourceOverride;
+  markPending(parent);
+  await syncPendingEdits();
+  return url;
+}
+async function openPosterPicker(id,index){
+  try{getPosterTarget(id,index);}catch(e){alert(e.message);return;}
+  posterPickerState={id,index};
+  document.getElementById('poster-picker-overlay')?.remove();
+  const overlay=document.createElement('div');overlay.id='poster-picker-overlay';
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:99999;display:flex;justify-content:center;align-items:center;padding:16px';
+  overlay.innerHTML=`<section style="background:var(--surface,#fff);color:var(--text);border-radius:14px;padding:18px;width:min(560px,100%);max-height:90vh;overflow:auto"><div style="display:flex;justify-content:space-between;align-items:center"><b>Replace poster</b><button class="manager-btn secondary" id="poster-picker-close">Close</button></div><p class="manager-small">Current backed-up poster stays locked unless you save a replacement. Select an alternate TMDB poster or upload a custom photo.</p><button class="manager-btn" id="poster-find-alternatives">Browse TMDB posters</button><p class="manager-small">Or choose an image from your device:</p><input type="file" id="poster-custom-file" accept="image/*"><div id="poster-picker-results" style="margin-top:12px"></div><p class="manager-small" id="poster-picker-status"></p></section>`;
+  document.body.appendChild(overlay);
+  const close=()=>overlay.remove();
+  overlay.querySelector('#poster-picker-close').onclick=close;
+  overlay.onclick=e=>{if(e.target===overlay)close();};
+  overlay.querySelector('#poster-find-alternatives').onclick=()=>loadPosterAlternatives(id,index);
+  overlay.querySelector('#poster-custom-file').onchange=async e=>{
+    const file=e.target.files?.[0];if(!file)return;
+    const status=overlay.querySelector('#poster-picker-status');
+    if(!confirm('Replace and lock this movie poster with the selected photo?'))return;
+    status.textContent='Preparing and uploading photo…';
+    try{
+      const blob=await prepareCoverPhoto(file);
+      const {parent}=getPosterTarget(id,index);
+      await archiveSelectedPoster(parent,index,null,blob);
+      close();openDetail(id);
+    }catch(err){status.textContent='Poster not saved: '+err.message;}
+  };
+}
+async function loadPosterAlternatives(id,index){
+  const overlay=document.getElementById('poster-picker-overlay');if(!overlay)return;
+  const out=overlay.querySelector('#poster-picker-results'),status=overlay.querySelector('#poster-picker-status');
+  const {item}=getPosterTarget(id,index),key=localStorage.getItem('tmdbKey');
+  if(!key||!item.tmdbId){status.textContent='This movie needs a confirmed TMDB match and TMDB API key first.';return;}
+  const type=index!==null?'movie':item.mediaType==='tv'?'tv':'movie';
+  status.textContent='Loading alternative posters…';
+  try{
+    const response=await fetch(`https://api.themoviedb.org/3/${type}/${item.tmdbId}/images?api_key=${encodeURIComponent(key)}&include_image_language=en,null,hi`,{cache:'no-store'});
+    if(!response.ok)throw new Error('TMDB HTTP '+response.status);
+    const images=(await response.json()).posters||[];
+    if(!images.length){status.textContent='No alternate posters found.';return;}
+    out.innerHTML='<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">'+images.slice(0,24).map((im,i)=>`<button type="button" data-poster-choice="${i}" style="padding:4px;border:1px solid #aaa;border-radius:8px;background:transparent;cursor:pointer"><img loading="lazy" alt="TMDB poster option ${i+1}" style="width:100%;border-radius:5px" src="https://image.tmdb.org/t/p/w185${escapeHtml(im.file_path)}"></button>`).join('')+'</div>';
+    status.textContent='Tap a poster to save it to GitHub and lock it.';
+    out.querySelectorAll('[data-poster-choice]').forEach(b=>b.onclick=async()=>{
+      const im=images[Number(b.dataset.posterChoice)];
+      if(!confirm('Save this TMDB poster as the new locked cover?'))return;
+      status.textContent='Saving selected 780px poster…';
+      try{
+        const {parent}=getPosterTarget(id,index);
+        await archiveSelectedPoster(parent,index,'https://image.tmdb.org/t/p/w500'+im.file_path);
+        overlay.remove();openDetail(id);
+      }catch(err){status.textContent='Could not save poster: '+err.message;}
+    });
+  }catch(e){status.textContent='Could not load TMDB posters: '+e.message;}
+}
+
 async function backupNextPosters(){
   if(posterBackupRunning)return;
   const cfg=githubConfig();
@@ -809,6 +909,7 @@ async function backupNextPosters(){
         const url=await uploadArchivedPoster(cfg,path,blob);
         film.archivedPosterUrl=url;
         film.archivedSourcePosterUrl=film.posterUrl;
+        film.posterLocked=true;
         markPending(parent);
         // Commit movie JSON after each image: makes every successful poster resumable
         // across refreshes and devices, and reports metadata persistence failures.
@@ -1149,7 +1250,7 @@ async function enrichIncludedFilm(film, tmdbKey, omdbKey) {
     const detail=await detailRes.json();
     let result={...film,title,tmdbId:c.id,tmdbTitle:c.title,year:(c.release_date||'').slice(0,4)||null,posterUrl:c.poster_path?'https://image.tmdb.org/t/p/w500'+c.poster_path:null,language:film.languageOverride||c.original_language||null,genre:(detail.genres||[]).map(g=>g.name).join(', ')||null,overview:c.overview||null,imdbId:detail.imdb_id||null,matchNote:null};
     if(omdbKey && result.imdbId) result=await retryOmdbOnly(result,omdbKey);
-    return result;
+    return preservePosterChoice(film,result);
   } catch(e) { return {...film,matchNote:'Lookup failed: '+e.message}; }
 }
 function includedFilmCards(m) {
@@ -1157,7 +1258,7 @@ function includedFilmCards(m) {
   if(!m.isBoxSet) return '';
   return `<section style="margin-top:16px"><b>Included movies (${films.length})</b><div class="included-grid">${films.map((f,i)=>{
     const film=typeof f==='string'?{title:f}:f;
-    return `<div class="included-card">${displayPoster(film)?`<img loading="lazy" src="${escapeHtml(displayPoster(film))}" alt="${escapeHtml(film.title||'Movie poster')}">`:'<div class="poster-empty">🎬</div>'}<strong>${escapeHtml(film.tmdbTitle||film.title||'Untitled')}</strong><small>${escapeHtml(film.year||'Year unknown')}${film.imdbRating?' · ★ '+escapeHtml(film.imdbRating):''}</small>${film.genre?`<small>${escapeHtml(film.genre)}</small>`:''}${film.matchNote?`<small style="color:#A65B13">⚠ ${escapeHtml(film.matchNote)}</small>`:''}<button class="manager-btn secondary" data-film-index="${i}" style="width:100%">Find / correct</button></div>`;
+    return `<div class="included-card">${displayPoster(film)?`<img loading="lazy" src="${escapeHtml(displayPoster(film))}" alt="${escapeHtml(film.title||'Movie poster')}">`:'<div class="poster-empty">🎬</div>'}<strong>${escapeHtml(film.tmdbTitle||film.title||'Untitled')}</strong><small>${escapeHtml(film.year||'Year unknown')}${film.imdbRating?' · ★ '+escapeHtml(film.imdbRating):''}</small>${film.genre?`<small>${escapeHtml(film.genre)}</small>`:''}${film.matchNote?`<small style="color:#A65B13">⚠ ${escapeHtml(film.matchNote)}</small>`:''}<button class="manager-btn secondary" data-film-index="${i}" style="width:100%">Find / correct</button><button class="manager-btn secondary" data-poster-film="${i}" style="width:100%">${film.archivedPosterUrl?'🔒 Replace poster':'Choose poster'}</button></div>`;
   }).join('')}</div><button class="manager-btn secondary" onclick="refreshBoxSetFilms('${escapeHtml(m.id)}')">Refresh missing movie details</button><p id="film-refresh-status" class="manager-small"></p></section>`;
 }
 async function resolveBoxSetFilms(id, force=false) {
@@ -1175,8 +1276,20 @@ async function resolveBoxSetFilms(id, force=false) {
   }
   markPending(m);
   const result=await syncPendingEdits().catch(e=>'Saved locally, NOT on GitHub: '+e.message);
+  // Newly identified films in a box set get their own locked GitHub posters.
+  // Failed image downloads remain eligible for the resumable Data Manager backup.
+  let archived=0;
+  if(result.startsWith('Saved and verified')){
+    for(let i=0;i<films.length;i++){
+      const f=films[i];
+      if(f && typeof f==='object' && !f.archivedPosterUrl && tmdbPosterSource(f)){
+        try { await archiveSelectedPoster(m,i); archived++; }
+        catch(err) { console.warn('Box-set poster backup can be retried:',f.title,err); }
+      }
+    }
+  }
   openDetail(id);
-  const msg=document.getElementById('boxset-status');if(msg)msg.textContent=result;
+  const msg=document.getElementById('boxset-status');if(msg)msg.textContent=result+(archived?' '+archived+' included movie posters archived and locked.':'');
 }
 async function refreshBoxSetFilms(id){await resolveBoxSetFilms(id);}
 // Keep selected images only in memory until the user saves this particular collection.
@@ -1317,11 +1430,16 @@ async function correctIncludedFilm(id,index) {
             imdbRating:null,omdbNote:null,matchNote:null,matchedVia:'tmdb-manual'};
           const omdbKey=localStorage.getItem('omdbKey');
           if(omdbKey && updated.imdbId)updated=await retryOmdbOnly(updated,omdbKey);
-          m.includedMovies[index]=updated;
+          m.includedMovies[index]=preservePosterChoice(old,updated);
           markPending(m);
           const result=await syncPendingEdits().catch(e=>'Saved locally, NOT on GitHub: '+e.message);
+          let backupNote='';
+          if(result.startsWith('Saved and verified') && !updated.archivedPosterUrl && tmdbPosterSource(updated)){
+            try { await archiveSelectedPoster(m,index);backupNote=' Poster archived and locked.'; }
+            catch(err) { backupNote=' Poster backup pending: '+err.message; }
+          }
           openDetail(id);
-          const status=document.getElementById('boxset-status');if(status)status.textContent=result;
+          const status=document.getElementById('boxset-status');if(status)status.textContent=result+backupNote;
         }catch(e){out.textContent='Correction failed: '+e.message;}
       });
     }catch(e){out.textContent='Search failed: '+e.message;}
@@ -1435,7 +1553,7 @@ async function chooseCandidate(id,c) {
     const detail=await res.json();
     const m=movies[idx];
     const imdbId=type==='tv'?(await (await fetch(`https://api.themoviedb.org/3/tv/${c.id}/external_ids?api_key=${encodeURIComponent(key)}`)).json()).imdb_id:detail.imdb_id;
-    movies[idx]={...m,mediaType:type,tmdbId:c.id,tmdbTitle:c.title||c.name,genre:(c.genre_ids||[]).map(g=>genres[g]).filter(Boolean)[0]||null,posterUrl:c.poster_path?'https://image.tmdb.org/t/p/w500'+c.poster_path:null,year:(c.release_date||c.first_air_date||'').slice(0,4)||null,overview:c.overview||null,language:c.original_language||null,imdbId:imdbId||null,imdbRating:null,omdbNote:null,enrichNote:null,matchedVia:'tmdb-manual',reviewStatus:'confirmed',reviewedAt:new Date().toISOString()};
+    movies[idx]=preservePosterChoice(m,{...m,mediaType:type,tmdbId:c.id,tmdbTitle:c.title||c.name,genre:(c.genre_ids||[]).map(g=>genres[g]).filter(Boolean)[0]||null,posterUrl:c.poster_path?'https://image.tmdb.org/t/p/w500'+c.poster_path:null,year:(c.release_date||c.first_air_date||'').slice(0,4)||null,overview:c.overview||null,language:c.original_language||null,imdbId:imdbId||null,imdbRating:null,omdbNote:null,enrichNote:null,matchedVia:'tmdb-manual',reviewStatus:'confirmed',reviewedAt:new Date().toISOString()});
     preserveLanguageOverride(movies[idx]);
     const omdb=localStorage.getItem('omdbKey');if(omdb&&movies[idx].imdbId&&!isCollection(movies[idx]))movies[idx]=await retryOmdbOnly(movies[idx],omdb);
     localStorage.setItem('movie-cache',JSON.stringify(movies));buildGenreFilter();buildLanguageFilter();render();openDetail(id);
@@ -1476,6 +1594,7 @@ function openDetail(id) {
       <button class="manager-btn" onclick="saveMovieLanguage('${m.id}')">Save language</button><p class="manager-small" id="language-save-status"></p></div></details>`}
           <details class="collection-editor collection-edit-small"><summary>${m.isBoxSet?'Edit collection details / cover':'Mark as box set'}</summary><div style="margin-top:12px;padding:12px;background:var(--surface);border-radius:10px;border:1px solid var(--groove)"><b>Collection / Box Set</b><p class="manager-small">Automatically detects movies separated by / in the title. For franchise box sets, searches TMDB collections. Review suggestions before saving.</p><input id="boxset-search" type="text" value="${escapeHtml(m.title||'')}" placeholder="Collection or franchise name" style="width:100%;padding:8px;border:1px solid var(--groove);border-radius:7px;margin-bottom:8px"><button class="manager-btn secondary" onclick="suggestBoxSet('${m.id}')">Find included movies automatically</button><div id="boxset-suggestions" style="margin-top:8px"></div><label style="font-size:12px"><input type="checkbox" id="boxset-check" ${m.isBoxSet?'checked':''}> This is a multi-movie collection</label><label class="manager-small" style="display:block;margin-top:9px">Original box-set cover URL (optional; use https://)</label><input id="boxset-cover-url" type="url" value="${escapeHtml(m.boxCoverUrl||'')}" placeholder="https://.../original-box-cover.jpg" style="width:100%;padding:8px;border:1px solid var(--groove);border-radius:7px;margin:5px 0"><div class="cover-upload-zone" id="cover-upload-zone" tabindex="0" aria-label="Paste or upload a box-set cover image"><b style="font-size:12px">Box-set cover photo</b><p class="manager-small">Paste an image here (Ctrl+V / Cmd+V), or choose a photo from your device.</p><div class="cover-upload-buttons"><input id="boxset-cover-file" type="file" accept="image/*" aria-label="Choose cover photo"><button type="button" class="manager-btn secondary" id="cover-paste-focus">Paste image</button></div><img class="cover-preview" id="boxset-cover-preview" alt="New box-set cover preview"><p class="manager-small" id="cover-upload-status">An uploaded photo will be saved to GitHub when you tap Save collection.</p></div><p class="manager-small">When no original cover is supplied, the app displays a collage of included posters.</p><textarea id="boxset-films" rows="3" placeholder="One film per line" style="width:100%;margin-top:8px;border:1px solid var(--groove);border-radius:7px;padding:8px">${escapeHtml((m.includedMovies||[]).map(f=>typeof f==='string'?f:f.title).join('\n'))}</textarea><button class="manager-btn" onclick="saveBoxSet('${m.id}')">Save collection</button><p id="boxset-status" class="manager-small"></p></div></details>
     </div></details>` : ''}
+    ${!m.isBoxSet?`<div style="margin-top:12px"><button class="manager-btn secondary" onclick="openPosterPicker('${m.id}',null)">${m.archivedPosterUrl?'🔒 Replace locked poster':'Choose / save poster'}</button></div>`:''}
     <div style="margin-top:12px;">
       <label style="font-size:11px; color:var(--text-muted); display:block; margin-bottom:4px;">Search TMDB with a different title (optional)</label>
       <input id="rematch-title-input" type="text" placeholder="${escapeHtml(m.title)}" style="width:100%; padding:8px; border-radius:8px; border:1px solid var(--groove); font-size:13px; margin-bottom:8px;">
@@ -1489,6 +1608,7 @@ function openDetail(id) {
   `;
   document.getElementById('detail-overlay').style.display = 'flex';
   document.querySelectorAll('[data-film-index]').forEach(b=>b.onclick=()=>correctIncludedFilm(id,Number(b.dataset.filmIndex)));
+  document.querySelectorAll('[data-poster-film]').forEach(b=>b.onclick=()=>openPosterPicker(id,Number(b.dataset.posterFilm)));
   initCoverPhotoEditor(id);
 }
 function closeDetail() { document.getElementById('detail-overlay').style.display = 'none'; }
@@ -1519,7 +1639,7 @@ async function rematchOne(id) {
     if (enriched.genre && omdbKey) {
       enriched = await retryOmdbOnly(enriched, omdbKey);
     }
-    movies[idx] = preserveLanguageOverride(enriched);
+    movies[idx] = preservePosterChoice(movies[idx],preserveLanguageOverride(enriched));
     localStorage.setItem('movie-cache', JSON.stringify(movies));
     buildGenreFilter();
     buildLanguageFilter();
@@ -1861,7 +1981,7 @@ async function rematchAll() {
       if (enriched.genre && omdbKey) {
         enriched = await retryOmdbOnly(enriched, omdbKey);
       }
-      movies[i] = preserveLanguageOverride(enriched);
+      movies[i] = preservePosterChoice(movies[i],preserveLanguageOverride(enriched));
       if (enriched.genre) successCount++;
       if (enriched.imdbRating) imdbSuccessCount++;
     } catch (e) {
@@ -2200,7 +2320,14 @@ async function saveNewMovie(){
  const button=document.getElementById('add-save');button.disabled=true;addMsg('Checking GitHub for existing barcode…');
  try{const remote=(await readGitHubMovies(config)).data;if(barcode){const key=barcodeKey(barcode),already=remote.find(m=>[m.upc,m.ean].some(x=>barcodeKey(x)===key));if(already)throw new Error('Already exists on GitHub: '+already.title);}
  movies.push(movie);markPending(movie);buildGenreFilter();buildLanguageFilter();render();addMsg('Saving and verifying on GitHub…');
- const msg=await syncPendingEdits();addMsg(msg+' Added '+movie.title+'.');button.textContent='Saved';
+ const msg=await syncPendingEdits();
+ let posterMsg='';
+ if(!movie.isBoxSet && tmdbPosterSource(movie)){
+   addMsg('Collection item saved. Archiving and locking its 780px poster…');
+   try { await archiveSelectedPoster(movie,null);posterMsg=' Poster backed up and locked.'; }
+   catch(e) {posterMsg=' Poster backup needs retry in Data Manager: '+e.message;}
+ }
+ addMsg(msg+' Added '+movie.title+'.'+posterMsg);button.textContent='Saved';
  stopAddCamera();setTimeout(()=>{if(document.getElementById('add-overlay').style.display==='flex'){closeAddMovie();openDetail(movie.id);}},600);
  }catch(e){addMsg('Saved locally if added, but GitHub verification failed: '+e.message+'. Use Data Manager → Sync with GitHub.');button.disabled=false;}
 }
