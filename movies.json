@@ -300,7 +300,9 @@
     "enrichNote": null,
     "matchedVia": "tmdb-manual",
     "reviewStatus": "confirmed",
-    "reviewedAt": "2026-10-15T19:19:09.495Z"
+    "reviewedAt": "2026-10-15T19:19:09.495Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0009-main-mvb5tyoe.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/6IC8PQZAynsUAh0MDvopR3zDTRk.jpg"
   },
   {
     "id": "MOV-0010",
