@@ -1063,7 +1063,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0035-main-mvb8lp2v.jpg",
+    "archivedSourcePosterUrl": "https://m.media-amazon.com/images/M/MV5BMTYwNTc0NTM2NF5BMl5BanBnXkFtZTgwNjkyMjg4MTI@._V1_SX300.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0036",
