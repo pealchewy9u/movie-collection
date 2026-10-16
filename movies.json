@@ -10526,7 +10526,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Action",
-    "posterUrl": "https://imagestorage.org/025192135118.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/jQrroNwP8hbFiUlNMs20emauwPE.jpg",
     "year": "2011",
     "overview": "When a group of hard-working guys find out they've fallen victim to their wealthy employer's Ponzi scheme, they conspire to rob his high-rise residence.",
     "mediaType": "movie",
@@ -10537,7 +10537,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0293-main-mvba146n-hb1t0f.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/jQrroNwP8hbFiUlNMs20emauwPE.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0294",
