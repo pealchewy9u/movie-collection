@@ -1046,7 +1046,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Biography",
-    "posterUrl": "https://imagestorage.org/024543558231.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/lHu1wtNaczFPGFDTrjCSzeLPTKN.jpg",
     "year": "2018",
     "overview": "With his impeccable vocal abilities, Freddie Mercury and his rock band, Queen, achieve superstardom. However, amidst his skyrocketing success, he grapples with his ego, sexuality and a fatal illness.",
     "mediaType": "movie",
@@ -1057,7 +1057,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0034-main-mvb97lqr-it1blv.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/lHu1wtNaczFPGFDTrjCSzeLPTKN.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0035",
