@@ -8845,7 +8845,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Drama",
-    "posterUrl": "https://imagestorage.org/715515252614.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg",
     "year": "2019",
     "overview": "Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan.",
     "mediaType": "movie",
@@ -8856,7 +8856,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0240-main-mvb9x0q5-gnx2ab.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0241",
