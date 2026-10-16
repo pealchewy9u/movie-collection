@@ -5838,7 +5838,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Action",
-    "posterUrl": "https://imagestorage.org/0031398211044.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/h3VxEVUOoBZmo79O8RqKvyGiqmE.jpg",
     "year": "2014",
     "overview": "John Wick is a former hitman grieving the loss of his true love. When his home is broken into, robbed, and his dog killed, he is forced to return to action to exact revenge.",
     "mediaType": "movie",
@@ -5849,7 +5849,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0161-main-mvb9ouq6-y8bd4o.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/h3VxEVUOoBZmo79O8RqKvyGiqmE.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0162",
