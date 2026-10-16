@@ -10067,5 +10067,22 @@
     "imdbId": "tt1730768",
     "imdbRating": "7.0",
     "omdbNote": null
+  },
+  {
+    "id": "MOV-NEW-1792114787008-uyjij",
+    "title": "The Hobbit: The Motion Picture Trilogy (Theatrical Versions)",
+    "studio": "",
+    "upc": "883929636143",
+    "ean": null,
+    "mediaType": "movie",
+    "blurayDiscs": 1,
+    "dvdDiscs": 0,
+    "is4k": false,
+    "formatOverride": "bluray",
+    "dateAdded": "2026-10-16",
+    "releaseDate": null,
+    "countryCode": null,
+    "isBoxSet": false,
+    "includedMovies": []
   }
 ]
