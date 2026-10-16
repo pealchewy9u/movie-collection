@@ -3319,7 +3319,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Crime",
-    "posterUrl": "https://imagestorage.org/715515099110.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/3bX6VVSMf0dvzk5pMT4ALG5A92d.jpg",
     "year": "1998",
     "overview": "A young writer who follows strangers for material meets a thief who takes him under his wing.",
     "mediaType": "movie",
@@ -3330,7 +3330,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0100-main-mvb9deyx-cvti9s.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/3bX6VVSMf0dvzk5pMT4ALG5A92d.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0101",
