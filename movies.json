@@ -429,7 +429,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Comedy",
-    "posterUrl": "https://imagestorage.org/032429146205.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/55volAzeebtFzyrx7DJkegvw8Ta.jpg",
     "year": "2013",
     "overview": "With the 1970s behind him, Ron Burgundy, San Diego's former top-rated newsreader, returns to take New York City's first twenty-four-hour news channel by storm.",
     "mediaType": "movie",
@@ -440,7 +440,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0013-main-mvb8vdxc-biwb7s.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/55volAzeebtFzyrx7DJkegvw8Ta.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0014",
