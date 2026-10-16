@@ -11467,5 +11467,26 @@
     "imdbId": null,
     "omdbNote": null,
     "enrichNote": "No TMDB match found"
+  },
+  {
+    "id": "MOV-NEW-1792182202314-quiws",
+    "title": "A Nightmare on Elm Street Collection",
+    "studio": "",
+    "upc": "794043163289",
+    "ean": null,
+    "mediaType": "movie",
+    "blurayDiscs": 1,
+    "dvdDiscs": 0,
+    "is4k": false,
+    "formatOverride": "bluray",
+    "dateAdded": "2026-10-16",
+    "releaseDate": null,
+    "countryCode": null,
+    "isBoxSet": false,
+    "includedMovies": [],
+    "year": "2012",
+    "language": "en",
+    "languageOverride": "en",
+    "languageReviewedAt": "2026-10-16T20:23:22.315Z"
   }
 ]
