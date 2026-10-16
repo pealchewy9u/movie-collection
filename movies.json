@@ -5302,7 +5302,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Biography",
-    "posterUrl": "https://imagestorage.org/715515253215.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/5nCjsUqjIAY4sqBxmTtYvSaiqXV.jpg",
     "year": "2019",
     "overview": "An illustration of Frank Sheeran's life, from W.W.II veteran to hit-man for the Bufalino crime family and his alleged assassination of his close friend Jimmy Hoffa.",
     "mediaType": "movie",
@@ -5313,7 +5313,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0156-main-mvb9kuc8-yqtoeo.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/5nCjsUqjIAY4sqBxmTtYvSaiqXV.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0157",
