@@ -673,7 +673,9 @@
     "omdbNote": null,
     "tmdbId": 222951,
     "matchedVia": "tmdb",
-    "enrichNote": null
+    "enrichNote": null,
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0022-main-mvb5uk4y.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/A9GhjUpw3bSJO9OLC1dDBfCgUHa.jpg"
   },
   {
     "id": "MOV-0023",
