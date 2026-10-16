@@ -3344,7 +3344,9 @@
     "tmdbId": 199139,
     "matchedVia": "tmdb-manual",
     "reviewStatus": "confirmed",
-    "reviewedAt": "2026-10-15T21:25:12.806Z"
+    "reviewedAt": "2026-10-15T21:25:12.806Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0105-main-mvb6gxaw.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/wAXcxLLFKeqFdlhORajj4pZrPTz.jpg"
   },
   {
     "id": "MOV-0106",
