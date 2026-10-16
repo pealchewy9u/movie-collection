@@ -3349,7 +3349,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Comedy",
-    "posterUrl": "https://imagestorage.org/097361449142.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/cDUW5RWmyHcTxu7eg9eMqhBQy2J.jpg",
     "year": "2011",
     "overview": "City teenager Ren MacCormack moves to a small town where rock music and dancing have been banned, and his rebellious spirit shakes up the populace.",
     "mediaType": "movie",
@@ -3360,7 +3360,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0101-main-mvb9dik2-i5tk7c.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/cDUW5RWmyHcTxu7eg9eMqhBQy2J.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0102",
