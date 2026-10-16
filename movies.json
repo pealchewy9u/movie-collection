@@ -2701,7 +2701,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Action",
-    "posterUrl": "https://imagestorage.org/025192224232.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/qOZPLflxDqKogu9v9hYw3lolxGs.jpg",
     "year": "2013",
     "overview": "When a structural-security authority finds himself set up and incarcerated in the world's most secret and secure prison, he has to use his skills to escape with help from the inside.",
     "mediaType": "movie",
@@ -2712,7 +2712,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0084-main-mvb99krf-uzzxvh.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/qOZPLflxDqKogu9v9hYw3lolxGs.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0085",
