@@ -6226,7 +6226,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Crime",
-    "posterUrl": "https://imagestorage.org/715515331517.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/Anvux3wa95hseYtSAqbAyb29qYe.jpg",
     "year": "2023",
     "overview": "When oil is discovered in 1920s Oklahoma under Osage Nation land, the Osage people are murdered one by one - until the FBI steps in to unravel the mystery.",
     "mediaType": "movie",
@@ -6237,7 +6237,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0174-main-mvb9ty63-2t41uu.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/Anvux3wa95hseYtSAqbAyb29qYe.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0175",
