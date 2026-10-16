@@ -5242,76 +5242,340 @@
     "boxCoverUrl": null,
     "includedMovies": [
       {
-        "title": "• Dr. No (1962)"
+        "title": "• Dr. No (1962)",
+        "tmdbId": 646,
+        "tmdbTitle": "Dr. No",
+        "year": "1962",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/9zCOLJmLNst0sCPZlkW1IRoH65E.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Thriller",
+        "overview": "Agent 007 battles mysterious Dr. No, a scientific genius bent on destroying the U.S. space program. As the countdown to disaster begins, Bond must go to Jamaica, where he encounters beautiful Honey Ryder, to confront a megalomaniacal villain in his massive island headquarters.",
+        "imdbId": "tt0055928",
+        "matchNote": null,
+        "imdbRating": "7.2",
+        "omdbNote": null
       },
       {
-        "title": "• From Russia with Love (1963)"
+        "title": "• From Russia with Love (1963)",
+        "tmdbId": 657,
+        "tmdbTitle": "From Russia with Love",
+        "year": "1963",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/zx4V17FP8oclNvOpTgs2iCCtiYk.jpg",
+        "language": "en",
+        "genre": "Action, Thriller, Adventure",
+        "overview": "Agent 007 is back in the second installment of the James Bond series, this time battling a secret crime organization known as SPECTRE. Russians Rosa Klebb and Kronsteen are out to snatch a decoding device known as the Lektor, using the ravishing Tatiana to lure Bond into helping them. Bond willingly travels to meet Tatiana in Istanbul, where he must rely on his wits to escape with his life in a series of deadly encounters with the enemy.",
+        "imdbId": "tt0057076",
+        "matchNote": null,
+        "imdbRating": "7.3",
+        "omdbNote": null
       },
       {
-        "title": "• Goldfinger (1964)"
+        "title": "• Goldfinger (1964)",
+        "tmdbId": 658,
+        "tmdbTitle": "Goldfinger",
+        "year": "1964",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/aKNFzaqQgPzsGXnsMc4kJH5hFIV.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Thriller",
+        "overview": "Special agent 007 comes face to face with one of the most notorious villains of all time, and now he must outwit and outgun the powerful tycoon to prevent him from cashing in on a devious scheme to raid Fort Knox -- and obliterate the world's economy.",
+        "imdbId": "tt0058150",
+        "matchNote": null,
+        "imdbRating": "7.7",
+        "omdbNote": null
       },
       {
-        "title": "• Thunderball (1965)"
+        "title": "• Thunderball (1965)",
+        "tmdbId": 660,
+        "tmdbTitle": "Thunderball",
+        "year": "1965",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/wCc4qllaTDsQN8zgGkAgQrKO6N9.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Thriller",
+        "overview": "A criminal organization has obtained two nuclear bombs and are asking for a 100 million pound ransom in the form of diamonds in seven days or they will use the weapons. The secret service sends James Bond to the Bahamas to once again save the world.",
+        "imdbId": "tt0059800",
+        "matchNote": null,
+        "imdbRating": "6.9",
+        "omdbNote": null
       },
       {
-        "title": "• You Only Live Twice (1967)"
+        "title": "• You Only Live Twice (1967)",
+        "tmdbId": 667,
+        "tmdbTitle": "You Only Live Twice",
+        "year": "1967",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/gIhS0VC7YzI8pj6zfS3KxsxV0dS.jpg",
+        "language": "en",
+        "genre": "Action, Thriller, Adventure",
+        "overview": "A mysterious spacecraft captures Russian and American space capsules and brings the two superpowers to the brink of war. James Bond investigates the case in Japan and comes face to face with his archenemy Blofeld.",
+        "imdbId": "tt0062512",
+        "matchNote": null,
+        "imdbRating": "6.8",
+        "omdbNote": null
       },
       {
-        "title": "• Diamonds Are Forever (1971)"
+        "title": "• Diamonds Are Forever (1971)",
+        "tmdbId": 681,
+        "tmdbTitle": "Diamonds Are Forever",
+        "year": "1971",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/ooDT0eKrWCxJCsn9JehPkD0QYNj.jpg",
+        "language": "en",
+        "genre": "Action, Thriller",
+        "overview": "Diamonds are stolen only to be sold again in the international market. James Bond infiltrates a smuggling mission to find out who's guilty. The mission takes him to Las Vegas where Bond meets his archenemy Blofeld.",
+        "imdbId": "tt0066995",
+        "matchNote": null,
+        "imdbRating": "6.5",
+        "omdbNote": null
       },
       {
-        "title": "• On Her Majesty's Secret Service (1969)"
+        "title": "• On Her Majesty's Secret Service (1969)",
+        "tmdbId": 668,
+        "tmdbTitle": "On Her Majesty's Secret Service",
+        "year": "1969",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/yVzJLLhBwuWJBR9BYEMurShu2WT.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Thriller",
+        "overview": "With the help of Marc-Ange Draco, head of the Unione Corse crime syndicate, and Draco's troubled daughter Tracy, James Bond tracks his archnemesis, Ernst Stravro Blofeld, to a mountaintop retreat in the Swiss Alps, where he is training an army of beautiful, lethal women.",
+        "imdbId": "tt0064757",
+        "matchNote": null,
+        "imdbRating": "6.7",
+        "omdbNote": null
       },
       {
-        "title": "• Live and Let Die (1973)"
+        "title": "• Live and Let Die (1973)",
+        "tmdbId": 253,
+        "tmdbTitle": "Live and Let Die",
+        "year": "1973",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/39qkrjqMZs6utwNmihVImC3ghas.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Thriller",
+        "overview": "James Bond must investigate a mysterious murder case of a British agent in New Orleans. Soon he finds himself up against a gangster boss named Mr. Big.",
+        "imdbId": "tt0070328",
+        "matchNote": null,
+        "imdbRating": "6.7",
+        "omdbNote": null
       },
       {
-        "title": "• The Man with the Golden Gun (1974)"
+        "title": "• The Man with the Golden Gun (1974)",
+        "tmdbId": 682,
+        "tmdbTitle": "The Man with the Golden Gun",
+        "year": "1974",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/xVkbKwGnBVNQ122GN5bCTMyPbWz.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Thriller",
+        "overview": "Cool government operative James Bond searches for a stolen invention that can turn the sun's heat into a destructive weapon. He soon crosses paths with the menacing Francisco Scaramanga, a hitman so skilled he has a seven-figure working fee. Bond then joins forces with the swimsuit-clad Mary Goodnight, and together they track Scaramanga to a Thai tropical isle hideout where the killer-for-hire lures the slick spy into a deadly maze for a final duel.",
+        "imdbId": "tt0071807",
+        "matchNote": null,
+        "imdbRating": "6.7",
+        "omdbNote": null
       },
       {
-        "title": "• The Spy Who Loved Me (1977)"
+        "title": "• The Spy Who Loved Me (1977)",
+        "tmdbId": 691,
+        "tmdbTitle": "The Spy Who Loved Me",
+        "year": "1977",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/3ZxHKFxMYvAko680DsRgAZKWcLi.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Thriller",
+        "overview": "Russian and British submarines with nuclear missiles on board both vanish from sight without a trace. England and Russia both blame each other as James Bond tries to solve the riddle of the disappearing ships. But the KGB also has an agent on the case.",
+        "imdbId": "tt0076752",
+        "matchNote": null,
+        "imdbRating": "7.0",
+        "omdbNote": null
       },
       {
-        "title": "• Moonraker (1979)"
+        "title": "• Moonraker (1979)",
+        "tmdbId": 698,
+        "tmdbTitle": "Moonraker",
+        "year": "1979",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/6LrJdXNmu5uHOVALZxVYd44Lva0.jpg",
+        "language": "en",
+        "genre": "Action, Adventure, Thriller, Science Fiction",
+        "overview": "After Drax Industries' Moonraker space shuttle is hijacked, secret agent James Bond is assigned to investigate, traveling to California to meet the company's owner, the mysterious Hugo Drax. With the help of scientist Dr. Holly Goodhead, Bond soon uncovers Drax's nefarious plans for humanity, all the while fending off an old nemesis, Jaws, and venturing to Venice, Rio, the Amazon...and even outer space.",
+        "imdbId": "tt0079574",
+        "matchNote": null,
+        "imdbRating": "6.3",
+        "omdbNote": null
       },
       {
-        "title": "• For Your Eyes Only (1981)"
+        "title": "• For Your Eyes Only (1981)",
+        "tmdbId": 699,
+        "tmdbTitle": "For Your Eyes Only",
+        "year": "1981",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/xV4Nnr6DjjERlqNikqDQX8LUgua.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Thriller",
+        "overview": "A British spy ship has sunk and on board was a hi-tech encryption device. James Bond is sent to find the device that holds British launching instructions before the enemy Soviets get to it first.",
+        "imdbId": "tt0082398",
+        "matchNote": null,
+        "imdbRating": "6.7",
+        "omdbNote": null
       },
       {
-        "title": "• Octopussy (1983)"
+        "title": "• Octopussy (1983)",
+        "tmdbId": 700,
+        "tmdbTitle": "Octopussy",
+        "year": "1983",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/yoosZitM9igSk3Sd0sBXIhKlAh1.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Thriller",
+        "overview": "James Bond is sent to investigate after a fellow “00” agent is found dead with a priceless Fabergé egg. Bond follows the mystery and uncovers a smuggling scandal and a Russian General who wants to provoke a new World War.",
+        "imdbId": "tt0086034",
+        "matchNote": null,
+        "imdbRating": "6.5",
+        "omdbNote": null
       },
       {
-        "title": "• A View to a Kill (1985)"
+        "title": "• A View to a Kill (1985)",
+        "tmdbId": 707,
+        "tmdbTitle": "A View to a Kill",
+        "year": "1985",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/arJF829RP9cYvh0NU70dC5TtXSa.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Thriller",
+        "overview": "A newly-developed microchip designed by Zorin Industries for the British Government that can survive the electromagnetic radiation caused by a nuclear explosion has landed in the hands of the KGB. James Bond must find out how and why. His suspicions soon lead him to big industry leader Max Zorin who forms a plan to destroy his only competition in Silicon Valley by triggering a massive earthquake in the San Francisco Bay.",
+        "imdbId": "tt0090264",
+        "matchNote": null,
+        "imdbRating": "6.3",
+        "omdbNote": null
       },
       {
-        "title": "• The Living Daylights (1987)"
+        "title": "• The Living Daylights (1987)",
+        "tmdbId": 708,
+        "tmdbTitle": "The Living Daylights",
+        "year": "1987",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/1oRlmWX9hewpn2B44wawBjHd7dx.jpg",
+        "language": "en",
+        "genre": "Action, Adventure, Thriller",
+        "overview": "After a defecting Russian general reveals a plot to assassinate foreign spies, James Bond is assigned a secret mission to dispatch the new head of the KGB to prevent an escalation of tensions between the Soviet Union and the West.",
+        "imdbId": "tt0093428",
+        "matchNote": null,
+        "imdbRating": "6.7",
+        "omdbNote": null
       },
       {
-        "title": "• Licence to Kill (1989)"
+        "title": "• Licence to Kill (1989)",
+        "tmdbId": 709,
+        "tmdbTitle": "Licence to Kill",
+        "year": "1989",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/8nzJve63EXA79HGAyidZwivZrQ2.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Thriller",
+        "overview": "After capturing the notorious drug lord Franz Sanchez, Bond's close friend and former CIA agent Felix Leiter is left for dead and his wife is murdered. Bond goes rogue and seeks vengeance on those responsible, as he infiltrates Sanchez's organization from the inside.",
+        "imdbId": "tt0097742",
+        "matchNote": null,
+        "imdbRating": "6.7",
+        "omdbNote": null
       },
       {
-        "title": "• GoldenEye (1995)"
+        "title": "• GoldenEye (1995)",
+        "tmdbId": 710,
+        "tmdbTitle": "GoldenEye",
+        "year": "1995",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/z0ljRnNxIO7CRBhLEO0DvLgAFPR.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Thriller",
+        "overview": "When a powerful secret defense system is stolen, James Bond is assigned to stop a Russian crime syndicate from using it.",
+        "imdbId": "tt0113189",
+        "matchNote": null,
+        "imdbRating": "7.2",
+        "omdbNote": null
       },
       {
-        "title": "• Tomorrow Never Dies (1997)"
+        "title": "• Tomorrow Never Dies (1997)",
+        "tmdbId": 714,
+        "tmdbTitle": "Tomorrow Never Dies",
+        "year": "1997",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/gZm002w7q9yLOkltxT76TWGfdZX.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Thriller",
+        "overview": "A deranged media mogul is staging international incidents to pit the world's superpowers against each other. Now James Bond must take on this evil mastermind in an adrenaline-charged battle to end his reign of terror and prevent global pandemonium.",
+        "imdbId": "tt0120347",
+        "matchNote": null,
+        "imdbRating": "6.5",
+        "omdbNote": null
       },
       {
-        "title": "• The World Is Not Enough (1999)"
+        "title": "• The World Is Not Enough (1999)",
+        "tmdbId": 36643,
+        "tmdbTitle": "The World Is Not Enough",
+        "year": "1999",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/wCb2msgoZPK01WIqry24M4xsM73.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Thriller",
+        "overview": "Greed, revenge, world dominance and high-tech terrorism – it's all in a day's work for Bond, who's on a mission to protect a beautiful oil heiress from a notorious terrorist. In a race against time that culminates in a dramatic submarine showdown, Bond works to defuse the international power struggle that has the world's oil supply hanging in the balance.",
+        "imdbId": "tt0143145",
+        "matchNote": null,
+        "imdbRating": "6.4",
+        "omdbNote": null
       },
       {
-        "title": "• Die Another Day (2002)"
+        "title": "• Die Another Day (2002)",
+        "tmdbId": 36669,
+        "tmdbTitle": "Die Another Day",
+        "year": "2002",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/bZmGqOhMhaLn8AoFMvFDct4tbrL.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Thriller",
+        "overview": "James Bond is sent to investigate the connection between a North Korean terrorist and a diamond mogul, who is funding the development of an international space weapon.",
+        "imdbId": "tt0246460",
+        "matchNote": null,
+        "imdbRating": "6.1",
+        "omdbNote": null
       },
       {
-        "title": "• Casino Royale (2006)"
+        "title": "• Casino Royale (2006)",
+        "tmdbId": 36557,
+        "tmdbTitle": "Casino Royale",
+        "year": "2006",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/lMrxYKKhd4lqRzwUHAy5gcx9PSO.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Thriller",
+        "overview": "Le Chiffre, a banker to the world's terrorists, is scheduled to participate in a high-stakes poker game in Montenegro, where he intends to use his winnings to establish his financial grip on the terrorist market. M sends Bond—on his maiden mission as a 00 Agent—to attend this game and prevent Le Chiffre from winning. With the help of Vesper Lynd and Felix Leiter, Bond enters the most important poker game in his already dangerous career.",
+        "imdbId": "tt0381061",
+        "matchNote": null,
+        "imdbRating": "8.0",
+        "omdbNote": null
       },
       {
-        "title": "• Quantum of Solace (2008)"
+        "title": "• Quantum of Solace (2008)",
+        "tmdbId": 10764,
+        "tmdbTitle": "Quantum of Solace",
+        "year": "2008",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/e3DXXLJHGqMx9yYpXsql1XNljmM.jpg",
+        "language": "en",
+        "genre": "Adventure, Action, Thriller",
+        "overview": "Betrayed by Vesper, the woman he loved, 007 fights the urge to make his latest mission personal. Pursuing his determination to uncover the truth, Bond and M interrogate Mr. White, who reveals that the organization that blackmailed Vesper is far more complex and dangerous than anyone had imagined.",
+        "imdbId": "tt0830515",
+        "matchNote": null,
+        "imdbRating": "6.5",
+        "omdbNote": null
       },
       {
-        "title": "• Skyfall (2012)"
+        "title": "• Skyfall (2012)",
+        "tmdbId": 37724,
+        "tmdbTitle": "Skyfall",
+        "year": "2012",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/d0IVecFQvsGdSbnMAHqiYsNYaJT.jpg",
+        "language": "en",
+        "genre": "Action, Adventure, Thriller",
+        "overview": "When Bond's latest assignment goes gravely wrong, agents around the world are exposed and MI6 headquarters is attacked. While M faces challenges to her authority and position from Gareth Mallory, the new Chairman of the Intelligence and Security Committee, it's up to Bond, aided only by field agent Eve, to locate the mastermind behind the attack.",
+        "imdbId": "tt1074638",
+        "matchNote": null,
+        "imdbRating": "7.8",
+        "omdbNote": null
       },
       {
-        "title": "• SPECTRE (2015)"
+        "title": "• SPECTRE (2015)",
+        "tmdbId": 206647,
+        "tmdbTitle": "Spectre",
+        "year": "2015",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/zj8ongFhtWNsVlfjOGo8pSr7PQg.jpg",
+        "language": "en",
+        "genre": "Action, Adventure, Thriller",
+        "overview": "A cryptic message from Bond’s past sends him on a trail to uncover a sinister organization. While M battles political forces to keep the secret service alive, Bond peels back the layers of deceit to reveal the terrible truth behind SPECTRE.",
+        "imdbId": "tt2379713",
+        "matchNote": null,
+        "imdbRating": "6.8",
+        "omdbNote": null
       }
     ],
     "reviewStatus": "collection"
