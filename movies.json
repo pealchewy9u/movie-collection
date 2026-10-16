@@ -10792,7 +10792,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Documentary",
-    "posterUrl": "https://imagestorage.org/085391117018.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/nUHco53IU01Mat763FrcPJaGjmD.jpg",
     "year": "2006",
     "overview": "A documentary about the background and making of for the movie V for Vendetta.",
     "mediaType": "movie",
@@ -10803,7 +10803,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0302-main-mvba1jd7-ifs47y.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/nUHco53IU01Mat763FrcPJaGjmD.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0303",
