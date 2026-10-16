@@ -3977,7 +3977,7 @@
     "dvdDiscs": 0,
     "digitalCopy": true,
     "genre": "Drama",
-    "posterUrl": "https://imagestorage.org/0032429344069.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/z2FnLKpFi1HPO7BEJxdkv6hpJSU.jpg",
     "year": "1997",
     "overview": "A therapist counsels Will Hunting, a janitor with a genius IQ.",
     "mediaType": "movie",
@@ -3988,7 +3988,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0120-main-mvb9dxa2-qixei2.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/z2FnLKpFi1HPO7BEJxdkv6hpJSU.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0121",
