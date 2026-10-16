@@ -4037,7 +4037,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Comedy",
-    "posterUrl": "https://imagestorage.org/715515244619.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/eWdyYQreja6JGCzqHWXpWHDrrPo.jpg",
     "year": "2014",
     "overview": "A writer encounters the owner of an aging high-class hotel, who tells him of his early years serving as a lobby boy in the hotel's glorious years under an exceptional concierge.",
     "mediaType": "movie",
@@ -4048,7 +4048,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0122-main-mvb9e486-5kiufa.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/eWdyYQreja6JGCzqHWXpWHDrrPo.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0123",
