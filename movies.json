@@ -5063,7 +5063,7 @@
     "dvdDiscs": 0,
     "digitalCopy": true,
     "genre": "Biography",
-    "posterUrl": "https://imagestorage.org/013132622514.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/zSqJ1qFq8NXFfi7JeIYMlzyR0dx.jpg",
     "year": "2014",
     "overview": "During World War II, the English mathematical genius Alan Turing tries to crack the German Enigma code with help from fellow mathematicians while attempting to come to terms with his troubled private life.",
     "mediaType": "movie",
@@ -5074,7 +5074,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0148-main-mvb9ex5b-9vligz.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/zSqJ1qFq8NXFfi7JeIYMlzyR0dx.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0149",
