@@ -459,7 +459,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Comedy",
-    "posterUrl": "https://imagestorage.org/097361314242.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/mhZIcRePT7U8viFQVjt1ZjYIsR4.jpg",
     "year": "2004",
     "overview": "In the 1970s, an anchorman's stint as San Diego's top-rated newsreader is challenged when an ambitious newswoman becomes his co-anchor.",
     "mediaType": "movie",
@@ -470,7 +470,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0014-main-mvb8vx57-qcv47k.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/mhZIcRePT7U8viFQVjt1ZjYIsR4.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0015",
