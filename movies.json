@@ -6377,7 +6377,9 @@
     "language": "hi",
     "imdbId": "tt3495000",
     "imdbRating": "7.3",
-    "omdbNote": null
+    "omdbNote": null,
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0197-main-mvb71llv.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/fD1zfYXgMbDkgIt9ZrHfte6mWHE.jpg"
   },
   {
     "id": "MOV-0198",
