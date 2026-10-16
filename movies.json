@@ -11517,7 +11517,10 @@
         "imdbId": "tt0093629",
         "matchNote": null,
         "imdbRating": "6.7",
-        "omdbNote": null
+        "omdbNote": null,
+        "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1792182202314-quiws-film-2-mvbf20pk-0m7gta.jpg",
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/qbtZewU6EGvxi8yFVzwZ31NijLX.jpg",
+        "posterLocked": true
       },
       {
         "title": "A Nightmare on Elm Street 4: The Dream Master",
