@@ -10643,7 +10643,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Action",
-    "posterUrl": "https://imagestorage.org/032429258441.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/zAurB9mNxfYRoVrVjAJJwGV3sPg.jpg",
     "year": "2008",
     "overview": "Through a series of freak occurrences, a group of actors shooting a big-budget war movie are forced to become the soldiers they are portraying.",
     "mediaType": "movie",
@@ -10654,7 +10654,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0297-main-mvba1fe3-q5f1q9.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/zAurB9mNxfYRoVrVjAJJwGV3sPg.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0298",
