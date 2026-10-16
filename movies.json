@@ -2173,7 +2173,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Animation",
-    "posterUrl": "https://imagestorage.org/025192123634.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/5Fh4NdoEnCjCK9wLjdJ9DJNFl2b.jpg",
     "year": "2013",
     "overview": "When a new criminal comes to town, the Anti-Villain League decides to hire Gru in order to fight him off. While Gru initially refuses, he eventually agrees after his aide goes back to his evil ways.",
     "mediaType": "movie",
@@ -2184,7 +2184,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0066-main-mvb98rf3-xyw9v5.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/5Fh4NdoEnCjCK9wLjdJ9DJNFl2b.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0067",
