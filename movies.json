@@ -6588,7 +6588,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Comedy",
-    "posterUrl": "https://imagestorage.org/025192169908.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/6nuZUJge3egVZI1rPLVpjRHPMf7.jpg",
     "year": "2014",
     "overview": "The Little Rascals are back in an all-new movie! Join the fun with Spanky, Alfalfa, Darla, Buckwheat, Petey the dog and the whole gang as they are up to their usual mischief! The Rascals ...",
     "mediaType": "movie",
@@ -6599,7 +6599,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0187-main-mvb9scqt-944mfu.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/6nuZUJge3egVZI1rPLVpjRHPMf7.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0188",
