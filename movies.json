@@ -6986,7 +6986,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Crime",
-    "posterUrl": "https://imagestorage.org/0025192275159.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/lrCgt8NNMyFsfmXyXiSSCRXNH4u.jpg",
     "year": "2001",
     "overview": "A laconic, chain-smoking barber blackmails his wife's boss and lover for money to invest in dry cleaning, but his plan goes terribly wrong.",
     "mediaType": "movie",
@@ -6997,7 +6997,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0196-main-mvbcfh9v-h9olql.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/lrCgt8NNMyFsfmXyXiSSCRXNH4u.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0197",
