@@ -5355,7 +5355,9 @@
     "tmdbId": 177358,
     "matchedVia": "tmdb-manual",
     "reviewStatus": "confirmed",
-    "reviewedAt": "2026-10-15T20:44:56.121Z"
+    "reviewedAt": "2026-10-15T20:44:56.121Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0164-main-mvb6zhht.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/zmh8eBq0MdwqHl7NMyVOnAhNu7I.jpg"
   },
   {
     "id": "MOV-0165",
