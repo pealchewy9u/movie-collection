@@ -2641,7 +2641,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Action",
-    "posterUrl": "https://imagestorage.org/043396417199.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/aRjuJuPXHtVs6YegfeeQWXGRs1E.jpg",
     "year": "2013",
     "overview": "In the year 2154, the very wealthy live on a man-made space station while the rest of the population resides on a ruined Earth. A man takes on a mission that could bring equality to the polarized worlds.",
     "mediaType": "movie",
@@ -2652,7 +2652,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0082-main-mvb99dzr-jyb8ja.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/aRjuJuPXHtVs6YegfeeQWXGRs1E.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0083",
