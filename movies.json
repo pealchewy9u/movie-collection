@@ -7005,7 +7005,9 @@
         "imdbId": "tt0133093",
         "imdbRating": "8.7",
         "omdbNote": null,
-        "matchedVia": "tmdb-manual"
+        "matchedVia": "tmdb-manual",
+        "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0206-film-0-mvb7633f.jpg",
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg"
       },
       {
         "title": "The Matrix Reloaded",
