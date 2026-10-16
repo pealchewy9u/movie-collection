@@ -4719,7 +4719,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Animation",
-    "posterUrl": "https://imagestorage.org/043396460850.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/3nFnrivNgipSKZ8LZJJbRSlAcTR.jpg",
     "year": "2015",
     "overview": "Dracula and his friends try to bring out the monster in his half human, half vampire grandson in order to keep Mavis from leaving the hotel.",
     "mediaType": "movie",
@@ -4730,7 +4730,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0140-main-mvb9eqa7-zax9wp.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/3nFnrivNgipSKZ8LZJJbRSlAcTR.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0141",
