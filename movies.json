@@ -2611,7 +2611,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Action",
-    "posterUrl": "https://imagestorage.org/883929105731.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/pvHjp1vEFmp5FquSCPQ2O95tIZJ.jpg",
     "year": "2010",
     "overview": "As homicide detective Thomas Craven investigates the murder of his activist daughter, he uncovers a corporate cover-up and government conspiracy that attracts an agent tasked with cleaning up the evidence.",
     "mediaType": "movie",
@@ -2622,7 +2622,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0081-main-mvb99akp-8d7mz1.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/pvHjp1vEFmp5FquSCPQ2O95tIZJ.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0082",
