@@ -9803,7 +9803,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Action",
-    "posterUrl": "https://imagestorage.org/883929086993.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/momkKuWburNTqKBF6ez7rvhYVhE.jpg",
     "year": "2009",
     "overview": "Detective Sherlock Holmes and his stalwart partner Watson engage in a battle of wits and brawn with a nemesis whose plot is a threat to all of England.",
     "mediaType": "movie",
@@ -9814,7 +9814,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0271-main-mvba0hy2-5zyn8m.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/momkKuWburNTqKBF6ez7rvhYVhE.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0272",
