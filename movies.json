@@ -7549,7 +7549,9 @@
         "imdbId": "tt0120616",
         "imdbRating": "7.1",
         "omdbNote": null,
-        "matchedVia": "tmdb-manual"
+        "matchedVia": "tmdb-manual",
+        "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0220-film-0-mvb783s6.jpg",
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/yhIsVvcUm7QxzLfT6HW2wLf5ajY.jpg"
       },
       {
         "title": "The Mummy Returns",
