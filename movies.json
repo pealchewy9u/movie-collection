@@ -10496,7 +10496,7 @@
     "dvdDiscs": 0,
     "digitalCopy": true,
     "genre": "Action",
-    "posterUrl": "https://imagestorage.org/0032429343338.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/n0YuM4f5lvGAP6MAW2kBIzugXnc.jpg",
     "year": "2022",
     "overview": "The story involves Maverick confronting his past while training a group of younger Top Gun graduates, including the son of his deceased best friend, for a dangerous mission.",
     "mediaType": "movie",
@@ -10507,7 +10507,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0292-main-mvba10o9-yidjn8.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/n0YuM4f5lvGAP6MAW2kBIzugXnc.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0293",
