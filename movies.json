@@ -4547,7 +4547,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Drama",
-    "posterUrl": "https://imagestorage.org/883929174430.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/nOy0X8XSmSDOuwV8pqT70WoWHwT.jpg",
     "year": "2010",
     "overview": "An American factory worker, a French journalist and a London school boy set out on a spiritual journey after death touches their lives in different ways.",
     "mediaType": "movie",
@@ -4558,7 +4558,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0134-main-mvb9ejbf-w7m636.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/nOy0X8XSmSDOuwV8pqT70WoWHwT.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0135",
