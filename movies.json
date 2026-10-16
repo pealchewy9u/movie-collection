@@ -5602,7 +5602,9 @@
     "tmdbId": 14862,
     "matchedVia": "tmdb-manual",
     "reviewStatus": "confirmed",
-    "reviewedAt": "2026-10-15T20:48:24.488Z"
+    "reviewedAt": "2026-10-15T20:48:24.488Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0173-main-mvb6zwqj.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/fhZNX8SCvtrrTfh8NV5EgtZC9d0.jpg"
   },
   {
     "id": "MOV-0174",
