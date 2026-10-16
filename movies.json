@@ -11534,7 +11534,10 @@
         "imdbId": "tt0095742",
         "matchNote": null,
         "imdbRating": "5.6",
-        "omdbNote": null
+        "omdbNote": null,
+        "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1792182202314-quiws-film-3-mvbf23x0-lveodm.jpg",
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/boStYG7jKdoIZTduiOOsUVknD13.jpg",
+        "posterLocked": true
       },
       {
         "title": "A Nightmare on Elm Street: The Dream Child",
