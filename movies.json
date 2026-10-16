@@ -8251,7 +8251,7 @@
     "dvdDiscs": 0,
     "digitalCopy": true,
     "genre": "Action",
-    "posterUrl": "https://imagestorage.org/025192399848.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/A3acM1lX5PNWQa6r5qeMAJOxbnT.jpg",
     "year": "2008",
     "overview": "In the Far East, Alex O'Connell, the son of famed mummy fighters Rick and Evy O'Connell, unearths the mummy of the first Emperor of Qin -- a shape-shifting entity cursed by a witch centuries ago.",
     "mediaType": "movie",
@@ -8262,7 +8262,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0221-main-mvb9wokf-y1cqdy.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/A3acM1lX5PNWQa6r5qeMAJOxbnT.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0222",
