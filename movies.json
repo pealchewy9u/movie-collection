@@ -5994,7 +5994,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Animation",
-    "posterUrl": "https://imagestorage.org/786936850628.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/2Epx7F9X7DrFptn4seqn4mzBVks.jpg",
     "year": "2016",
     "overview": "After a threat from the tiger Shere Khan forces him to flee the jungle, a man-cub named Mowgli embarks on a journey of self discovery with the help of panther Bagheera and free-spirited bear Baloo.",
     "mediaType": "movie",
@@ -6005,7 +6005,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0166-main-mvb9rq4p-uod7iq.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/2Epx7F9X7DrFptn4seqn4mzBVks.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0167",
