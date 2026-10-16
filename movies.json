@@ -989,7 +989,9 @@
     "language": "hi",
     "imdbId": "tt1729637",
     "imdbRating": "4.8",
-    "omdbNote": null
+    "omdbNote": null,
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0033-main-mvb5voek.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/12VEUEHebd9ydQs0Y4ikzb179LY.jpg"
   },
   {
     "id": "MOV-0034",
