@@ -9009,7 +9009,9 @@
     "tmdbId": 22804,
     "matchedVia": "tmdb-manual",
     "reviewStatus": "confirmed",
-    "reviewedAt": "2026-10-15T21:08:35.304Z"
+    "reviewedAt": "2026-10-15T21:08:35.304Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0267-main-mvb7dxg4.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/jBr7bBPA4PYPaf4O6nfjYViyRWK.jpg"
   },
   {
     "id": "MOV-0268",
