@@ -11486,7 +11486,18 @@
     "includedMovies": [
       {
         "title": "A Nightmare on Elm Street",
-        "matchNote": "Multiple possible movies — choose manually"
+        "matchNote": null,
+        "tmdbId": 377,
+        "tmdbTitle": "A Nightmare on Elm Street",
+        "year": "1984",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/wGTpGGRMZmyFCcrY2YoxVTIBlli.jpg",
+        "language": "en",
+        "genre": "Horror",
+        "overview": "Teenagers in a small town are dropping like flies, apparently in the grip of mass hysteria causing their suicides. A cop's daughter, Nancy Thompson, traces the cause to child molester Fred Krueger, who was burned alive by angry parents many years before. Krueger has now come back in the dreams of his killers' children, claiming their lives as his revenge. Nancy and her boyfriend, Glen, must devise a plan to lure the monster out of the realm of nightmares and into the real world...",
+        "imdbId": "tt0087800",
+        "imdbRating": "7.4",
+        "omdbNote": null,
+        "matchedVia": "tmdb-manual"
       },
       {
         "title": "A Nightmare on Elm Street Part 2: Freddy's Revenge",
