@@ -4007,7 +4007,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Biography",
-    "posterUrl": "https://imagestorage.org/085391108085.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/9OkCLM73MIU2CrKZbqiT8Ln1wY2.jpg",
     "year": "1990",
     "overview": "The story of Henry Hill and his life in the mafia, covering his relationship with his wife Karen and his mob partners Jimmy Conway and Tommy DeVito.",
     "mediaType": "movie",
@@ -4018,7 +4018,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0121-main-mvb9e0mg-1jiyn7.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/9OkCLM73MIU2CrKZbqiT8Ln1wY2.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0122",
