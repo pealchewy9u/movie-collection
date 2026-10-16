@@ -6537,7 +6537,9 @@
         "imdbId": "tt3501632",
         "imdbRating": "7.9",
         "omdbNote": null,
-        "matchedVia": "tmdb-manual"
+        "matchedVia": "tmdb-manual",
+        "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0200-film-4-mvb73xlt.jpg",
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/rzRwTcFvttcN1ZpX2xv4j3tSdJu.jpg"
       }
     ],
     "reviewStatus": "collection",
