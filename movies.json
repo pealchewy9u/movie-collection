@@ -10074,7 +10074,7 @@
     "studio": "",
     "upc": "883929636143",
     "ean": null,
-    "mediaType": "movie",
+    "mediaType": null,
     "blurayDiscs": 1,
     "dvdDiscs": 0,
     "is4k": false,
@@ -10132,6 +10132,13 @@
     "languageReviewedAt": "2026-10-16T01:40:24.708Z",
     "boxCoverUrl": null,
     "reviewStatus": "collection",
-    "imdbRating": null
+    "imdbRating": null,
+    "genre": null,
+    "posterUrl": null,
+    "year": null,
+    "overview": null,
+    "imdbId": null,
+    "omdbNote": null,
+    "enrichNote": "No TMDB match found"
   }
 ]
