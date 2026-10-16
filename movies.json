@@ -6078,7 +6078,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Action",
-    "posterUrl": "https://imagestorage.org/0031398344155.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/m2zXTuNPkywdYLyWlVyJZW2QOJH.jpg",
     "year": "2023",
     "overview": "During a train trip to New Delhi, a pair of commandos face an army of invading bandits.",
     "mediaType": "movie",
@@ -6089,7 +6089,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "hi",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0169-main-mvb9rtm1-a619l9.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/m2zXTuNPkywdYLyWlVyJZW2QOJH.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0170",
