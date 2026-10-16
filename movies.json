@@ -8638,7 +8638,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Comedy",
-    "posterUrl": "https://imagestorage.org/043396542099.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/8j58iEBw9pOXFD2L0nt0ZXeHviB.jpg",
     "year": "2019",
     "overview": "As Hollywood's Golden Age is winding down during the summer of 1969, television actor Rick Dalton and his stunt double Cliff Booth endeavor to achieve lasting success in Hollywood while meeting several colorful characters along th...",
     "mediaType": "movie",
@@ -8649,7 +8649,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0233-main-mvb9wwvi-t9wic7.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/8j58iEBw9pOXFD2L0nt0ZXeHviB.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0234",
