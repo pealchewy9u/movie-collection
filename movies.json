@@ -9067,7 +9067,9 @@
     "matchedVia": "tmdb-manual",
     "enrichNote": null,
     "reviewStatus": "confirmed",
-    "reviewedAt": "2026-10-15T21:09:01.182Z"
+    "reviewedAt": "2026-10-15T21:09:01.182Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0269-main-mvb7e17u.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/4X9wr1tnwPY0MPlf3MHtJBggdlA.jpg"
   },
   {
     "id": "MOV-0270",
