@@ -6916,7 +6916,7 @@
     "dvdDiscs": 0,
     "digitalCopy": true,
     "genre": "Action",
-    "posterUrl": "https://imagestorage.org/043396480209.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/hcZE3SpsbroaF9e7myUG1bhYiDJ.jpg",
     "year": "2016",
     "overview": "Seven gunmen from a variety of backgrounds are brought together by a vengeful young widow to protect her town from the private army of a destructive industrialist.",
     "mediaType": "movie",
@@ -6927,7 +6927,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0194-main-mvb9vah1-p5e92x.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/hcZE3SpsbroaF9e7myUG1bhYiDJ.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0195",
