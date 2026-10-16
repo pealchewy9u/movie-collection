@@ -5964,7 +5964,7 @@
     "dvdDiscs": 0,
     "digitalCopy": true,
     "genre": "Biography",
-    "posterUrl": "https://imagestorage.org/024543109440.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/nZAs0HbW82TI1i4Xid83M941Pki.jpg",
     "year": "2015",
     "overview": "Joy is the story of the title character, who rose to become founder and matriarch of a powerful family business dynasty.",
     "mediaType": "movie",
@@ -5975,7 +5975,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0165-main-mvb9rm9g-ctgmaf.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/nZAs0HbW82TI1i4Xid83M941Pki.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0166",
