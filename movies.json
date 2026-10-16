@@ -5272,7 +5272,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Adventure",
-    "posterUrl": "https://imagestorage.org/0032429277800.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/yQvGrMoipbRoddT0ZR8tPoR7NfX.jpg",
     "year": "2014",
     "overview": "When Earth becomes uninhabitable in the future, a farmer and ex-NASA pilot, Joseph Cooper, is tasked to pilot a spacecraft, along with a team of researchers, to find a new planet for humans.",
     "mediaType": "movie",
@@ -5283,7 +5283,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0155-main-mvb9kdyd-9xv6jz.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/yQvGrMoipbRoddT0ZR8tPoR7NfX.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0156",
