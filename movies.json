@@ -104,7 +104,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Action",
-    "posterUrl": "https://imagestorage.org/043396347076.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/zaqam2RNscH5ooYFWInV6hjx6y5.jpg",
     "year": "2009",
     "overview": "A frustrated writer struggles to keep his family alive when a series of global catastrophes threatens to annihilate mankind.",
     "mediaType": "movie",
@@ -115,7 +115,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0004-main-mvb8uy6u-14c0u9.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/zaqam2RNscH5ooYFWInV6hjx6y5.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0005",
