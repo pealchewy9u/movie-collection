@@ -11482,11 +11482,36 @@
     "dateAdded": "2026-10-16",
     "releaseDate": null,
     "countryCode": null,
-    "isBoxSet": false,
-    "includedMovies": [],
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "A Nightmare on Elm Street"
+      },
+      {
+        "title": "A Nightmare on Elm Street Part 2: Freddy's Revenge"
+      },
+      {
+        "title": "A Nightmare on Elm Street 3: Dream Warriors"
+      },
+      {
+        "title": "A Nightmare on Elm Street 4: The Dream Master"
+      },
+      {
+        "title": "A Nightmare on Elm Street: The Dream Child"
+      },
+      {
+        "title": "Freddy's Dead: The Final Nightmare"
+      },
+      {
+        "title": "Wes Craven's New Nightmare"
+      }
+    ],
     "year": "2012",
     "language": "en",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-16T20:23:22.315Z"
+    "languageReviewedAt": "2026-10-16T20:23:22.315Z",
+    "boxCoverUrl": null,
+    "reviewStatus": "collection",
+    "imdbRating": null
   }
 ]
