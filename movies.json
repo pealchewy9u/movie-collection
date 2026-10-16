@@ -10583,7 +10583,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Action",
-    "posterUrl": "https://imagestorage.org/032429280183.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/s5HQf2Gb3lIO2cRcFwNL9sn1o1o.jpg",
     "year": "2017",
     "overview": "A deadly threat from Earth's history reappears and a hunt for a lost artifact takes place between Autobots and Decepticons, while Optimus Prime encounters his creator in space.",
     "mediaType": "movie",
@@ -10594,7 +10594,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0295-main-mvba180h-nqqhgo.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/s5HQf2Gb3lIO2cRcFwNL9sn1o1o.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0296",
