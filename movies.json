@@ -5239,7 +5239,7 @@
     "languageOverride": "en",
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "isBoxSet": true,
-    "boxCoverUrl": null,
+    "boxCoverUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/box-covers/MOV-0160-mvb7vkjc-79nksdbb.jpg",
     "includedMovies": [
       {
         "title": "• Dr. No (1962)",
@@ -5626,7 +5626,7 @@
         "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/zj8ongFhtWNsVlfjOGo8pSr7PQg.jpg"
       }
     ],
-    "reviewStatus": "confirmed",
+    "reviewStatus": "collection",
     "reviewedAt": "2026-10-16T16:58:01.786Z"
   },
   {
