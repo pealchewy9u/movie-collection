@@ -393,7 +393,9 @@
     "tmdbId": 190859,
     "matchedVia": "tmdb-manual",
     "reviewStatus": "confirmed",
-    "reviewedAt": "2026-10-15T19:20:08.039Z"
+    "reviewedAt": "2026-10-15T19:20:08.039Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0012-main-mvb5u910.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/i1U46OwMc6vlm7OoSUKfqUH615e.jpg"
   },
   {
     "id": "MOV-0013",
