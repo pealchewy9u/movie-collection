@@ -1761,7 +1761,9 @@
         "imdbId": "tt0372784",
         "matchNote": null,
         "imdbRating": "8.2",
-        "omdbNote": null
+        "omdbNote": null,
+        "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0056-film-0-mvb60cow.jpg",
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/sPX89Td70IDDjVr85jdSBb4rWGr.jpg"
       },
       {
         "title": "The Dark Knight",
