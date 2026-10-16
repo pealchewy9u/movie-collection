@@ -668,7 +668,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Biography",
-    "posterUrl": "https://imagestorage.org/085391186281.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/lx4kWcZc3o9PaNxlQpEJZM17XUI.jpg",
     "year": "2004",
     "overview": "A biopic depicting the early years of legendary director and aviator Howard Hughes' career from the late 1920s to the mid 1940s.",
     "mediaType": "movie",
@@ -679,7 +679,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0021-main-mvb97i55-yo0j2i.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/lx4kWcZc3o9PaNxlQpEJZM17XUI.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0022",
