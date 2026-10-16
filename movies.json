@@ -9289,7 +9289,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Action",
-    "posterUrl": "https://imagestorage.org/025192091506.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/8eeK3OB5PeSRQD7BpZcGZKkehG.jpg",
     "year": "2010",
     "overview": "When his peaceful life is threatened by a high-tech assassin, former black-ops agent Frank Moses reassembles his old team in a last-ditch effort to survive and uncover the assailants.",
     "mediaType": "movie",
@@ -9300,7 +9300,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0253-main-mvb9xo38-f3yq5r.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/8eeK3OB5PeSRQD7BpZcGZKkehG.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0254",
