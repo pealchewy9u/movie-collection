@@ -3797,7 +3797,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Crime",
-    "posterUrl": "https://imagestorage.org/043396542341.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/zqDopwg7XQ4IfFX2dRlQCT1SwMG.jpg",
     "year": "2011",
     "overview": "Journalist Mikael Blomkvist is aided in his search for a woman who has been missing for 40 years by hacker Lisbeth Salander.",
     "mediaType": "movie",
@@ -3808,7 +3808,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0115-main-mvb9li0t-f86dqt.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/zqDopwg7XQ4IfFX2dRlQCT1SwMG.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0116",
