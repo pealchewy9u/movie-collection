@@ -254,7 +254,9 @@
 <div id="detail-overlay" role="dialog" aria-modal="true" aria-label="Movie details"><div id="detail-sheet"></div></div>
 <script>
 'use strict';
-// Read-only viewer. Fetches public JSON and displays it; no keys, storage, or write endpoints.
+// Read-only viewer. Fetches committed JSON from the public GitHub repository first.
+// No tokens, local storage, or write endpoints are used.
+const GITHUB_DATA_API='https://api.github.com/repos/pealchewy9u/movie-collection/contents/movies.json?ref=main';
 const DATA_URL='./movies.json';
 let movies=[];
 let currentView='list';
@@ -308,9 +310,41 @@ function closeDetail(){$('detail-overlay').style.display='none';}
 function filters(){const genres=[...new Set(movies.map(m=>m.genre).filter(Boolean))].sort(),langs=[...new Set(movies.map(m=>m.languageOverride||m.language).filter(Boolean))].sort();
  $('genre-select').innerHTML='<option value="">All Genres</option>'+genres.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');
  $('language-select').innerHTML='<option value="">All Languages</option>'+langs.map(v=>`<option value="${esc(v)}">${esc(lang(v))}</option>`).join('');}
-async function load(){const status=$('status-text');status.textContent='Loading collection…';
- try{const response=await fetch(DATA_URL+'?v='+Date.now(),{cache:'no-store'});if(!response.ok)throw Error('HTTP '+response.status);const data=await response.json();if(!Array.isArray(data))throw Error('Expected a list of movies');movies=data;filters();render();status.textContent=movies.length+' collection items · Read-only';}
- catch(error){status.textContent='Unable to load movies.json';$('list-view').innerHTML=`<div class="viewer-error">Could not load movies.json (${esc(error.message)}). Upload viewer.html alongside movies.json on your GitHub Pages site, then reload.</div>`;console.error(error);}}
+async function fetchPublicCollection(){
+ // GitHub Contents API reflects the latest commit without waiting for Pages deployment.
+ // Its JSON payload contains base64-encoded UTF-8 file content.
+ let apiError;
+ try{
+  const response=await fetch(GITHUB_DATA_API+'&v='+Date.now(),{cache:'no-store',headers:{Accept:'application/vnd.github+json'}});
+  if(!response.ok)throw Error('GitHub API HTTP '+response.status);
+  const file=await response.json();
+  if(file.encoding!=='base64'||typeof file.content!=='string')throw Error('GitHub returned unexpected file data');
+  const binary=atob(file.content.replace(/\s/g,''));
+  const bytes=Uint8Array.from(binary,c=>c.charCodeAt(0));
+  const data=JSON.parse(new TextDecoder().decode(bytes));
+  if(!Array.isArray(data))throw Error('Expected a list of movies');
+  return {data,source:'GitHub (latest commit)'};
+ }catch(error){apiError=error;console.warn('Direct GitHub load failed; trying GitHub Pages:',error);}
+ try{
+  const response=await fetch(DATA_URL+'?v='+Date.now(),{cache:'no-store'});
+  if(!response.ok)throw Error('GitHub Pages HTTP '+response.status);
+  const data=await response.json();
+  if(!Array.isArray(data))throw Error('Expected a list of movies');
+  return {data,source:'GitHub Pages fallback'};
+ }catch(error){throw Error('GitHub API: '+apiError.message+'; Pages: '+error.message);}
+}
+async function load(){
+ const status=$('status-text');status.textContent='Loading latest committed collection…';
+ try{
+  const result=await fetchPublicCollection();
+  movies=result.data;filters();render();
+  status.textContent=movies.length+' collection items · Read-only · '+result.source;
+ }catch(error){
+  status.textContent=movies.length?'Refresh failed · Showing previous data':'Unable to load movies.json';
+  if(!movies.length)$('list-view').innerHTML=`<div class="viewer-error">Could not load movies.json (${esc(error.message)}). Confirm that the repository is public and movies.json is on its main branch.</div>`;
+  console.error(error);
+ }
+}
 function view(name){currentView=name;document.querySelectorAll('.tab').forEach(t=>{t.classList.toggle('active',t.dataset.view===name);t.setAttribute('aria-selected',String(t.dataset.view===name));});['list','coverflow','summary'].forEach(v=>$(v+'-view').style.display=v===name?'block':'none');render();}
 document.querySelectorAll('.tab').forEach(t=>{t.onclick=()=>view(t.dataset.view);t.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();view(t.dataset.view);}};});
 ['search-input','genre-select','type-select','language-select'].forEach(id=>$(id).addEventListener(id==='search-input'?'input':'change',render));
