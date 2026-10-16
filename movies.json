@@ -3524,7 +3524,7 @@
     "dvdDiscs": 0,
     "digitalCopy": true,
     "genre": "Action",
-    "posterUrl": "https://imagestorage.org/043396439948.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/pfte7wdMobMF4CVHuOxyu6oqeeA.jpg",
     "year": "2014",
     "overview": "A grizzled tank commander makes tough decisions as he and his crew fight their way across Germany in April, 1945.",
     "mediaType": "movie",
@@ -3535,7 +3535,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0107-main-mvb9dtkl-h6ml7j.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/pfte7wdMobMF4CVHuOxyu6oqeeA.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0108",
