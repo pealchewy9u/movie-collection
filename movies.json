@@ -11023,7 +11023,7 @@
     "dvdDiscs": 0,
     "digitalCopy": true,
     "genre": "Animation",
-    "posterUrl": "https://imagestorage.org/0191329266847.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/wTnV3PCVW5O92JMrFvvrRcV39RU.jpg",
     "year": "2024",
     "overview": "After a shipwreck, an intelligent robot called Roz is stranded on an uninhabited island. To survive the harsh environment, Roz bonds with the island's animals and cares for an orphaned baby goose.",
     "mediaType": "movie",
@@ -11034,7 +11034,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0310-main-mvba1yyy-dwpwm2.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/wTnV3PCVW5O92JMrFvvrRcV39RU.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0311",
