@@ -11551,7 +11551,10 @@
         "imdbId": "tt0097981",
         "matchNote": null,
         "imdbRating": "5.1",
-        "omdbNote": null
+        "omdbNote": null,
+        "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1792182202314-quiws-film-4-mvbf26xe-cz2q9c.jpg",
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/kizvpgXQfrAgN8FhOd87LbKk6kO.jpg",
+        "posterLocked": true
       },
       {
         "title": "Freddy's Dead: The Final Nightmare",
