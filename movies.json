@@ -8305,7 +8305,9 @@
     "imdbId": "tt0419058",
     "imdbRating": "7.3",
     "omdbNote": null,
-    "matchedVia": "upcmdb"
+    "matchedVia": "upcmdb",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0244-main-mvb7ar5z.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/c1Mvyd983ZyrU5Vf2aKEe6WncSq.jpg"
   },
   {
     "id": "MOV-0245",
