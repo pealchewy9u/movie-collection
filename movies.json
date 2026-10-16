@@ -8905,7 +8905,7 @@
     "dvdDiscs": 0,
     "digitalCopy": false,
     "genre": "Biography",
-    "posterUrl": "https://imagestorage.org/025192351907.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/xN1aKur5ddWQSXTqvzDPJD2TCxe.jpg",
     "year": "1998",
     "overview": "The true story of the heroic Hunter \"Patch\" Adams who's determined to become a medical doctor because of his desire to help other people. He ventures where no doctor ever ventured before utilizing humor and pathos.",
     "mediaType": "movie",
@@ -8916,7 +8916,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0242-main-mvb9x8a5-2amgq0.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/xN1aKur5ddWQSXTqvzDPJD2TCxe.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0243",
