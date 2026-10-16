@@ -3289,7 +3289,7 @@
     "dvdDiscs": 1,
     "digitalCopy": true,
     "genre": "Drama",
-    "posterUrl": "https://imagestorage.org/097361700144.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/tFsHDNclXoCKy2xMxskzXXMaFJS.jpg",
     "year": "2012",
     "overview": "Troubling questions arise after airline pilot Whip Whitaker makes a miracle landing after a mid-air catastrophe.",
     "mediaType": "movie",
@@ -3300,7 +3300,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0099-main-mvb9dbh5-inrpa3.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/tFsHDNclXoCKy2xMxskzXXMaFJS.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0100",
