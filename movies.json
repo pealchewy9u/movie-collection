@@ -10613,7 +10613,7 @@
     "dvdDiscs": 1,
     "digitalCopy": false,
     "genre": "Action",
-    "posterUrl": "https://imagestorage.org/0786936808568.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w780/xcO8Uun0mfmE3N9CaiCy0tvjpiu.jpg",
     "year": "2010",
     "overview": "The son of a computer programmer goes looking for his father and ends up inside the digital world that his father designed. He meets his father's corrupted creation and a unique ally who was born inside the digital world.",
     "mediaType": "movie",
@@ -10624,7 +10624,10 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-10-15T22:54:23.767Z"
+    "languageReviewedAt": "2026-10-15T22:54:23.767Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0296-main-mvba1bvu-qt0zpq.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/xcO8Uun0mfmE3N9CaiCy0tvjpiu.jpg",
+    "posterLocked": true
   },
   {
     "id": "MOV-0297",
