@@ -11620,5 +11620,30 @@
     "boxCoverUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/box-covers/MOV-NEW-1792182202314-quiws-mvbf3p1d-b2ixm3hr.jpg",
     "reviewStatus": "collection",
     "imdbRating": null
+  },
+  {
+    "id": "MOV-NEW-1792726141113-9s0gk",
+    "title": "Unforgiven",
+    "studio": "",
+    "upc": "883929566952",
+    "ean": null,
+    "mediaType": "movie",
+    "blurayDiscs": 1,
+    "dvdDiscs": 0,
+    "is4k": true,
+    "formatOverride": "4k",
+    "dateAdded": "2026-10-23",
+    "releaseDate": null,
+    "countryCode": null,
+    "isBoxSet": false,
+    "includedMovies": [],
+    "tmdbTitle": "Unforgiven",
+    "posterUrl": "https://imagestorage.org/883929566952.jpg",
+    "genre": "Drama, Western",
+    "overview": "Retired Old West gunslinger Will Munny reluctantly takes on one last job to avenge an injustice with the help of his old partner and a young would-be gunman calling himself \"The Schofield Kid\".",
+    "year": "1992",
+    "imdbId": "tt0105695",
+    "imdbRating": "8.2",
+    "matchedVia": "upcmdb"
   }
 ]
