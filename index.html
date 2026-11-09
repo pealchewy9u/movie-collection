@@ -254,12 +254,69 @@
   .add-wide{grid-column:1/-1}.add-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.add-actions button{border:0;border-radius:8px;background:var(--surface-raised);padding:10px 13px;font-weight:700;color:var(--text)}.add-actions button.primary{background:var(--brass);color:white}
   #add-camera{width:100%;max-height:250px;object-fit:cover;border-radius:10px;background:#2b2929}#add-message{font-size:12px;color:var(--text-muted);line-height:1.5;min-height:18px}
   @media(max-width:470px){.add-fields{grid-template-columns:1fr}.add-wide{grid-column:auto}#add-sheet{padding:14px}}
+
+
+  .movie-brand-icon { display: none; }
+  .movie-brand-name em { font-style: normal; }
+
+  /* Windows / desktop presentation only. Mobile PWA styles are unchanged. */
+  @media (min-width: 900px) and (hover: hover) and (pointer: fine) {
+    :root { --desktop-poster-width: clamp(165px, 14vw, 220px); }
+    header { padding: 20px 28px 4px; }
+    .movie-topline { min-height: 42px; margin-bottom: 8px; }
+    .movie-topline h1 { margin: 0; font-size: 23px; letter-spacing: -.5px; display: flex; align-items: center; gap: 10px; }
+    .movie-brand-icon { display: grid; place-items: center; width: 35px; height: 35px; border-radius: 50%; background: #422c20; box-shadow: 0 2px 6px rgba(58,38,21,.16); font-size: 18px; }
+    .movie-brand-name em { color: var(--brass); font-style: normal; }
+    #add-movie-btn { margin-bottom: 0; padding: 10px 16px; border-radius: 10px; }
+    header > .search-row, header > .filter-row { max-width: 900px; margin-left: auto; margin-right: auto; }
+    .search-row { background: #faeedb; }
+    .filter-row select { background: #faeedb; }
+    .tabs { max-width: 920px; width: 100%; margin: 4px auto 0; padding: 0 10px 9px; gap: 7px; }
+    .tab { padding: 9px 0; background: #faeedb; cursor: pointer; }
+    .tab.active { box-shadow: 0 2px 6px rgba(232,130,61,.18); }
+    #coverflow-view { justify-content: flex-start; }
+    .cf-scroll {
+      flex: 0 0 auto;
+      width: 100%;
+      height: clamp(340px, 51vh, 535px);
+      padding: 0 calc(50% - var(--desktop-poster-width) / 2);
+      perspective: 1050px;
+      align-items: center;
+    }
+    .cf-card { width: var(--desktop-poster-width); margin: 0 16px; }
+    .cf-cover, .cf-cover-placeholder {
+      width: var(--desktop-poster-width);
+      height: calc(var(--desktop-poster-width) * 1.47);
+      border-radius: 9px;
+      box-shadow: 0 15px 30px rgba(58,38,21,.27), 0 4px 11px rgba(58,38,21,.22);
+    }
+    .cf-reflection, .cf-reflection-placeholder {
+      width: var(--desktop-poster-width);
+      height: calc(var(--desktop-poster-width) * .58);
+      margin-top: 2px;
+      background: transparent;
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,.35), rgba(0,0,0,.12) 48%, transparent 100%);
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.35), rgba(0,0,0,.12) 48%, transparent 100%);
+    }
+    .cf-reflection img { width: 100%; height: calc(var(--desktop-poster-width) * 1.47); object-fit: cover; }
+    .cf-caption { height: auto; min-height: 76px; padding: 0 20px 8px; gap: 2px; }
+    .cf-title { font-size: 23px; line-height: 1.2; }
+    .cf-studio { font-size: 13px; margin-top: 3px; }
+    #status-bar { padding-bottom: 8px; }
+    #summary-view, #manager-view { max-width: 1100px; margin: 0 auto; width: 100%; }
+    #detail-sheet { max-width: 900px; }
+  }
+  @media (min-width: 900px) and (max-height: 740px) and (hover: hover) and (pointer: fine) {
+    :root { --desktop-poster-width: clamp(150px, 11vw, 183px); }
+    .cf-scroll { height: clamp(290px, 45vh, 380px); }
+    .cf-title { font-size: 21px; }
+  }
 </style>
 </head>
 <body>
 <div id="app">
   <header>
-    <div class="movie-topline"><h1>Movie Collection</h1><button id="add-movie-btn" type="button">＋ Add / Scan</button></div>
+    <div class="movie-topline"><h1><span class="movie-brand-icon" aria-hidden="true">🎬</span><span class="movie-brand-name">Movie <em>Collection</em></span></h1><button id="add-movie-btn" type="button">＋ Add / Scan</button></div>
     <div class="search-row">
       <span>🔍</span>
       <input id="search-input" type="text" placeholder="Search title, studio…">
@@ -662,7 +719,9 @@ function renderCoverFlow() {
     scroll.querySelectorAll('.cf-card').forEach((el, idx) => {
       const rect = el.getBoundingClientRect();
       const cardCenter = rect.left + rect.width / 2;
-      const dist = (cardCenter - containerCenter) / 170;
+      const desktopFlow = window.matchMedia('(min-width: 900px) and (hover: hover) and (pointer: fine)').matches;
+      const step = desktopFlow ? el.offsetWidth + 32 : 170;
+      const dist = (cardCenter - containerCenter) / step;
       const clamped = Math.max(-3, Math.min(3, dist));
       const scale = Math.max(0.6, 1 - Math.abs(clamped) * 0.18);
       const rotation = clamped * -50;
