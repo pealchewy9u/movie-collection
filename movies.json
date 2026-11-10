@@ -11942,6 +11942,17 @@
     "countryCode": null,
     "isBoxSet": false,
     "includedMovies": [],
-    "year": "1969"
+    "year": "1969",
+    "genre": "Science Fiction",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/tW7Dr74ovic9wTAqoeRZy2SQ96L.jpg",
+    "overview": "A planet is discovered in the same orbit as Earth's but is located on the exact opposite side of the sun, making it not visible from Earth. The European Space Exploration Council decide to send American astronaut Glenn Ross and British scientist John Kane via spaceship to explore the other planet.",
+    "language": "en",
+    "imdbId": "tt0064519",
+    "imdbRating": "6.3",
+    "omdbNote": null,
+    "tmdbTitle": "Doppelgänger",
+    "tmdbId": 40430,
+    "matchedVia": "tmdb",
+    "enrichNote": null
   }
 ]
