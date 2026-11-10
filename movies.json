@@ -11925,5 +11925,23 @@
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1794333776279-ufzoa-main-mwb004pp-3e9rle.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/jFB5uvCZ3HXF00liAEAuOruCPs6.jpg",
     "posterLocked": true
+  },
+  {
+    "id": "MOV-NEW-1794333821392-p8n40",
+    "title": "Journey to the Far Side of the Sun",
+    "studio": "",
+    "upc": "025192231407",
+    "ean": null,
+    "mediaType": "movie",
+    "blurayDiscs": 1,
+    "dvdDiscs": 0,
+    "is4k": false,
+    "formatOverride": "bluray",
+    "dateAdded": "2026-11-10",
+    "releaseDate": null,
+    "countryCode": null,
+    "isBoxSet": false,
+    "includedMovies": [],
+    "year": "1969"
   }
 ]
