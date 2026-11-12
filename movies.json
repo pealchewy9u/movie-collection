@@ -1582,7 +1582,8 @@
         "imdbRating": "5.5",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0049-film-1-mvb5zmdb.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/yLsuU2P2SpDYFwtZQ7dtfVAf6TE.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/yLsuU2P2SpDYFwtZQ7dtfVAf6TE.jpg",
+        "runtimeMinutes": 99
       },
       {
         "title": "The Conjuring 2 (2016)",
@@ -1598,7 +1599,8 @@
         "imdbRating": "7.3",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0049-film-2-mvb5zpy1.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/zEqyD0SBt6HL7W9JQoWwtd5Do1T.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/zEqyD0SBt6HL7W9JQoWwtd5Do1T.jpg",
+        "runtimeMinutes": 134
       },
       {
         "title": "Annabelle: Creation (2017)",
@@ -1614,7 +1616,8 @@
         "imdbRating": "6.5",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0049-film-3-mvb5zts5.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/tb86j8jVCVsdZnzf8I6cIi65IeM.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/tb86j8jVCVsdZnzf8I6cIi65IeM.jpg",
+        "runtimeMinutes": 110
       },
       {
         "title": "The Nun (2018)",
@@ -1630,7 +1633,8 @@
         "imdbRating": "5.4",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0049-film-4-mvb5zyg0.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/sFC1ElvoKGdHJIWRpNB3xWJ9lJA.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/sFC1ElvoKGdHJIWRpNB3xWJ9lJA.jpg",
+        "runtimeMinutes": 96
       },
       {
         "title": "Annabelle Comes Home (2019)",
@@ -1646,7 +1650,8 @@
         "imdbRating": "5.9",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0049-film-5-mvb6021k.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/qWsHMrbg9DsBY3bCMk9jyYCRVRs.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/qWsHMrbg9DsBY3bCMk9jyYCRVRs.jpg",
+        "runtimeMinutes": 106
       },
       {
         "title": "The Conjuring: The Devil Made Me Do It (2021)",
@@ -1662,7 +1667,8 @@
         "imdbRating": "6.2",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0049-film-6-mvb605no.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/xbSuFiJbbBWCkyCCKIMfuDCA4yV.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/xbSuFiJbbBWCkyCCKIMfuDCA4yV.jpg",
+        "runtimeMinutes": 111
       }
     ],
     "reviewStatus": "collection",
@@ -1696,7 +1702,8 @@
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0050-main-mvb97zvd-f4eq6m.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/vPYgvd2MwHlxTamAOjwVQp4qs1W.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 121
   },
   {
     "id": "MOV-0051",
@@ -1727,7 +1734,8 @@
     "tmdbId": 312221,
     "enrichNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0051-main-mvb60989.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/1BfTsk5VWuw8FCocAhCyqnRbEzq.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/1BfTsk5VWuw8FCocAhCyqnRbEzq.jpg",
+    "runtimeMinutes": 133
   },
   {
     "id": "MOV-0052",
@@ -1757,7 +1765,8 @@
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0052-main-mvb983da-a71pn5.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/26wEWZYt6yJkwRVkjcbwJEFh9IS.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 166
   },
   {
     "id": "MOV-0053",
@@ -1787,7 +1796,8 @@
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0053-main-mvb9879l-rpks4v.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/x9DzkDWp8O82Wzxk6otuD9bce9a.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 97
   },
   {
     "id": "MOV-0054",
@@ -1817,7 +1827,8 @@
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0054-main-mvb98b9y-ukpson.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/7Fdh7gUq3plvQqxRbNYhWvDABXA.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 117
   },
   {
     "id": "MOV-0055",
@@ -1847,7 +1858,8 @@
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0055-main-mvb98feh-brttqw.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/oSW5OVXTulaIXcoNwJAp5YEKpbP.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 91
   },
   {
     "id": "MOV-0056",
@@ -1889,7 +1901,8 @@
         "imdbRating": "8.2",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0056-film-0-mvb60cow.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/sPX89Td70IDDjVr85jdSBb4rWGr.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/sPX89Td70IDDjVr85jdSBb4rWGr.jpg",
+        "runtimeMinutes": 140
       },
       {
         "title": "The Dark Knight",
@@ -1906,7 +1919,8 @@
         "omdbNote": null,
         "matchedVia": "tmdb-manual",
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0056-film-1-mvb60gke.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+        "runtimeMinutes": 152
       },
       {
         "title": "The Dark Knight Rises",
@@ -1922,7 +1936,8 @@
         "imdbRating": "8.4",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0056-film-2-mvb60kdp.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/hr0L2aueqlP2BYUblTTjmtn0hw4.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/hr0L2aueqlP2BYUblTTjmtn0hw4.jpg",
+        "runtimeMinutes": 165
       }
     ],
     "reviewStatus": "collection",
@@ -1955,7 +1970,8 @@
     "tmdbId": 35053,
     "matchedVia": "tmdb",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0057-main-mvb60o4e.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/6y601CavDK46ap8uxeoXxpArU8p.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/6y601CavDK46ap8uxeoXxpArU8p.jpg",
+    "runtimeMinutes": 179
   },
   {
     "id": "MOV-0058",
@@ -1992,7 +2008,8 @@
         "overview": "Phil and Claire Foster fear that their mild-mannered relationship may be falling into a stale rut. During their weekly date night, their dinner reservation leads to their being mistaken for a couple of thieves—and now a number of unsavoury characters want Phil and Claire killed.",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0058-film-0-mvb60ryy.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/9ftaHHJW2IrtnGbazdn5SP8V7Cf.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/9ftaHHJW2IrtnGbazdn5SP8V7Cf.jpg",
+        "runtimeMinutes": 88
       },
       {
         "title": "Mr. & Mrs. Smith",
@@ -2008,7 +2025,8 @@
         "overview": "A husband and wife struggle to keep their marriage alive until they realize they are both secretly working as assassins. Now, their respective assignments require them to kill each other.",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0058-film-1-mvb60v90.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/kjD700RtyhveN3ZbOnSvUSne0Qj.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/kjD700RtyhveN3ZbOnSvUSne0Qj.jpg",
+        "runtimeMinutes": 120
       }
     ],
     "reviewStatus": "collection",
@@ -2047,7 +2065,8 @@
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0059-main-mvb98j4q-jmqf6p.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/3E53WEZJqP6aM84D8CckXx4pIHw.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 108
   },
   {
     "id": "MOV-0060",
@@ -2077,7 +2096,8 @@
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0060-main-mvb98nq9-caynnm.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/gyfPKfFYcVW54MoqhYlwwDDIfJR.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 119
   },
   {
     "id": "MOV-0061",
@@ -2106,7 +2126,8 @@
     "tmdbId": 13018,
     "matchedVia": "tmdb",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0061-main-mvb60ymw.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/lfkdTvfmaqlGiHymJl6EAdIaN1J.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/lfkdTvfmaqlGiHymJl6EAdIaN1J.jpg",
+    "runtimeMinutes": 107
   },
   {
     "id": "MOV-0062",
@@ -2136,7 +2157,8 @@
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0062-main-mvb9nuqh-woa0u1.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/aqfeqtqnuCk2zCG7QxVkvm7kf1O.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 151
   },
   {
     "id": "MOV-0063",
@@ -2163,7 +2185,8 @@
     "imdbRating": "7.3",
     "omdbNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0063-main-mvb612v7.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/8cDq5UlOPYeKm39okALCEOsZPxk.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/8cDq5UlOPYeKm39okALCEOsZPxk.jpg",
+    "runtimeMinutes": 115
   },
   {
     "id": "MOV-0064",
@@ -2189,7 +2212,8 @@
     "imdbRating": "5.7",
     "omdbNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0064-main-mvb616l4.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/8ARLxG5RbsHMxDYhUFEXq2jSSI1.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/8ARLxG5RbsHMxDYhUFEXq2jSSI1.jpg",
+    "runtimeMinutes": 122
   },
   {
     "id": "MOV-0065",
@@ -2218,7 +2242,8 @@
     "tmdbId": 20352,
     "matchedVia": "tmdb",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0065-main-mvb61a2s.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/b1BT309QWjtFUlJPLmXmrcHOWEL.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/b1BT309QWjtFUlJPLmXmrcHOWEL.jpg",
+    "runtimeMinutes": 95
   },
   {
     "id": "MOV-0066",
