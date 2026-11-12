@@ -406,26 +406,28 @@
 
     <p id="pending-count" style="font-size:13px; font-weight:600; margin-bottom:8px;"></p>
 
-    <div style="background:var(--surface-raised); padding:12px; border-radius:8px; margin-bottom:16px;">
-      <p style="font-size:12px; font-weight:600; margin:0 0 8px;">⚠ Test UPCMDB on ONE movie first</p>
-      <p style="font-size:11px; color:var(--text-muted); margin:0 0 10px;">UPCMDB's free tier is 500/month, not daily -- confirm this actually works before running the full batch of 298.</p>
-      <button onclick="testUpcmdbOne()" id="upcmdb-test-btn" style="padding:8px 12px; border-radius:8px; border:none; background:#2D6A8F; color:#fff; font-weight:600; font-size:13px;">Test on 1 Movie</button>
-      <p id="upcmdb-test-status" style="font-size:12px; color:var(--text-muted); margin-top:8px;"></p>
-    </div>
-
-    <button onclick="matchAllViaUpcmdb()" id="upcmdb-all-btn" disabled style="padding:10px 16px; border-radius:8px; border:none; background:#2D6A8F; color:#fff; font-weight:600; opacity:0.5;">Match All via UPCMDB (298 movies)</button>
-    <p id="upcmdb-all-status" style="font-size:12px; color:var(--text-muted); margin-top:10px; margin-bottom:16px;"></p>
-
-    <button onclick="matchAllOnTmdb()" id="enrich-btn" style="padding:10px 16px; border-radius:8px; border:none; background:var(--brass); color:#fff; font-weight:600;">1. Match All on TMDB</button>
-    <p id="enrich-status" style="font-size:12px; color:var(--text-muted); margin-top:10px; margin-bottom:16px;"></p>
-
-    <button onclick="fetchAllImdbRatings()" id="imdb-fetch-btn" style="padding:10px 16px; border-radius:8px; border:none; background:var(--maroon); color:#fff; font-weight:600;">2. Fetch All IMDB Ratings</button>
-    <p id="imdb-fetch-status" style="font-size:12px; color:var(--text-muted); margin-top:10px;"></p>
-
-    <hr style="margin:20px 0; border:none; border-top:1px solid var(--groove);">
-    <p style="font-size:12px; color:var(--text-muted); line-height:1.5;">Forces every movie to re-match from scratch -- use this after a matching-logic fix (like the Chernobyl year issue) to apply it retroactively, not just to new movies. Takes a while for the full collection since nothing is skipped.</p>
-    <button onclick="rematchAll()" id="rematch-all-btn" style="padding:10px 16px; border-radius:8px; border:none; background:#6B4F8C; color:#fff; font-weight:600;">Re-match ALL Movies</button>
-    <p id="rematch-all-status" style="font-size:12px; color:var(--text-muted); margin-top:10px;"></p>
+    <details id="advanced-maintenance" style="margin-top:16px; background:var(--surface); border:1px solid var(--groove); border-radius:12px; overflow:hidden;">
+      <summary style="padding:15px 14px; cursor:pointer; font-size:14px; font-weight:700;">Advanced / Maintenance <span style="font-weight:400; color:var(--text-muted); font-size:12px;">· matching and recovery tools</span></summary>
+      <div style="border-top:1px solid var(--groove); padding:14px;">
+        <p style="font-size:12px; color:var(--text-muted); line-height:1.5; margin:0 0 15px;">These tools are for troubleshooting older matches or repairing missing metadata. New matched movies already receive runtime automatically; routine additions do not require running these batches.</p>
+        <div style="background:var(--surface-raised); padding:12px; border-radius:8px; margin-bottom:16px;">
+          <p style="font-size:12px; font-weight:600; margin:0 0 8px;">Test UPCMDB on one movie</p>
+          <p style="font-size:11px; color:var(--text-muted); margin:0 0 10px;">Use only if barcode matching is not working. This consumes an UPCMDB lookup.</p>
+          <button onclick="testUpcmdbOne()" id="upcmdb-test-btn" style="padding:8px 12px; border-radius:8px; border:none; background:#2D6A8F; color:#fff; font-weight:600; font-size:13px;">Test on 1 Movie</button>
+          <p id="upcmdb-test-status" style="font-size:12px; color:var(--text-muted); margin-top:8px;"></p>
+        </div>
+        <button onclick="matchAllViaUpcmdb()" id="upcmdb-all-btn" disabled style="padding:10px 16px; border-radius:8px; border:none; background:#2D6A8F; color:#fff; font-weight:600; opacity:0.5;">Match All via UPCMDB (legacy)</button>
+        <p id="upcmdb-all-status" style="font-size:12px; color:var(--text-muted); margin-top:10px; margin-bottom:16px;"></p>
+        <button onclick="matchAllOnTmdb()" id="enrich-btn" style="padding:10px 16px; border-radius:8px; border:none; background:var(--brass); color:#fff; font-weight:600;">Match missing titles on TMDB</button>
+        <p id="enrich-status" style="font-size:12px; color:var(--text-muted); margin-top:10px; margin-bottom:16px;"></p>
+        <button onclick="fetchAllImdbRatings()" id="imdb-fetch-btn" style="padding:10px 16px; border-radius:8px; border:none; background:var(--maroon); color:#fff; font-weight:600;">Fetch missing IMDb ratings</button>
+        <p id="imdb-fetch-status" style="font-size:12px; color:var(--text-muted); margin-top:10px;"></p>
+        <hr style="margin:20px 0; border:none; border-top:1px solid var(--groove);">
+        <p style="font-size:12px; color:var(--text-muted); line-height:1.5;">Re-matching can change metadata. This tool skips confirmed and barcode-matched titles; use individual corrections in Data Manager whenever possible.</p>
+        <button onclick="rematchAll()" id="rematch-all-btn" style="padding:10px 16px; border-radius:8px; border:none; background:#6B4F8C; color:#fff; font-weight:600;">Re-match eligible movies</button>
+        <p id="rematch-all-status" style="font-size:12px; color:var(--text-muted); margin-top:10px;"></p>
+      </div>
+    </details>
   </div>
 </div>
 
@@ -2821,7 +2823,7 @@ async function lookupNewBarcode(){
  if(!d.title){addMsg('No product found for this barcode. Enter title and search TMDB.');return;}
  document.getElementById('add-title').value=d.title;
  if(d.year)document.getElementById('add-year').value=d.year;
- newItemCandidate={tmdbTitle:d.title,posterUrl:d.productImageUrl||null,genre:d.genre||null,overview:d.plot||null,year:d.year?String(d.year):null,imdbId:d.imdbID||null,imdbRating:d.imdbRating||null,matchedVia:'upcmdb'};
+ newItemCandidate={tmdbTitle:d.title,posterUrl:d.productImageUrl||null,genre:d.genre||null,overview:d.plot||null,year:d.year?String(d.year):null,imdbId:d.imdbID||null,imdbRating:d.imdbRating||null,runtimeMinutes:runtimeMinutes(d.runtime)||runtimeMinutes(d.Runtime)||null,matchedVia:'upcmdb'};
   if (newItemCandidate.imdbId && localStorage.getItem('omdbKey')) newItemCandidate=await retryOmdbOnly({...newItemCandidate,mediaType:'movie'},localStorage.getItem('omdbKey'));
  addMsg('Barcode details found. Confirm the physical edition and title, then save. You can also search TMDB for a different match.');
  }catch(e){addMsg('Barcode lookup failed: '+e.message+'. Enter the title manually.');}
