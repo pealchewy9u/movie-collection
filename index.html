@@ -125,7 +125,20 @@
   .history-entry-text small{display:block;color:var(--text-muted);font-size:11px;margin-top:3px}
   .history-panel{background:var(--surface);border:1px solid var(--groove);border-radius:12px;padding:15px;margin-bottom:12px}
   .history-panel h3{font-size:14px;margin:0 0 9px}
-  .history-random{border:0;background:var(--brass);color:#fff;padding:10px 15px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer}
+  /* A compact movie-night picker, confined to Watching History. */
+  .random-feature{display:flex;gap:13px;align-items:center;justify-content:space-between;background:linear-gradient(120deg,#fff8ec,#f9ead1);border:1px solid #efddbd;border-radius:12px;padding:14px;margin-bottom:13px}
+  .random-feature-copy{display:flex;gap:11px;align-items:center;min-width:0;flex:1}
+  .random-feature-icon{height:44px;width:44px;flex:0 0 44px;display:grid;place-items:center;background:#f5dfbd;color:#a6531b;border-radius:13px;font-size:24px}
+  .random-feature-title{font-size:14px;font-weight:750;line-height:1.25;color:var(--text)}
+  .random-feature-sub{font-size:11px;line-height:1.4;color:var(--text-muted);margin-top:3px}
+  .history-random{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:42px;border:0;background:var(--brass);color:#fff;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:750;cursor:pointer;white-space:nowrap;box-shadow:0 3px 8px rgba(170,87,31,.16);transition:transform .15s ease,box-shadow .15s ease,opacity .15s ease}
+  .history-random:active{transform:scale(.97);box-shadow:none}
+  .history-random:focus-visible{outline:3px solid #6b4f8c;outline-offset:3px}
+  .history-random:disabled{opacity:.7;cursor:wait}
+  .history-random.is-picking .random-shuffle-icon{animation:random-shuffle .38s ease-in-out infinite}
+  @keyframes random-shuffle{0%,100%{transform:rotate(-15deg)}50%{transform:rotate(20deg)}}
+  @media(max-width:420px){.random-feature{padding:12px;gap:9px}.random-feature-icon{width:38px;height:38px;flex-basis:38px}.history-random{padding:10px 12px;font-size:12px}.random-feature-title{font-size:13px}}
+  @media(prefers-reduced-motion:reduce){.history-random{transition:none}.history-random.is-picking .random-shuffle-icon{animation:none}}
   .history-note{color:var(--text-muted);font-size:11px;line-height:1.5}
 
   /* ---- Summary view ---- */
@@ -884,11 +897,21 @@ function renderWatchHistory(){
   const never=films.filter(m=>!counts.has(m.id));
   el.innerHTML=`<div class="history-wrap"><h2 style="font-size:20px;margin:4px 0">Watching History</h2><p class="history-note">Track what you have watched without changing your movie collection data.</p>
   <div class="history-kpis"><div class="history-kpi"><strong>${counts.size}</strong><span>Movies watched</span></div><div class="history-kpi"><strong>${events.length}</strong><span>Total viewings</span></div><div class="history-kpi"><strong>${never.length}</strong><span>Never watched</span></div></div>
-  <section class="history-panel"><button class="history-random" id="history-random">↝ Random Pick</button> <span class="history-note">Opens a movie in Cover Flow. Does not mark it watched.</span><p class="history-note" id="watch-status">${escapeHtml(watchStatus)}</p><button class="manager-btn secondary" id="history-sync">Sync history</button> <span class="history-note">${storedWatchEvents(WATCH_PENDING_KEY).length} awaiting GitHub sync</span></section>
+  <section class="history-panel"><div class="random-feature"><div class="random-feature-copy"><span class="random-feature-icon" aria-hidden="true">🎲</span><div><div class="random-feature-title">What should we watch?</div><div class="random-feature-sub">A surprise pick from your movies</div></div></div><button type="button" class="history-random" id="history-random" ${films.length?'':'disabled'} aria-label="Pick a random movie and open it in Cover Flow"><span class="random-shuffle-icon" aria-hidden="true">⤨</span><span class="random-pick-label">Surprise me</span></button></div><p class="history-note">Opens your pick in Cover Flow. Nothing is marked watched until you tap Watched.</p><p class="history-note" id="watch-status" role="status">${escapeHtml(watchStatus)}</p><button class="manager-btn secondary" id="history-sync">Sync history</button> <span class="history-note">${storedWatchEvents(WATCH_PENDING_KEY).length} awaiting GitHub sync</span></section>
   <section class="history-panel"><h3>Recently Watched</h3><div class="history-rows">${recent.map(({m,e})=>watchMovieRow(m,new Date(e.watchedAt).toLocaleDateString()+' · '+counts.get(m.id)+' time(s)')).join('')||'<p class="history-note">No movies watched yet. Use Watched below a poster in Cover Flow.</p>'}</div></section>
   <section class="history-panel"><h3>Most Watched</h3><div class="history-rows">${top.map(([id,n])=>{const m=films.find(f=>f.id===id);return m?watchMovieRow(m,n+' viewing'+(n===1?'':'s')):''}).join('')||'<p class="history-note">No viewing history yet.</p>'}</div></section>
   <details class="history-panel"><summary style="font-size:14px;font-weight:700;cursor:pointer">Never Watched (${never.length})</summary><div class="history-rows" style="max-height:440px;overflow-y:auto;margin-top:12px">${never.map(m=>watchMovieRow(m,'Not watched yet')).join('')||'<p class="history-note">Every movie has been watched!</p>'}</div></details></div>`;
-  el.querySelector('#history-random').onclick=()=>{if(!films.length)return;const candidates=films;const pick=candidates[Math.floor(Math.random()*candidates.length)];switchMovieView('coverflow',pick.id);};
+  el.querySelector('#history-random').onclick=()=>{
+    if(!films.length)return;
+    const button=el.querySelector('#history-random');
+    if(button.disabled)return;
+    const pick=films[Math.floor(Math.random()*films.length)];
+    button.disabled=true;
+    button.classList.add('is-picking');
+    button.querySelector('.random-pick-label').textContent='Picking…';
+    // Keep the shuffle moment short; the pick still goes straight to Cover Flow.
+    setTimeout(()=>switchMovieView('coverflow',pick.id),430);
+  };
   el.querySelector('#history-sync').onclick=()=>syncMovieWatches().then(setWatchStatus).catch(e=>setWatchStatus(e.message));
   el.querySelectorAll('[data-history-film]').forEach(row=>row.onclick=()=>switchMovieView('coverflow',row.dataset.historyFilm));
 }
