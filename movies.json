@@ -7785,7 +7785,8 @@
         "imdbRating": "7.7",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0203-film-2-mvb75i2h.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/tVFRpFw3xTedgPGqxW0AOI8Qhh0.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/tVFRpFw3xTedgPGqxW0AOI8Qhh0.jpg",
+        "runtimeMinutes": 136
       },
       {
         "title": "• Guardians of the Galaxy (2014)",
@@ -7801,7 +7802,8 @@
         "imdbRating": "8.0",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0203-film-3-mvb75lng.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/r7vmZjiyZw9rpJMQJdXpjgiCOk9.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/r7vmZjiyZw9rpJMQJdXpjgiCOk9.jpg",
+        "runtimeMinutes": 121
       },
       {
         "title": "• Avengers: Age of Ultron (2015)",
@@ -7817,7 +7819,8 @@
         "imdbRating": "7.3",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0203-film-4-mvb75p5a.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/4ssDuvEDkSArWEdyBl2X5EHvYKU.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/4ssDuvEDkSArWEdyBl2X5EHvYKU.jpg",
+        "runtimeMinutes": 141
       },
       {
         "title": "• Ant-Man (2015)",
@@ -7833,7 +7836,8 @@
         "imdbRating": "7.2",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0203-film-5-mvb75shx.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/rQRnQfUl3kfp78nCWq8Ks04vnq1.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/rQRnQfUl3kfp78nCWq8Ks04vnq1.jpg",
+        "runtimeMinutes": 117
       }
     ],
     "reviewStatus": "collection",
@@ -7865,7 +7869,8 @@
     "imdbRating": "6.8",
     "omdbNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0204-main-mvb75wkv.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/eI1rxHzxO2sWeeBMvr42buetYnd.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/eI1rxHzxO2sWeeBMvr42buetYnd.jpg",
+    "runtimeMinutes": 122
   },
   {
     "id": "MOV-0205",
@@ -7895,7 +7900,8 @@
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0205-main-mvb9sk42-c03yf5.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/jPC2eYub74zwf2tPGVtzSlBW6Oy.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 101
   },
   {
     "id": "MOV-0206",
@@ -7938,7 +7944,8 @@
         "omdbNote": null,
         "matchedVia": "tmdb-manual",
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0206-film-0-mvb7633f.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg",
+        "runtimeMinutes": 136
       },
       {
         "title": "The Matrix Reloaded",
@@ -7954,7 +7961,8 @@
         "imdbRating": "7.2",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0206-film-1-mvb767z9.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/8xEVAe84zlL9rkfYT6dZXero4KK.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/8xEVAe84zlL9rkfYT6dZXero4KK.jpg",
+        "runtimeMinutes": 138
       },
       {
         "title": "The Matrix Revolutions",
@@ -7970,7 +7978,8 @@
         "imdbRating": "6.8",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0206-film-2-mvb76bp6.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/qEWiBXJGXK28jGBAm8oFKKTB0WD.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/qEWiBXJGXK28jGBAm8oFKKTB0WD.jpg",
+        "runtimeMinutes": 129
       }
     ],
     "reviewStatus": "collection",
@@ -8005,7 +8014,8 @@
     "reviewStatus": "confirmed",
     "reviewedAt": "2026-10-15T22:31:08.147Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0207-main-mvb76fmt.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/k37axEHszFP9WOVvbozxF0r7X7g.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/k37axEHszFP9WOVvbozxF0r7X7g.jpg",
+    "runtimeMinutes": 93
   },
   {
     "id": "MOV-0208",
@@ -8035,7 +8045,8 @@
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0208-main-mvb9snul-qzx5a2.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/fDPAjvfPMomkKF7cMRmL5Anak61.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 178
   },
   {
     "id": "MOV-0209",
@@ -8066,7 +8077,8 @@
     "tmdbId": 41154,
     "enrichNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0209-main-mvb76j7d.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/90DdoEStzeObs96fsYf4GG544iN.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/90DdoEStzeObs96fsYf4GG544iN.jpg",
+    "runtimeMinutes": 106
   },
   {
     "id": "MOV-0210",
@@ -8092,7 +8104,8 @@
     "imdbRating": "5.5",
     "omdbNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0210-main-mvb76pch.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/26fFnoLCuA5vzEGQsmLbNYBiI8J.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/26fFnoLCuA5vzEGQsmLbNYBiI8J.jpg",
+    "runtimeMinutes": 158
   },
   {
     "id": "MOV-0211",
@@ -8122,7 +8135,8 @@
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0211-main-mvb9srbd-g533b6.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/7LEI8ulZzO5gy9Ww2NVCrKmHeDZ.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 148
   },
   {
     "id": "MOV-0212",
@@ -8149,7 +8163,8 @@
     "imdbRating": "7.0",
     "omdbNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0212-main-mvb76syu.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/6OgA9x6jvwBIj8e7x8LANTbVvR2.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/6OgA9x6jvwBIj8e7x8LANTbVvR2.jpg",
+    "runtimeMinutes": 124
   },
   {
     "id": "MOV-0213",
@@ -8192,7 +8207,8 @@
         "overview": "When Ethan Hunt, the leader of a crack espionage team whose perilous operation has gone awry with no explanation, discovers that a mole has penetrated the CIA, he's surprised to learn that he's the prime suspect. To clear his name, Hunt now must ferret out the real double agent and, in the process, even the score.",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0213-film-0-mvb76wjj.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/l5uxY5m5OInWpcExIpKG6AR3rgL.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/l5uxY5m5OInWpcExIpKG6AR3rgL.jpg",
+        "runtimeMinutes": 111
       },
       {
         "title": "Mission: Impossible II",
@@ -8208,7 +8224,8 @@
         "imdbRating": "6.1",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0213-film-1-mvb76zsq.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/hfnrual76gPeNFduhD4xzHWpfTw.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/hfnrual76gPeNFduhD4xzHWpfTw.jpg",
+        "runtimeMinutes": 123
       },
       {
         "title": "Mission: Impossible III",
@@ -8224,7 +8241,8 @@
         "imdbRating": "6.9",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0213-film-2-mvb773yp.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/vKGYCpmQyV9uHybWDzXuII8Los5.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/vKGYCpmQyV9uHybWDzXuII8Los5.jpg",
+        "runtimeMinutes": 126
       },
       {
         "title": "Mission: Impossible - Ghost Protocol",
@@ -8240,7 +8258,8 @@
         "imdbRating": "7.4",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0213-film-3-mvb777nv.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/eRZTGx7GsiKqPch96k27LK005ZL.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/eRZTGx7GsiKqPch96k27LK005ZL.jpg",
+        "runtimeMinutes": 133
       },
       {
         "title": "Mission: Impossible - Rogue Nation",
@@ -8256,7 +8275,8 @@
         "imdbRating": "7.4",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0213-film-4-mvb77be2.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/fRJLXQBHK2wyznK5yZbO7vmsuVK.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/fRJLXQBHK2wyznK5yZbO7vmsuVK.jpg",
+        "runtimeMinutes": 131
       },
       {
         "title": "Mission: Impossible - Fallout",
@@ -8272,7 +8292,8 @@
         "imdbRating": "7.7",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0213-film-5-mvb77fcc.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/AkJQpZp9WoNdj7pLYSj1L0RcMMN.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/AkJQpZp9WoNdj7pLYSj1L0RcMMN.jpg",
+        "runtimeMinutes": 147
       }
     ],
     "reviewStatus": "collection",
@@ -8303,7 +8324,8 @@
     "imdbRating": "7.1",
     "omdbNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0214-main-mvb77jue.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/dDsYaBazrYKg9bv8qgsEohZQMat.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/dDsYaBazrYKg9bv8qgsEohZQMat.jpg",
+    "runtimeMinutes": 216
   },
   {
     "id": "MOV-0215",
@@ -8330,7 +8352,8 @@
     "imdbRating": "6.5",
     "omdbNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0215-main-mvb77opn.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/DlgdAkAKirD01R1mBejhFjS6nQ.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/DlgdAkAKirD01R1mBejhFjS6nQ.jpg",
+    "runtimeMinutes": 98
   },
   {
     "id": "MOV-0216",
@@ -8361,7 +8384,8 @@
     "tmdbId": 1124620,
     "enrichNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0216-main-mvb77sgz.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/aGDekyIb0yfmnuLZciCozRPk2TE.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/aGDekyIb0yfmnuLZciCozRPk2TE.jpg",
+    "runtimeMinutes": 97
   },
   {
     "id": "MOV-0217",
@@ -8392,7 +8416,8 @@
     "tmdbId": 560016,
     "enrichNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0217-main-mvb77wag.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/4lhR4L2vzzjl68P1zJyCH755Oz4.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/4lhR4L2vzzjl68P1zJyCH755Oz4.jpg",
+    "runtimeMinutes": 122
   },
   {
     "id": "MOV-0218",
