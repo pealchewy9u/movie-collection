@@ -12385,6 +12385,9 @@
     "tmdbId": 40430,
     "matchedVia": "tmdb",
     "enrichNote": null,
-    "runtimeMinutes": 101
+    "runtimeMinutes": 101,
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1794333821392-p8n40-main-mwdqdq5n.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/tW7Dr74ovic9wTAqoeRZy2SQ96L.jpg",
+    "posterLocked": true
   }
 ]
