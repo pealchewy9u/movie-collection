@@ -608,6 +608,30 @@ function effectiveMediaType(item) {
   return 'movie';
 }
 
+// Movie-only runtime stored as minutes. Never infer an episode or box-set duration.
+function runtimeMinutes(value) {
+  if (typeof value === 'number' && Number.isFinite(value) && value > 0) return Math.round(value);
+  if (typeof value === 'string') {
+    const digits = value.trim().match(/^(\d+)\s*(?:min(?:utes?)?)?$/i);
+    if (digits && Number(digits[1]) > 0) return Number(digits[1]);
+  }
+  return null;
+}
+function formatRuntime(value) {
+  const minutes = runtimeMinutes(value);
+  if (!minutes) return null;
+  const hours = Math.floor(minutes / 60), remainder = minutes % 60;
+  return hours ? `${hours}h${remainder ? ` ${remainder}m` : ''}` : `${minutes}m`;
+}
+function isRuntimeMovie(item) {
+  return item && !item.isBoxSet && effectiveMediaType(item) !== 'tv';
+}
+function setMovieRuntime(item, value) {
+  const minutes = runtimeMinutes(value);
+  if (isRuntimeMovie(item) && minutes) item.runtimeMinutes = minutes;
+  return item;
+}
+
 function filteredMovies() {
   const q = document.getElementById('search-input').value.trim().toLowerCase();
   const genre = document.getElementById('genre-select').value;
@@ -877,6 +901,110 @@ async function cleanHistoricalLookupErrors() {
 }
 // Dashboard separates inventory counts from actionable data-quality issues.
 let managerFilter='attention', managerSearch='';
+let runtimeBackfillBusy=false, runtimeBackfillStop=false, runtimeBackfillMessage='';
+const runtimeAttemptedThisSession=new Set();
+function runtimeTargets() {
+  const result=[];
+  for (const parent of movies) {
+    if (parent.isBoxSet) {
+      (parent.includedMovies||[]).forEach((film,index)=>{
+        if (film && typeof film==='object' && isRuntimeMovie(film) && !runtimeMinutes(film.runtimeMinutes) && (film.tmdbId || film.imdbId)) result.push({parent,film,index});
+      });
+    } else if (isRuntimeMovie(parent) && !runtimeMinutes(parent.runtimeMinutes) && (parent.tmdbId || parent.imdbId)) {
+      result.push({parent,film:parent,index:null});
+    }
+  }
+  return result;
+}
+function runtimeCoverage() {
+  let total=0,complete=0;
+  for (const parent of movies) {
+    const films=parent.isBoxSet ? (parent.includedMovies||[]) : [parent];
+    for (const film of films) {
+      if (!film || typeof film==='string' || !isRuntimeMovie(film)) continue;
+      total++;
+      if (runtimeMinutes(film.runtimeMinutes)) complete++;
+    }
+  }
+  return {total,complete};
+}
+function runtimeBackfillStatus(message) {
+  runtimeBackfillMessage=message;
+  const el=document.getElementById('runtime-backfill-status');
+  if (el) el.textContent=message;
+}
+// Uses existing IDs only; never guesses a movie identity or changes other metadata.
+async function fetchKnownMovieRuntime(film,tmdbKey,omdbKey) {
+  if (tmdbKey && film.tmdbId) {
+    const response=await fetch(`https://api.themoviedb.org/3/movie/${encodeURIComponent(film.tmdbId)}?api_key=${encodeURIComponent(tmdbKey)}`,{cache:'no-store'});
+    if (response.ok) {
+      const data=await response.json();
+      const minutes=runtimeMinutes(data.runtime);
+      if (minutes) return minutes;
+    } else if (response.status===401 || response.status===403 || response.status===429) {
+      throw new Error('TMDB HTTP '+response.status);
+    }
+  }
+  if (omdbKey && film.imdbId && /^tt\d+$/.test(String(film.imdbId))) {
+    const response=await fetch(`https://www.omdbapi.com/?i=${encodeURIComponent(film.imdbId)}&apikey=${encodeURIComponent(omdbKey)}`,{cache:'no-store'});
+    if (!response.ok) {
+      if ([401,403,429].includes(response.status)) throw new Error('OMDb HTTP '+response.status);
+    } else {
+      const data=await response.json();
+      if (data.Response==='False' && /limit|api key|invalid key/i.test(data.Error||'')) throw new Error('OMDb: '+data.Error);
+      const minutes=runtimeMinutes(data.Runtime);
+      if (minutes) return minutes;
+    }
+  }
+  return null;
+}
+async function backfillMovieRuntimes() {
+  if (runtimeBackfillBusy) return;
+  const tmdbKey=localStorage.getItem('tmdbKey'),omdbKey=localStorage.getItem('omdbKey');
+  if (!tmdbKey && !omdbKey) {runtimeBackfillStatus('Set a TMDB or OMDb API key in Settings first.');return;}
+  const eligible=runtimeTargets().filter(x=>((tmdbKey&&x.film.tmdbId)||(omdbKey&&x.film.imdbId)) && !runtimeAttemptedThisSession.has(x.parent.id+'|'+(x.index===null?'main':x.index)));
+  if (!eligible.length) {runtimeBackfillStatus('No more untried movie runtimes with available IDs and keys this session. Reload to retry unavailable results.');return;}
+  const batch=eligible.slice(0,25);
+  if (!confirm(`Look up runtimes for up to ${batch.length} movies? Only missing runtime fields will be changed. Save to GitHub is attempted after the batch.`)) return;
+  runtimeBackfillBusy=true;runtimeBackfillStop=false;
+  let updated=0,unavailable=0,failed=0;
+  try {
+    for (let i=0;i<batch.length;i++) {
+      if (runtimeBackfillStop) break;
+      const {parent,film}=batch[i];
+      runtimeBackfillStatus(`Checking ${i+1}/${batch.length}: ${film.title||parent.title}…`);
+      runtimeAttemptedThisSession.add(parent.id+'|'+(batch[i].index===null?'main':batch[i].index));
+      try {
+        const minutes=await fetchKnownMovieRuntime(film,tmdbKey,omdbKey);
+        if (minutes && !runtimeMinutes(film.runtimeMinutes)) {
+          film.runtimeMinutes=minutes;
+          markPending(parent);
+          updated++;
+        } else unavailable++;
+      } catch(err) {
+        failed++;
+        if (/HTTP (401|403|429)|api key|limit/i.test(String(err.message||''))) {
+          runtimeBackfillStatus('Provider blocked further requests: '+err.message);
+          break;
+        }
+      }
+      if (!runtimeBackfillStop) await new Promise(r=>setTimeout(r,250));
+    }
+    if (updated) {
+      runtimeBackfillStatus(`Retrieved ${updated} runtimes. Saving to GitHub…`);
+      try {
+        const message=await syncPendingEdits();
+        runtimeBackfillMessage=`${updated} runtimes added; ${unavailable} unavailable, ${failed} lookup errors. ${message}`;
+      } catch(err) {
+        runtimeBackfillMessage=`${updated} runtimes saved locally, NOT on GitHub: ${err.message}. Use Data Manager → Sync with GitHub.`;
+      }
+    } else runtimeBackfillMessage=`No runtimes added; ${unavailable} unavailable, ${failed} lookup errors. Existing data unchanged.`;
+  } finally {
+    runtimeBackfillBusy=false;runtimeBackfillStop=false;
+    if (currentView==='manager') renderManager();
+    runtimeBackfillStatus(runtimeBackfillMessage);
+  }
+}
 function dataIssues(m){
   const issues=[];
   if(m.isBoxSet){
@@ -942,6 +1070,13 @@ function renderManager(){
         <p class="manager-small" id="poster-backup-status" role="status">${escapeHtml(posterBackupMessage||'No upload in progress.')}</p>
       </div>
     </details>
+    <details class="bulk-language" id="runtime-backfill-panel">
+      <summary>Movie runtimes · <span id="runtime-covered-count">${runtimeCoverage().complete} / ${runtimeCoverage().total}</span> recorded</summary>
+      <p class="manager-small">Add missing film runtimes from existing verified TMDB IDs, with OMDb fallback by IMDb ID. TV shows are skipped, and box sets are processed film by film. This does not rematch titles or modify posters.</p>
+      <button class="manager-btn" id="runtime-backfill-start" ${runtimeBackfillBusy?'disabled':''}>${runtimeBackfillBusy?'Working…':'Fetch next 25 missing runtimes'}</button>
+      <button class="manager-btn secondary" id="runtime-backfill-stop" ${runtimeBackfillBusy?'':'disabled'}>Stop after current movie</button>
+      <p id="runtime-backfill-status" class="manager-small" role="status">${escapeHtml(runtimeBackfillMessage || 'No changes have been made.')}</p>
+    </details>
     <h3 style="font-size:17px;margin:24px 0 6px">Needs attention</h3>
     <p class="manager-small">Only items with missing or suspicious information appear here. An API match does not automatically mean a verified match.</p>
     <div class="manager-controls"><select id="manager-filter">${[['attention','Needs attention'],['movie','Individual movies'],['tv','TV shows'],['collection','Box sets'],['confirmed','Manually confirmed'],['all','All entries']].map(([v,l])=>`<option value="${v}" ${managerFilter===v?'selected':''}>${l}</option>`).join('')}</select></div>
@@ -953,6 +1088,8 @@ function renderManager(){
       ${issues.length?`<div class="issue-list">${issues.map(x=>`<span>${escapeHtml(x)}</span>`).join('')}</div>`:'<div class="manager-small">No current data-quality warnings</div>'}</div><button class="manager-btn" data-fix="${escapeHtml(m.id)}">${issues.length?'Fix':'View'}</button></div></div>`;
     }).join('')||'<p class="empty-state">Nothing needs attention in this view.</p>'}</div>`;
   renderBulkLanguageReview();
+  el.querySelector('#runtime-backfill-start').onclick=backfillMovieRuntimes;
+  el.querySelector('#runtime-backfill-stop').onclick=()=>{runtimeBackfillStop=true;runtimeBackfillStatus('Stopping after current movie…');};
   el.querySelector('#bulk-language-panel').ontoggle=e=>{bulkLanguageOpen=e.target.open;};
   el.querySelector('#poster-backup-panel').ontoggle=e=>{posterBackupOpen=e.target.open;};
   el.querySelectorAll('[data-unbacked-id]').forEach(b=>b.onclick=()=>openDetail(b.dataset.unbackedId));
@@ -1650,7 +1787,7 @@ async function enrichIncludedFilm(film, tmdbKey, omdbKey) {
     const detailRes=await fetch(`https://api.themoviedb.org/3/movie/${c.id}?api_key=${encodeURIComponent(tmdbKey)}`,{cache:'no-store'});
     if(!detailRes.ok) throw new Error('TMDB detail HTTP '+detailRes.status);
     const detail=await detailRes.json();
-    let result={...film,title,tmdbId:c.id,tmdbTitle:c.title,year:(c.release_date||'').slice(0,4)||null,posterUrl:c.poster_path?'https://image.tmdb.org/t/p/w500'+c.poster_path:null,language:film.languageOverride||c.original_language||null,genre:(detail.genres||[]).map(g=>g.name).join(', ')||null,overview:c.overview||null,imdbId:detail.imdb_id||null,matchNote:null};
+    let result={...film,title,tmdbId:c.id,tmdbTitle:c.title,year:(c.release_date||'').slice(0,4)||null,posterUrl:c.poster_path?'https://image.tmdb.org/t/p/w500'+c.poster_path:null,language:film.languageOverride||c.original_language||null,genre:(detail.genres||[]).map(g=>g.name).join(', ')||null,overview:c.overview||null,imdbId:detail.imdb_id||null,runtimeMinutes:runtimeMinutes(detail.runtime)||film.runtimeMinutes||null,matchNote:null};
     if(omdbKey && result.imdbId) result=await retryOmdbOnly(result,omdbKey);
     return preservePosterChoice(film,result);
   } catch(e) { return {...film,matchNote:'Lookup failed: '+e.message}; }
@@ -1660,7 +1797,7 @@ function includedFilmCards(m) {
   if(!m.isBoxSet) return '';
   return `<section style="margin-top:16px"><b>Included movies (${films.length})</b><div class="included-grid">${films.map((f,i)=>{
     const film=typeof f==='string'?{title:f}:f;
-    return `<div class="included-card">${displayPoster(film)?`<img loading="lazy" src="${escapeHtml(displayPoster(film))}" alt="${escapeHtml(film.title||'Movie poster')}">`:'<div class="poster-empty">🎬</div>'}<strong>${escapeHtml(film.tmdbTitle||film.title||'Untitled')}</strong><small>${escapeHtml(film.year||'Year unknown')}${film.imdbRating?' · ★ '+escapeHtml(film.imdbRating):''}</small>${film.genre?`<small>${escapeHtml(film.genre)}</small>`:''}${film.matchNote?`<small style="color:#A65B13">⚠ ${escapeHtml(film.matchNote)}</small>`:''}<button class="manager-btn secondary" data-film-index="${i}" style="width:100%">Find / correct</button><button class="manager-btn secondary" data-poster-film="${i}" style="width:100%">Manage Poster · ${posterStatusText(film)}</button></div>`;
+    return `<div class="included-card">${displayPoster(film)?`<img loading="lazy" src="${escapeHtml(displayPoster(film))}" alt="${escapeHtml(film.title||'Movie poster')}">`:'<div class="poster-empty">🎬</div>'}<strong>${escapeHtml(film.tmdbTitle||film.title||'Untitled')}</strong><small>${escapeHtml(film.year||'Year unknown')}${film.imdbRating?' · ★ '+escapeHtml(film.imdbRating):''}${formatRuntime(film.runtimeMinutes)?' · '+escapeHtml(formatRuntime(film.runtimeMinutes)):''}</small>${film.genre?`<small>${escapeHtml(film.genre)}</small>`:''}${film.matchNote?`<small style="color:#A65B13">⚠ ${escapeHtml(film.matchNote)}</small>`:''}<button class="manager-btn secondary" data-film-index="${i}" style="width:100%">Find / correct</button><button class="manager-btn secondary" data-poster-film="${i}" style="width:100%">Manage Poster · ${posterStatusText(film)}</button></div>`;
   }).join('')}</div><button class="manager-btn secondary" onclick="refreshBoxSetFilms('${escapeHtml(m.id)}')">Refresh missing movie details</button><p id="film-refresh-status" class="manager-small"></p></section>`;
 }
 async function resolveBoxSetFilms(id, force=false) {
@@ -1829,7 +1966,7 @@ async function correctIncludedFilm(id,index) {
             language:old.languageOverride||detail.original_language||c.original_language||null,
             genre:(detail.genres||[]).map(g=>g.name).join(', ')||null,
             overview:detail.overview||null,imdbId:detail.imdb_id||null,
-            imdbRating:null,omdbNote:null,matchNote:null,matchedVia:'tmdb-manual'};
+            imdbRating:null,omdbNote:null,runtimeMinutes:runtimeMinutes(detail.runtime)||null,matchNote:null,matchedVia:'tmdb-manual'};
           const omdbKey=localStorage.getItem('omdbKey');
           if(omdbKey && updated.imdbId)updated=await retryOmdbOnly(updated,omdbKey);
           m.includedMovies[index]=preservePosterChoice(old,updated);
@@ -1955,7 +2092,7 @@ async function chooseCandidate(id,c) {
     const detail=await res.json();
     const m=movies[idx];
     const imdbId=type==='tv'?(await (await fetch(`https://api.themoviedb.org/3/tv/${c.id}/external_ids?api_key=${encodeURIComponent(key)}`)).json()).imdb_id:detail.imdb_id;
-    movies[idx]=preservePosterChoice(m,{...m,mediaType:type,tmdbId:c.id,tmdbTitle:c.title||c.name,genre:(c.genre_ids||[]).map(g=>genres[g]).filter(Boolean)[0]||null,posterUrl:c.poster_path?'https://image.tmdb.org/t/p/w500'+c.poster_path:null,year:(c.release_date||c.first_air_date||'').slice(0,4)||null,overview:c.overview||null,language:c.original_language||null,imdbId:imdbId||null,imdbRating:null,omdbNote:null,enrichNote:null,matchedVia:'tmdb-manual',reviewStatus:'confirmed',reviewedAt:new Date().toISOString()});
+    movies[idx]=preservePosterChoice(m,{...m,mediaType:type,tmdbId:c.id,tmdbTitle:c.title||c.name,genre:(c.genre_ids||[]).map(g=>genres[g]).filter(Boolean)[0]||null,posterUrl:c.poster_path?'https://image.tmdb.org/t/p/w500'+c.poster_path:null,year:(c.release_date||c.first_air_date||'').slice(0,4)||null,overview:c.overview||null,language:c.original_language||null,imdbId:imdbId||null,imdbRating:null,omdbNote:null,enrichNote:null,runtimeMinutes:type==='movie'?runtimeMinutes(detail.runtime):null,matchedVia:'tmdb-manual',reviewStatus:'confirmed',reviewedAt:new Date().toISOString()});
     preserveLanguageOverride(movies[idx]);
     const omdb=localStorage.getItem('omdbKey');if(omdb&&movies[idx].imdbId&&!isCollection(movies[idx]))movies[idx]=await retryOmdbOnly(movies[idx],omdb);
     localStorage.setItem('movie-cache',JSON.stringify(movies));buildGenreFilter();buildLanguageFilter();render();openDetail(id);
@@ -1970,7 +2107,7 @@ function openDetail(id) {
 
   document.getElementById('detail-sheet').innerHTML = `
     <div class="sheet-close"><button onclick="closeDetail()">Close</button></div>
-    <div class="detail-hero">${coverHtml(m, 'sheet-cover', 'sheet-cover')}<div class="detail-hero-text"><div class="sheet-title">${escapeHtml(m.title || 'Untitled')}</div><div class="sheet-studio">${escapeHtml(m.studio || '')}</div><div class="detail-chips"><span>${isUHD(m)?'4K UHD':'Blu-ray'}</span>${m.year?`<span>${escapeHtml(m.year)}</span>`:''}${m.language?`<span>${escapeHtml(languageName(m.language))}</span>`:''}${m.imdbRating?`<span>★ ${escapeHtml(m.imdbRating)}</span>`:''}</div></div></div>
+    <div class="detail-hero">${coverHtml(m, 'sheet-cover', 'sheet-cover')}<div class="detail-hero-text"><div class="sheet-title">${escapeHtml(m.title || 'Untitled')}</div><div class="sheet-studio">${escapeHtml(m.studio || '')}</div><div class="detail-chips"><span>${isUHD(m)?'4K UHD':'Blu-ray'}</span>${m.year?`<span>${escapeHtml(m.year)}</span>`:''}${m.language?`<span>${escapeHtml(languageName(m.language))}</span>`:''}${m.imdbRating?`<span>★ ${escapeHtml(m.imdbRating)}</span>`:''}${!m.isBoxSet && effectiveMediaType(m)!=='tv' && formatRuntime(m.runtimeMinutes)?`<span>◷ ${escapeHtml(formatRuntime(m.runtimeMinutes))}</span>`:''}</div></div></div>
     ${includedFilmCards(m)}
     <div id="film-correction-panel" style="display:none;margin-top:12px;padding:12px;border:1px solid var(--groove);background:var(--surface);border-radius:10px"></div>
     <div class="sheet-fields">
@@ -1978,6 +2115,7 @@ function openDetail(id) {
       <div><div class="field-label">Format</div><div class="field-value">${isUHD(m) ? '4K UHD' : 'Blu-ray'}</div></div>
       <div><div class="field-label">Genre</div><div class="field-value">${escapeHtml(displayGenre(m) || '—')}</div></div>
       <div><div class="field-label">Year</div><div class="field-value">${escapeHtml(m.year || '—')}</div></div>
+       ${!m.isBoxSet && effectiveMediaType(m)!=='tv' ? `<div><div class="field-label">Runtime</div><div class="field-value">${escapeHtml(formatRuntime(m.runtimeMinutes)||'—')}</div></div>` : ''}
       <div><div class="field-label">IMDB Rating</div><div class="field-value">${m.imdbRating ? '★ ' + escapeHtml(m.imdbRating) : (isCollection(m) ? 'Multi-film set -- no single rating applies' : (m.omdbNote ? escapeHtml(m.omdbNote) : '—'))}</div></div>
       <div><div class="field-label">Language</div><div class="field-value">${escapeHtml(m.language || '—')}</div></div>
       <div><div class="field-label">Release Date</div><div class="field-value">${escapeHtml(m.releaseDate || '—')}</div></div>
@@ -2036,7 +2174,7 @@ async function rematchOne(id) {
   statusEl.textContent = 'Re-matching…';
   try {
     const reset = { ...movies[idx], genre: null, posterUrl: null, year: null, overview: null,
-                     language: null, imdbId: null, imdbRating: null, omdbNote: null, mediaType: null };
+                     language: null, imdbId: null, imdbRating: null, omdbNote: null, runtimeMinutes: null, mediaType: null };
     let enriched = await matchOnTmdb(reset, tmdbKey, overrideTitle || null);
     if (enriched.genre && omdbKey) {
       enriched = await retryOmdbOnly(enriched, omdbKey);
@@ -2274,11 +2412,12 @@ async function matchOnTmdb(item, tmdbKey, overrideTitle) {
 
   // TV shows need a separate call for their IMDB id -- the main /tv/{id} endpoint
   // doesn't include it the way /movie/{id} does for movies.
-  let imdbId = null;
+  let imdbId = null, movieRuntime = null;
   if (mediaType === 'movie') {
     const detailRes = await fetch(`https://api.themoviedb.org/3/movie/${match.id}?api_key=${tmdbKey}`, { cache: 'no-store' });
     const detail = await detailRes.json();
     imdbId = detail.imdb_id || null;
+    movieRuntime = runtimeMinutes(detail.runtime);
   } else {
     const extRes = await fetch(`https://api.themoviedb.org/3/tv/${match.id}/external_ids?api_key=${tmdbKey}`, { cache: 'no-store' });
     const extData = await extRes.json();
@@ -2296,6 +2435,7 @@ async function matchOnTmdb(item, tmdbKey, overrideTitle) {
     language: match.original_language || null,
     imdbId: imdbId,
     tmdbId: match.id,
+    runtimeMinutes: mediaType === 'movie' ? movieRuntime : null,
     matchedVia: 'tmdb',
     enrichNote: null,
     // Deliberately not touching imdbRating/omdbNote here -- fetching the rating
@@ -2309,20 +2449,19 @@ async function matchOnTmdb(item, tmdbKey, overrideTitle) {
 // reuses the imdbId we already found rather than re-doing the TMDB search, since
 // that part already succeeded and doesn't need repeating.
 async function retryOmdbOnly(item, omdbKey) {
-  if (!item.imdbId) return { ...item, omdbNote: 'No IMDB id on file -- needs a full re-enrich, not just a retry' };
+  if (!item.imdbId) return {...item,omdbNote:'No IMDb ID on file'};
   try {
-    const omdbRes = await fetch(`https://www.omdbapi.com/?i=${item.imdbId}&apikey=${omdbKey}`, { cache: 'no-store' });
-    const omdbData = await omdbRes.json();
-    if (omdbData.Response === 'False') {
-      return { ...item, omdbNote: `OMDb: ${omdbData.Error || 'unknown error'}` };
-    }
-    if (!omdbData.imdbRating || omdbData.imdbRating === 'N/A') {
-      return { ...item, omdbNote: 'OMDb had no rating for this title' };
-    }
-    return { ...item, imdbRating: omdbData.imdbRating, omdbNote: null };
-  } catch (e) {
-    return { ...item, omdbNote: `OMDb request failed: ${e.message}` };
-  }
+    const omdbRes=await fetch(`https://www.omdbapi.com/?i=${encodeURIComponent(item.imdbId)}&apikey=${encodeURIComponent(omdbKey)}`,{cache:'no-store'});
+    const omdbData=await omdbRes.json();
+    if (omdbData.Response==='False') return {...item,omdbNote:`OMDb: ${omdbData.Error||'unknown error'}`};
+    const result={...item};
+    if (isRuntimeMovie(result) && !runtimeMinutes(result.runtimeMinutes)) setMovieRuntime(result,omdbData.Runtime);
+    if (omdbData.imdbRating && omdbData.imdbRating!=='N/A') {
+      result.imdbRating=omdbData.imdbRating;
+      result.omdbNote=null;
+    } else result.omdbNote='OMDb had no rating for this title';
+    return result;
+  } catch (e) {return {...item,omdbNote:`OMDb request failed: ${e.message}`};}
 }
 
 // One-time, safe migration: adds the `ean` field onto whatever's already live
@@ -2378,7 +2517,7 @@ async function rematchAll() {
     try {
       if (movies[i].isBoxSet || movies[i].reviewStatus === 'confirmed' || movies[i].matchedVia === 'upcmdb') { continue; }
       const reset = { ...movies[i], genre: null, posterUrl: null, year: null, overview: null,
-                       language: null, imdbId: null, imdbRating: null, omdbNote: null, mediaType: null };
+                       language: null, imdbId: null, imdbRating: null, omdbNote: null, runtimeMinutes: null, mediaType: null };
       let enriched = await matchOnTmdb(reset, tmdbKey);
       if (enriched.genre && omdbKey) {
         enriched = await retryOmdbOnly(enriched, omdbKey);
@@ -2683,6 +2822,7 @@ async function lookupNewBarcode(){
  document.getElementById('add-title').value=d.title;
  if(d.year)document.getElementById('add-year').value=d.year;
  newItemCandidate={tmdbTitle:d.title,posterUrl:d.productImageUrl||null,genre:d.genre||null,overview:d.plot||null,year:d.year?String(d.year):null,imdbId:d.imdbID||null,imdbRating:d.imdbRating||null,matchedVia:'upcmdb'};
+  if (newItemCandidate.imdbId && localStorage.getItem('omdbKey')) newItemCandidate=await retryOmdbOnly({...newItemCandidate,mediaType:'movie'},localStorage.getItem('omdbKey'));
  addMsg('Barcode details found. Confirm the physical edition and title, then save. You can also search TMDB for a different match.');
  }catch(e){addMsg('Barcode lookup failed: '+e.message+'. Enter the title manually.');}
 }
@@ -2698,7 +2838,7 @@ async function searchNewMovieTmdb(){
  const items=(await response.json()).results||[];
  out.innerHTML=items.length?items.slice(0,20).map((c,i)=>`<div class="candidate">${c.poster_path?`<img src="https://image.tmdb.org/t/p/w92${c.poster_path}" alt="">`:'🎬'}<div style="flex:1"><b>${escapeHtml(c.title||c.name||'')}</b><div class="manager-small">${escapeHtml((c.release_date||c.first_air_date||'').slice(0,4))} · ${escapeHtml(languageName(c.original_language||'?'))}</div><button class="manager-btn" data-new-pick="${i}">Use this match</button></div></div>`).join(''):'No TMDB matches. Try adjusting the title or save manually.';
  out.querySelectorAll('[data-new-pick]').forEach(b=>b.onclick=async()=>{const c=items[Number(b.dataset.newPick)];out.textContent='Loading movie details…';try{const detailRes=await fetch(`https://api.themoviedb.org/3/${kind}/${c.id}?api_key=${encodeURIComponent(key)}`);if(!detailRes.ok)throw new Error('TMDB detail HTTP '+detailRes.status);const d=await detailRes.json();let imdbId=d.imdb_id||null;if(kind==='tv'){const ext=await fetch(`https://api.themoviedb.org/3/tv/${c.id}/external_ids?api_key=${encodeURIComponent(key)}`);if(ext.ok)imdbId=(await ext.json()).imdb_id||null;}
- newItemCandidate={mediaType:kind,tmdbId:c.id,tmdbTitle:c.title||c.name,posterUrl:d.poster_path?'https://image.tmdb.org/t/p/w500'+d.poster_path:null,genre:(d.genres||[]).map(g=>g.name).join(', '),overview:d.overview||null,year:(d.release_date||d.first_air_date||'').slice(0,4),language:d.original_language||null,imdbId,matchedVia:'tmdb-manual',reviewStatus:'confirmed'};
+ newItemCandidate={mediaType:kind,tmdbId:c.id,tmdbTitle:c.title||c.name,posterUrl:d.poster_path?'https://image.tmdb.org/t/p/w500'+d.poster_path:null,genre:(d.genres||[]).map(g=>g.name).join(', '),overview:d.overview||null,year:(d.release_date||d.first_air_date||'').slice(0,4),language:d.original_language||null,imdbId,runtimeMinutes:kind==='movie'?runtimeMinutes(d.runtime):null,matchedVia:'tmdb-manual',reviewStatus:'confirmed'};
  if(newItemCandidate.year)document.getElementById('add-year').value=newItemCandidate.year;
  if(newItemCandidate.language&&[...document.getElementById('add-language').options].some(x=>x.value===newItemCandidate.language))document.getElementById('add-language').value=newItemCandidate.language;
  const omdb=localStorage.getItem('omdbKey');if(omdb&&imdbId)newItemCandidate=await retryOmdbOnly(newItemCandidate,omdb);
@@ -2715,6 +2855,7 @@ async function saveNewMovie(){
  const films=document.getElementById('add-films').value.split('\n').map(x=>x.trim()).filter(Boolean);
  const discs=Math.max(0,Number(document.getElementById('add-discs').value)||0),lang=document.getElementById('add-language').value;
  const movie={id:'MOV-NEW-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),title,studio:document.getElementById('add-studio').value.trim(),upc:barcode.length===12?barcode:null,ean:barcode.length!==12?barcode||null:null,mediaType:type==='tv'?'tv':'movie',blurayDiscs:format==='dvd'?0:discs,dvdDiscs:format==='dvd'?discs:0,is4k:format==='4k',formatOverride:format,dateAdded:new Date().toISOString().slice(0,10),releaseDate:null,countryCode:null,isBoxSet:type==='boxset',includedMovies:type==='boxset'?films.map(title=>({title})):[],...((type!=='boxset'&&newItemCandidate)||{})};
+ if(type==='tv'||type==='boxset')delete movie.runtimeMinutes;
  if(type==='boxset'){movie.imdbRating=null;movie.imdbId=null;movie.tmdbId=null;movie.tmdbTitle=null;movie.reviewStatus='collection';}
  if(!movie.year&&/^\d{4}$/.test(document.getElementById('add-year').value.trim()))movie.year=document.getElementById('add-year').value.trim();
  if(lang){movie.language=lang;movie.languageOverride=lang;movie.languageReviewedAt=new Date().toISOString();}
