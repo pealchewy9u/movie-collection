@@ -394,7 +394,12 @@
 
     <div style="margin-top:16px;">
       <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:4px;">UPCMDB API Key</label>
-      <input id="upcmdb-key-input" type="password" style="width:100%; padding:9px; border-radius:8px; border:1px solid var(--groove); font-size:14px;">
+      <input id="upcmdb-key-input" type="password" autocomplete="off" style="width:100%; padding:9px; border-radius:8px; border:1px solid var(--groove); font-size:14px;">
+      <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:7px;">
+        <button type="button" id="upcmdb-reveal-btn" class="manager-btn secondary" style="margin-top:0;">Show key</button>
+        <button type="button" id="upcmdb-copy-btn" class="manager-btn secondary" style="margin-top:0;">Copy key</button>
+        <span id="upcmdb-key-copy-status" aria-live="polite" style="font-size:11px; color:var(--text-muted);"></span>
+      </div>
       <p style="font-size:11px; color:var(--text-muted); margin-top:4px;">Matches by exact barcode (UPC/EAN) when available -- no title-guessing, so this is the preferred method and runs first.</p>
     </div>
     <div style="margin-top:12px;">
@@ -2397,6 +2402,32 @@ document.getElementById('detail-overlay').addEventListener('click', e => {
 });
 
 document.getElementById('settings-btn').addEventListener('click', openSettings);
+// Optional, on-device recovery for a key saved in iPhone Safari but not its standalone PWA.
+// No API key is ever embedded in the published source or sent to a service by these controls.
+document.getElementById('upcmdb-reveal-btn').addEventListener('click', () => {
+  const input=document.getElementById('upcmdb-key-input');
+  const visible=input.type==='password';
+  input.type=visible?'text':'password';
+  document.getElementById('upcmdb-reveal-btn').textContent=visible?'Hide key':'Show key';
+  document.getElementById('upcmdb-key-copy-status').textContent=visible?'Key is visible only on this device. Hide it when done.':'';
+});
+document.getElementById('upcmdb-copy-btn').addEventListener('click', async () => {
+  const input=document.getElementById('upcmdb-key-input');
+  const status=document.getElementById('upcmdb-key-copy-status');
+  const key=input.value;
+  if(!key){status.textContent='No key is saved in this browser.';return;}
+  try {
+    if(!navigator.clipboard?.writeText)throw new Error('Clipboard API unavailable');
+    await navigator.clipboard.writeText(key);
+    status.textContent='Copied. Paste it into the Home Screen app Settings.';
+  } catch (error) {
+    // Safari may restrict clipboard access. Expose editable text for manual selection.
+    input.type='text';
+    document.getElementById('upcmdb-reveal-btn').textContent='Hide key';
+    input.focus();input.select();
+    status.textContent='Automatic copy blocked. The key is visible: press and hold it, then Copy.';
+  }
+});
 
 function openSettings() {
   document.getElementById('upcmdb-key-input').value = localStorage.getItem('upcmdbKey') || '';
@@ -2418,7 +2449,7 @@ function updatePendingCount() {
     `${done} of ${movies.length} matched on TMDB (${movies.length - done} pending). ` +
     `${withImdb} of ${movies.length} have an IMDB rating (${retryable} already matched but missing a rating; correct individually if needed).`;
 }
-function closeSettings() { document.getElementById('settings-overlay').style.display = 'none'; }
+function closeSettings() { document.getElementById('upcmdb-key-input').type='password'; document.getElementById('upcmdb-reveal-btn').textContent='Show key'; document.getElementById('upcmdb-key-copy-status').textContent=''; document.getElementById('settings-overlay').style.display = 'none'; }
 
 function saveSettings() {
   const historyName=document.getElementById('watch-repo-input').value.trim();
