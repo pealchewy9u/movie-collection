@@ -699,6 +699,82 @@ function filteredMovies() {
     .sort((a, b) => (a.title || '').localeCompare(b.title || ''));
 }
 
+// Virtual Cover Flow entries: a film inside a physical box set is not a new
+// collection record. Its stable-in-this-box key is used only for viewing history.
+// Keep list, summary and movies.json based on original physical collection items.
+function boxFilmId(boxId, filmIndex) {
+  return 'box-film:' + encodeURIComponent(boxId) + ':' + filmIndex;
+}
+function coverFlowItems() {
+  const q=document.getElementById('search-input').value.trim().toLowerCase();
+  const genre=document.getElementById('genre-select').value;
+  const type=document.getElementById('type-select').value;
+  const language=document.getElementById('language-select').value;
+  const result=[];
+  for(const box of movies){
+    // Keep the physical box cover as its own card, exactly as before.
+    if(hasGenre(box,genre) && (!type || (type==='boxset'?box.isBoxSet:!box.isBoxSet&&effectiveMediaType(box)===type))
+        && (!language || (box.languageOverride||box.language)===language)
+        && (!q || [box.title,box.studio].join(' ').toLowerCase().includes(q))){
+      result.push(box);
+    }
+    if(!box.isBoxSet || type==='boxset' || type==='tv')continue;
+    (box.includedMovies||[]).forEach((raw,index)=>{
+      const film=typeof raw==='string'?{title:raw}:raw;
+      if(!film || effectiveMediaType(film)==='tv')return;
+      // A fresh display object: editing, syncing, and matching still use the box's
+      // existing includedMovies array, never this virtual Cover Flow entry.
+      const entry={...film,id:boxFilmId(box.id,index),isBoxSet:false,mediaType:'movie',
+        boxParentId:box.id,boxFilmIndex:index,boxTitle:box.title,
+        formatOverride:film.formatOverride||box.formatOverride,
+        language:film.languageOverride||film.language||box.languageOverride||box.language};
+      if(genre && !hasGenre(entry,genre))return;
+      if(language && entry.language!==language)return;
+      if(q && ![film.title,film.tmdbTitle,box.title,box.studio].join(' ').toLowerCase().includes(q))return;
+      result.push(entry);
+    });
+  }
+  // Keep box-set covers together with their included movies rather than
+  // alphabetizing every virtual film independently across the entire flow.
+  // Standalone films and box-set groups stay alphabetically arranged.
+  const groups=new Map();
+  for(const item of result){
+    const parentId=item.boxParentId||item.id;
+    if(!groups.has(parentId))groups.set(parentId,[]);
+    groups.get(parentId).push(item);
+  }
+  const groupList=[...groups.entries()].map(([parentId,entries])=>{
+    const parent=movies.find(m=>m.id===parentId);
+    const groupTitle=parent?.title||entries[0]?.title||'';
+    return {parentId,groupTitle,entries};
+  });
+  groupList.sort((a,b)=>a.groupTitle.localeCompare(b.groupTitle)||a.parentId.localeCompare(b.parentId));
+  return groupList.flatMap(({entries})=>entries.sort((a,b)=>{
+    if(!a.boxParentId)return -1; // Physical box cover first.
+    if(!b.boxParentId)return 1;
+    // A film's actual release year is useful for franchise chronology.
+    // Use the saved box-set order when a year is missing or tied.
+    const year=x=>{const match=String(x.year||'').match(/^(18|19|20)\d{2}$/);return match?Number(match[0]):null;};
+    const ay=year(a),by=year(b);
+    if(ay!==null && by!==null && ay!==by)return ay-by;
+    return a.boxFilmIndex-b.boxFilmIndex;
+  }));
+}
+function watchableMovies(){
+  // Do not depend on active search/genre filters when building history or picking.
+  return movies.flatMap(m=>{
+    if(!m.isBoxSet)return effectiveMediaType(m)==='tv'?[]:[m];
+    return (m.includedMovies||[]).flatMap((raw,index)=>{
+      const film=typeof raw==='string'?{title:raw}:raw;
+      if(!film || effectiveMediaType(film)==='tv')return [];
+      return [{...film,id:boxFilmId(m.id,index),isBoxSet:false,mediaType:'movie',
+        boxParentId:m.id,boxFilmIndex:index,boxTitle:m.title,
+        formatOverride:film.formatOverride||m.formatOverride,
+        language:film.languageOverride||film.language||m.languageOverride||m.language}];
+    });
+  });
+}
+
 // Previously backed-up posters are locked by default, including backups made
 // before this version. Rematching can update metadata, never the chosen artwork.
 function displayPoster(m){
@@ -778,9 +854,9 @@ function renderList() {
 
 function renderCoverFlow() {
   const scroll = document.getElementById('cf-scroll');
-  const items = filteredMovies();
+  const items = coverFlowItems();
   scroll.innerHTML = items.map(m => `
-    <div class="cf-card" data-id="${m.id}">
+    <div class="cf-card" data-id="${escapeHtml(m.id)}">
       ${coverHtml(m, 'cf-cover', 'cf-cover-placeholder')}
       ${coverHtml(m, 'cf-reflection', 'cf-reflection-placeholder')}
     </div>
@@ -822,7 +898,7 @@ function renderCoverFlow() {
   }
   scroll.onscroll = () => requestAnimationFrame(updateTiltAndCaption);
   scroll.querySelectorAll('.cf-card').forEach(el => {
-    el.addEventListener('click', () => openDetail(el.dataset.id));
+    el.addEventListener('click', () => openCoverFlowDetail(el.dataset.id));
   });
   requestAnimationFrame(updateTiltAndCaption);
 }
@@ -866,7 +942,7 @@ async function loadWatchHistory(){
   if(currentView==='history')render();
 }
 function recordMovieWatch(id){
-  const m=movies.find(x=>x.id===id);if(!m||m.isBoxSet||effectiveMediaType(m)==='tv')return;
+  const m=watchableMovies().find(x=>x.id===id);if(!m)return;
   const event={id:'WATCH-'+Date.now()+'-'+Math.random().toString(36).slice(2,11),movieId:id,title:m.title||'',watchedAt:new Date().toISOString()};
   const pending=uniqueWatchEvents(storedWatchEvents(WATCH_PENDING_KEY),[event]);
   localStorage.setItem(WATCH_PENDING_KEY,JSON.stringify(pending));
@@ -910,7 +986,7 @@ function finishWatchSync(remote,pending){
 function watchMovieRow(m,detail){const posterUrl=displayPoster(m);return `<div class="history-entry" data-history-film="${escapeHtml(m.id)}">${posterUrl?`<img alt="" src="${escapeHtml(posterUrl)}" loading="lazy">`:'<span style="width:38px">🎬</span>'}<div class="history-entry-text"><b>${escapeHtml(m.title||'Untitled')}</b><small>${escapeHtml(detail)}</small></div><span style="color:var(--brass)">›</span></div>`;}
 function renderWatchHistory(){
   const el=document.getElementById('history-view');
-  const films=movies.filter(m=>!m.isBoxSet&&effectiveMediaType(m)!=='tv');
+  const films=watchableMovies();
   const events=currentWatches().filter(e=>films.some(m=>m.id===e.movieId));
   const counts=new Map();for(const e of events)counts.set(e.movieId,(counts.get(e.movieId)||0)+1);
   const recent=events.slice(0,12).map(e=>({m:films.find(m=>m.id===e.movieId),e})).filter(x=>x.m);
@@ -2306,6 +2382,34 @@ async function chooseCandidate(id,c) {
     const status=document.getElementById('review-status');
     await persistManualEdit(movies[idx],status);
   }catch(e){const status=document.getElementById('review-status');if(status)status.textContent='Correction/save issue: '+e.message;}
+}
+
+// A film opened from Cover Flow gets a lightweight read-only detail sheet.
+// Metadata corrections remain in its parent box-set editor, preventing accidental
+// creation of a duplicate collection record or overwriting sibling film data.
+function openCoverFlowDetail(id){
+  const movie=movies.find(m=>m.id===id);
+  if(movie){openDetail(id);return;}
+  const film=watchableMovies().find(m=>m.id===id && m.boxParentId);
+  if(!film)return;
+  const parent=movies.find(m=>m.id===film.boxParentId);
+  if(!parent)return;
+  const fields=[['Year',film.year],['Runtime',formatRuntime(film.runtimeMinutes)],
+    ['IMDb Rating',film.imdbRating?'★ '+film.imdbRating:null],
+    ['Genre',film.genre],['Language',languageName(film.language)],
+    ['Format',isUHD(film)?'4K UHD':'Blu-ray']];
+  const sheet=document.getElementById('detail-sheet');
+  sheet.innerHTML=`<div class="sheet-close"><button type="button" id="box-film-close">Close</button></div>
+    <div class="detail-hero">${coverHtml(film,'sheet-cover','sheet-cover')}
+    <div class="detail-hero-text"><div class="sheet-title">${escapeHtml(film.tmdbTitle||film.title||'Untitled')}</div>
+    <div class="detail-chips">${film.year?`<span>${escapeHtml(film.year)}</span>`:''}${formatRuntime(film.runtimeMinutes)?`<span>◷ ${escapeHtml(formatRuntime(film.runtimeMinutes))}</span>`:''}${film.imdbRating?`<span>★ ${escapeHtml(film.imdbRating)}</span>`:''}</div></div></div>
+    <p class="manager-small">Part of: <b>${escapeHtml(parent.title||'Box set')}</b></p>
+    <div class="sheet-fields">${fields.map(([label,value])=>`<div><div class="field-label">${label}</div><div class="field-value">${escapeHtml(value||'—')}</div></div>`).join('')}</div>
+    ${film.overview?`<div style="margin-top:16px;font-size:13px;line-height:1.5">${escapeHtml(film.overview)}</div>`:''}
+    <button type="button" id="open-parent-box" class="manager-btn secondary">View box set details</button>`;
+  document.getElementById('detail-overlay').style.display='flex';
+  sheet.querySelector('#box-film-close').onclick=closeDetail;
+  sheet.querySelector('#open-parent-box').onclick=()=>openDetail(parent.id);
 }
 
 function openDetail(id) {
