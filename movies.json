@@ -11523,7 +11523,8 @@
     "imdbRating": "7.3",
     "omdbNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0312-main-mvb7h6s3.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/v4ncgZjG2Zu8ZW5al1vIZTsSjqX.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/v4ncgZjG2Zu8ZW5al1vIZTsSjqX.jpg",
+    "runtimeMinutes": 141
   },
   {
     "id": "MOV-0313",
@@ -11554,7 +11555,8 @@
     "tmdbId": 1197306,
     "enrichNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0313-main-mvb7hak1.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/6FRFIogh3zFnVWn7Z6zcYnIbRcX.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/6FRFIogh3zFnVWn7Z6zcYnIbRcX.jpg",
+    "runtimeMinutes": 116
   },
   {
     "id": "MOV-0314",
@@ -11581,7 +11583,8 @@
     "imdbRating": "7.0",
     "omdbNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0314-main-mvb7hemf.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/aCnVdvExw6UWSeQfr0tUH3jr4qG.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/aCnVdvExw6UWSeQfr0tUH3jr4qG.jpg",
+    "runtimeMinutes": 116
   },
   {
     "id": "MOV-0315",
@@ -11624,7 +11627,8 @@
         "omdbNote": null,
         "matchedVia": "tmdb-manual",
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0315-film-0-mvb7hia9.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/bRDAc4GogyS9ci3ow7UnInOcriN.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/bRDAc4GogyS9ci3ow7UnInOcriN.jpg",
+        "runtimeMinutes": 104
       },
       {
         "title": "X2: X-Men United (2003)",
@@ -11641,7 +11645,8 @@
         "omdbNote": null,
         "matchedVia": "tmdb-manual",
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0315-film-1-mvb7hlw7.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/bst4alFUXCxISwdRUKSMhhkrX1M.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/bst4alFUXCxISwdRUKSMhhkrX1M.jpg",
+        "runtimeMinutes": 133
       },
       {
         "title": "X-Men: The Last Stand (2006)",
@@ -11658,7 +11663,8 @@
         "omdbNote": null,
         "matchedVia": "tmdb-manual",
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0315-film-2-mvb7hph7.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/a2xicU8DpKtRizOHjQLC1JyCSRS.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/a2xicU8DpKtRizOHjQLC1JyCSRS.jpg",
+        "runtimeMinutes": 104
       },
       {
         "title": "X-Men Origins: Wolverine (2009)",
@@ -11675,7 +11681,8 @@
         "omdbNote": null,
         "matchedVia": "tmdb-manual",
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0315-film-3-mvb7hsyd.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/yj8LbTju1p7CUJg7US2unSBk33s.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/yj8LbTju1p7CUJg7US2unSBk33s.jpg",
+        "runtimeMinutes": 107
       },
       {
         "title": "X-Men: First Class (2011)",
@@ -11692,7 +11699,8 @@
         "omdbNote": null,
         "matchedVia": "tmdb-manual",
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0315-film-4-mvb7hxen.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/hNEokmUke0dazoBhttFN0o3L7Xv.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/hNEokmUke0dazoBhttFN0o3L7Xv.jpg",
+        "runtimeMinutes": 132
       },
       {
         "title": "The Wolverine",
@@ -11708,7 +11716,8 @@
         "imdbRating": "6.7",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0315-film-5-mvb7i110.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/t2wVAcoRlKvEIVSbiYDb8d0QqqS.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/t2wVAcoRlKvEIVSbiYDb8d0QqqS.jpg",
+        "runtimeMinutes": 126
       }
     ],
     "reviewStatus": "collection",
@@ -11741,7 +11750,8 @@
     "tmdbId": 2080,
     "matchedVia": "tmdb",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0316-main-mvb7i4v9.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/yj8LbTju1p7CUJg7US2unSBk33s.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/yj8LbTju1p7CUJg7US2unSBk33s.jpg",
+    "runtimeMinutes": 107
   },
   {
     "id": "MOV-0317",
@@ -11768,7 +11778,8 @@
     "imdbRating": "7.9",
     "omdbNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0317-main-mvb7i8e8.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/tYfijzolzgoMOtegh1Y7j2Enorg.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/tYfijzolzgoMOtegh1Y7j2Enorg.jpg",
+    "runtimeMinutes": 132
   },
   {
     "id": "MOV-0318",
@@ -11795,7 +11806,8 @@
     "imdbRating": "7.0",
     "omdbNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0318-main-mvb7igwz.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/50KGpMiIvSkF4WHOgp0gM6r6sMU.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/50KGpMiIvSkF4WHOgp0gM6r6sMU.jpg",
+    "runtimeMinutes": 127
   },
   {
     "id": "MOV-NEW-1792114787008-uyjij",
@@ -11827,7 +11839,8 @@
         "imdbRating": "7.8",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1792114787008-uyjij-film-0-mvb7ikj0.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/yHA9Fc37VmpUA5UncTxxo3rTGVA.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/yHA9Fc37VmpUA5UncTxxo3rTGVA.jpg",
+        "runtimeMinutes": 169
       },
       {
         "title": "The Hobbit: The Desolation of Smaug",
@@ -11843,7 +11856,8 @@
         "imdbRating": "7.8",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1792114787008-uyjij-film-1-mvb7iod8.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/xQYiXsheRCDBA39DOrmaw1aSpbk.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/xQYiXsheRCDBA39DOrmaw1aSpbk.jpg",
+        "runtimeMinutes": 161
       },
       {
         "title": "The Hobbit: The Battle of the Five Armies",
@@ -11859,7 +11873,8 @@
         "imdbRating": "7.4",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1792114787008-uyjij-film-2-mvb7is8e.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/xT98tLqatZPQApyRmlPL12LtiWp.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/xT98tLqatZPQApyRmlPL12LtiWp.jpg",
+        "runtimeMinutes": 144
       }
     ],
     "languageOverride": "en",
@@ -11908,7 +11923,8 @@
         "matchedVia": "tmdb-manual",
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1792182202314-quiws-film-0-mvbf3fdx-8zmi0j.jpg",
         "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/wGTpGGRMZmyFCcrY2YoxVTIBlli.jpg",
-        "posterLocked": true
+        "posterLocked": true,
+        "runtimeMinutes": 91
       },
       {
         "title": "A Nightmare on Elm Street Part 2: Freddy's Revenge",
@@ -11925,7 +11941,8 @@
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1792182202314-quiws-film-1-mvbf1xcb-ngpuwe.jpg",
         "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/53kxYw0G3o55yJ23K7s7KMaOyAM.jpg",
-        "posterLocked": true
+        "posterLocked": true,
+        "runtimeMinutes": 87
       },
       {
         "title": "A Nightmare on Elm Street 3: Dream Warriors",
@@ -11942,7 +11959,8 @@
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1792182202314-quiws-film-2-mvbf20pk-0m7gta.jpg",
         "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/qbtZewU6EGvxi8yFVzwZ31NijLX.jpg",
-        "posterLocked": true
+        "posterLocked": true,
+        "runtimeMinutes": 96
       },
       {
         "title": "A Nightmare on Elm Street 4: The Dream Master",
@@ -11959,7 +11977,8 @@
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1792182202314-quiws-film-3-mvbf23x0-lveodm.jpg",
         "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/boStYG7jKdoIZTduiOOsUVknD13.jpg",
-        "posterLocked": true
+        "posterLocked": true,
+        "runtimeMinutes": 93
       },
       {
         "title": "A Nightmare on Elm Street: The Dream Child",
@@ -11976,7 +11995,8 @@
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1792182202314-quiws-film-4-mvbf26xe-cz2q9c.jpg",
         "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/kizvpgXQfrAgN8FhOd87LbKk6kO.jpg",
-        "posterLocked": true
+        "posterLocked": true,
+        "runtimeMinutes": 89
       },
       {
         "title": "Freddy's Dead: The Final Nightmare",
@@ -11993,7 +12013,8 @@
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1792182202314-quiws-film-5-mvbf29wd-rpj0xy.jpg",
         "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/e4qh58n2WaG4Gyh9VhjOUeN9Mhv.jpg",
-        "posterLocked": true
+        "posterLocked": true,
+        "runtimeMinutes": 89
       },
       {
         "title": "Wes Craven's New Nightmare",
@@ -12010,7 +12031,8 @@
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1792182202314-quiws-film-6-mvbf2cqa-tx5pjc.jpg",
         "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/q5BWxfL1x34nyYSvA3Qo5odleGW.jpg",
-        "posterLocked": true
+        "posterLocked": true,
+        "runtimeMinutes": 112
       }
     ],
     "year": "2012",
@@ -12051,7 +12073,8 @@
     "enrichNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1792726141113-9s0gk-main-mvkevpjx-nlvdk5.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/eMLf3eV0ZBXOKhQedJpg41KrqAH.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 130
   },
   {
     "id": "MOV-NEW-1792726223571-il9l9",
@@ -12086,7 +12109,8 @@
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1792726223571-il9l9-main-mvkex1ix-rnxsbr.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/ewbLUXvm4riZL0aepy90o0vMesn.jpg",
     "posterLocked": true,
-    "reviewedAt": "2026-10-23T03:30:47.955Z"
+    "reviewedAt": "2026-10-23T03:30:47.955Z",
+    "runtimeMinutes": 154
   },
   {
     "id": "MOV-NEW-1792861142228-pn6x6",
@@ -12120,7 +12144,8 @@
     "languageReviewedAt": "2026-10-24T16:59:02.230Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1792861142228-pn6x6-main-mvmn8h71-qh9y5s.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/hgoWjp9Sh0MI97eAMZCnIoVfgvq.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 130
   },
   {
     "id": "MOV-NEW-1792863601576-uje3n",
