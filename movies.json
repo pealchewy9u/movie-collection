@@ -9264,7 +9264,8 @@
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0242-main-mvb9x8a5-2amgq0.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/xN1aKur5ddWQSXTqvzDPJD2TCxe.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 115
   },
   {
     "id": "MOV-0243",
@@ -9294,7 +9295,8 @@
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0243-main-mvb9xbtn-gu2ddp.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/aTsp2VTaCBiGs8w05OTXfD97FRZ.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 143
   },
   {
     "id": "MOV-0244",
@@ -9321,7 +9323,8 @@
     "omdbNote": null,
     "matchedVia": "upcmdb",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0244-main-mvb7ar5z.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/c1Mvyd983ZyrU5Vf2aKEe6WncSq.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/c1Mvyd983ZyrU5Vf2aKEe6WncSq.jpg",
+    "runtimeMinutes": 153
   },
   {
     "id": "MOV-0245",
@@ -9348,7 +9351,8 @@
     "imdbRating": "8.5",
     "omdbNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0245-main-mvb7ava9.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/2hFvxCCWrTmCYwfy7yum0GKRi3Y.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/2hFvxCCWrTmCYwfy7yum0GKRi3Y.jpg",
+    "runtimeMinutes": 150
   },
   {
     "id": "MOV-0246",
@@ -9378,7 +9382,8 @@
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0246-main-mvb9xgbu-ns2nfv.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/uhviyknTT5cEQXbn6vWIqfM4vGm.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 153
   },
   {
     "id": "MOV-0247",
@@ -9408,7 +9413,8 @@
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0247-main-mvb9xk26-jpzgar.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/3KgtekisQBrHRsm2cD5UOB6Ce3k.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 140
   },
   {
     "id": "MOV-0248",
@@ -9445,7 +9451,8 @@
         "imdbRating": "5.8",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0248-film-0-mvb7az1w.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/46X1ei9uf13nkkr0OhWldGyr5Uh.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/46X1ei9uf13nkkr0OhWldGyr5Uh.jpg",
+        "runtimeMinutes": 85
       },
       {
         "title": "The Purge: Anarchy",
@@ -9461,7 +9468,8 @@
         "imdbRating": "6.4",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0248-film-1-mvb7b3an.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/qwqHHZLZSUvMkAMQ47ymtfjEifY.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/qwqHHZLZSUvMkAMQ47ymtfjEifY.jpg",
+        "runtimeMinutes": 103
       },
       {
         "title": "The Purge: Election Year",
@@ -9477,7 +9485,8 @@
         "imdbRating": "6.0",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0248-film-2-mvb7b7l3.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/gg7tlp45xqGWMra0sqQVPvybje2.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/gg7tlp45xqGWMra0sqQVPvybje2.jpg",
+        "runtimeMinutes": 109
       },
       {
         "title": "The First Purge",
@@ -9493,7 +9502,8 @@
         "imdbRating": "5.2",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0248-film-3-mvb7bc23.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/litjsBoiydO6JlO70uOX4N3WnNL.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/litjsBoiydO6JlO70uOX4N3WnNL.jpg",
+        "runtimeMinutes": 97
       }
     ],
     "reviewStatus": "collection",
@@ -9525,7 +9535,8 @@
     "imdbRating": "6.5",
     "omdbNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0249-main-mvb7bg1t.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/e3DXXLJHGqMx9yYpXsql1XNljmM.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/e3DXXLJHGqMx9yYpXsql1XNljmM.jpg",
+    "runtimeMinutes": 106
   },
   {
     "id": "MOV-0250",
@@ -9556,7 +9567,8 @@
     "reviewStatus": "confirmed",
     "reviewedAt": "2026-10-15T21:08:47.603Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0250-main-mvb7bju3.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/vKLp0X2RQOuA31R3AdaYtDdKIPK.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/vKLp0X2RQOuA31R3AdaYtDdKIPK.jpg",
+    "runtimeMinutes": 146
   },
   {
     "id": "MOV-0251",
@@ -9587,7 +9599,8 @@
     "tmdbId": 380,
     "enrichNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0251-main-mvb7bnh4.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/iTNHwO896WKkaoPtpMMS74d8VNi.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/iTNHwO896WKkaoPtpMMS74d8VNi.jpg",
+    "runtimeMinutes": 134
   },
   {
     "id": "MOV-0252",
@@ -9618,7 +9631,8 @@
     "tmdbId": 21566,
     "enrichNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0252-main-mvb7brlx.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/m4Uy3dHYmnYgvZ0U2xK5alazBFR.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/m4Uy3dHYmnYgvZ0U2xK5alazBFR.jpg",
+    "runtimeMinutes": 177
   },
   {
     "id": "MOV-0253",
@@ -9648,7 +9662,8 @@
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0253-main-mvb9xo38-f3yq5r.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/8eeK3OB5PeSRQD7BpZcGZKkehG.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 111
   },
   {
     "id": "MOV-0254",
@@ -9675,7 +9690,8 @@
     "imdbRating": "6.4",
     "omdbNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0254-main-mvb7bvtg.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/7PfJFtk0VjY3hmGGbjBnagQIytw.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/7PfJFtk0VjY3hmGGbjBnagQIytw.jpg",
+    "runtimeMinutes": 15
   },
   {
     "id": "MOV-0255",
@@ -9702,7 +9718,8 @@
     "imdbRating": "4.6",
     "omdbNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0255-main-mvb7d0hb.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/iEDCDioMy1A8i5iGUu5gDZM5BhY.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/iEDCDioMy1A8i5iGUu5gDZM5BhY.jpg",
+    "runtimeMinutes": 132
   },
   {
     "id": "MOV-0256",
@@ -9732,7 +9749,8 @@
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0256-main-mvba4698-blhfzo.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/36qZGOMHCLb7GP61a5RVdcOq6KI.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 101
   },
   {
     "id": "MOV-0257",
@@ -9759,7 +9777,8 @@
     "imdbRating": "6.1",
     "omdbNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0257-main-mvb7d4sp.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/gM5ql3BKYmHG3WtZ0buKXN7xY8O.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/gM5ql3BKYmHG3WtZ0buKXN7xY8O.jpg",
+    "runtimeMinutes": 117
   },
   {
     "id": "MOV-0258",
@@ -9786,7 +9805,8 @@
     "imdbRating": "6.1",
     "omdbNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0258-main-mvb7d83j.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/gM5ql3BKYmHG3WtZ0buKXN7xY8O.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/gM5ql3BKYmHG3WtZ0buKXN7xY8O.jpg",
+    "runtimeMinutes": 117
   },
   {
     "id": "MOV-0259",
@@ -9817,7 +9837,8 @@
     "reviewStatus": "confirmed",
     "reviewedAt": "2026-10-15T22:41:45.955Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0259-main-mvb7dbqn.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/cckTZXVpchMrljPouFf7u2wqUTX.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/cckTZXVpchMrljPouFf7u2wqUTX.jpg",
+    "runtimeMinutes": 144
   },
   {
     "id": "MOV-0260",
@@ -9844,7 +9865,8 @@
     "imdbRating": "6.6",
     "omdbNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0260-main-mvb7dfgv.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/iGvSMoPbWZWDnIhh54yiq3sW7wH.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/iGvSMoPbWZWDnIhh54yiq3sW7wH.jpg",
+    "runtimeMinutes": 114
   },
   {
     "id": "MOV-0261",
@@ -9871,7 +9893,8 @@
     "imdbRating": "6.8",
     "omdbNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0261-main-mvb7dinz.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/ode14q7WtDugFDp78fo9lCsmay9.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/ode14q7WtDugFDp78fo9lCsmay9.jpg",
+    "runtimeMinutes": 113
   },
   {
     "id": "MOV-0262",
@@ -9898,7 +9921,8 @@
     "imdbRating": "7.0",
     "omdbNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0262-main-mvb7dm8t.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/xwf74VcrHu1etzOsRVx7nckPPLR.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/xwf74VcrHu1etzOsRVx7nckPPLR.jpg",
+    "runtimeMinutes": 148
   },
   {
     "id": "MOV-0263",
@@ -9928,7 +9952,8 @@
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0263-main-mvbcfx4w-ozrvbc.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/7SYBPjv5ywF6cI4BSFFtlDyChT2.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 115
   },
   {
     "id": "MOV-0264",
