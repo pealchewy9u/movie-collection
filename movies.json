@@ -5237,7 +5237,8 @@
         "imdbRating": "5.7",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0147-film-4-mvb6xy6o.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/tFzUkdhPOForVrEfvxydXfPLrZR.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/tFzUkdhPOForVrEfvxydXfPLrZR.jpg",
+        "runtimeMinutes": 95
       }
     ],
     "reviewStatus": "collection"
@@ -5270,7 +5271,8 @@
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0148-main-mvb9ex5b-9vligz.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/zSqJ1qFq8NXFfi7JeIYMlzyR0dx.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 114
   },
   {
     "id": "MOV-0149",
@@ -5300,7 +5302,8 @@
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0149-main-mvb9ka92-glwxyu.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/xlaY2zyzMfkhk0HSC5VUwzoZPU1.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 148
   },
   {
     "id": "MOV-0150",
@@ -5327,7 +5330,8 @@
     "imdbRating": "7.0",
     "omdbNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0150-main-mvb6y233.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/p0BPQGSPoSa8Ml0DAf2mB2kCU0R.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/p0BPQGSPoSa8Ml0DAf2mB2kCU0R.jpg",
+    "runtimeMinutes": 145
   },
   {
     "id": "MOV-0151",
@@ -5358,7 +5362,8 @@
     "tmdbId": 16869,
     "enrichNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0151-main-mvb6y5uh.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/aupnPtagH9JVBuMrGEanf4iqXEQ.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/aupnPtagH9JVBuMrGEanf4iqXEQ.jpg",
+    "runtimeMinutes": 153
   },
   {
     "id": "MOV-0152",
@@ -5385,7 +5390,8 @@
     "imdbRating": "8.1",
     "omdbNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0152-main-mvb6y9n2.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/2H1TmgdfNtsKlU9jKdeNyYL5y8T.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/2H1TmgdfNtsKlU9jKdeNyYL5y8T.jpg",
+    "runtimeMinutes": 95
   },
   {
     "id": "MOV-0153",
@@ -5416,7 +5422,8 @@
     "tmdbId": 257211,
     "enrichNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0153-main-mvb6ydgx.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/bTQ46fupPbjBfFBHuzfD3hxxL0Q.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/bTQ46fupPbjBfFBHuzfD3hxxL0Q.jpg",
+    "runtimeMinutes": 121
   },
   {
     "id": "MOV-0154",
@@ -5443,7 +5450,8 @@
     "imdbRating": "6.3",
     "omdbNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0154-main-mvb6yhdt.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/hIh3ZgsZ31nbUAGn5SKIZGKiKCX.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/hIh3ZgsZ31nbUAGn5SKIZGKiKCX.jpg",
+    "runtimeMinutes": 119
   },
   {
     "id": "MOV-0155",
@@ -5473,7 +5481,8 @@
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0155-main-mvb9kdyd-9xv6jz.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/yQvGrMoipbRoddT0ZR8tPoR7NfX.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 169
   },
   {
     "id": "MOV-0156",
@@ -5503,7 +5512,8 @@
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0156-main-mvb9kuc8-yqtoeo.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/5nCjsUqjIAY4sqBxmTtYvSaiqXV.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 209
   },
   {
     "id": "MOV-0157",
@@ -5533,7 +5543,8 @@
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0157-main-mvb9ri6k-k052nr.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/hQE4q8Szeaae4davgB7o8MTLmwr.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 101
   },
   {
     "id": "MOV-0158",
@@ -5559,7 +5570,8 @@
     "imdbRating": "7.4",
     "omdbNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0158-main-mvb6z54d.jpg",
-    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/iV1W0IEtQYuBnnxNmZxSmPHK3Pu.jpg"
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/iV1W0IEtQYuBnnxNmZxSmPHK3Pu.jpg",
+    "runtimeMinutes": 155
   },
   {
     "id": "MOV-0159",
@@ -5589,7 +5601,8 @@
     "languageReviewedAt": "2026-10-15T22:54:23.767Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0159-main-mvba0a5n-xx9aqz.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w780/m7HcLUodrD4lM4s0Hui1tzO2pjO.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "runtimeMinutes": 105
   },
   {
     "id": "MOV-0160",
@@ -5634,7 +5647,8 @@
         "imdbRating": "7.2",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0160-film-0-mvb7om2s.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/9zCOLJmLNst0sCPZlkW1IRoH65E.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/9zCOLJmLNst0sCPZlkW1IRoH65E.jpg",
+        "runtimeMinutes": 110
       },
       {
         "title": "• From Russia with Love (1963)",
@@ -5650,7 +5664,8 @@
         "imdbRating": "7.3",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0160-film-1-mvb7opp7.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/zx4V17FP8oclNvOpTgs2iCCtiYk.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/zx4V17FP8oclNvOpTgs2iCCtiYk.jpg",
+        "runtimeMinutes": 115
       },
       {
         "title": "• Goldfinger (1964)",
@@ -5666,7 +5681,8 @@
         "imdbRating": "7.7",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0160-film-2-mvb7otqs.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/aKNFzaqQgPzsGXnsMc4kJH5hFIV.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/aKNFzaqQgPzsGXnsMc4kJH5hFIV.jpg",
+        "runtimeMinutes": 110
       },
       {
         "title": "• Thunderball (1965)",
@@ -5682,7 +5698,8 @@
         "imdbRating": "6.9",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0160-film-3-mvb7oxh1.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/wCc4qllaTDsQN8zgGkAgQrKO6N9.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/wCc4qllaTDsQN8zgGkAgQrKO6N9.jpg",
+        "runtimeMinutes": 130
       },
       {
         "title": "• You Only Live Twice (1967)",
@@ -5698,7 +5715,8 @@
         "imdbRating": "6.8",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0160-film-4-mvb7p13t.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/gIhS0VC7YzI8pj6zfS3KxsxV0dS.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/gIhS0VC7YzI8pj6zfS3KxsxV0dS.jpg",
+        "runtimeMinutes": 117
       },
       {
         "title": "• Diamonds Are Forever (1971)",
@@ -5714,7 +5732,8 @@
         "imdbRating": "6.5",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0160-film-5-mvb7p4qz.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/ooDT0eKrWCxJCsn9JehPkD0QYNj.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/ooDT0eKrWCxJCsn9JehPkD0QYNj.jpg",
+        "runtimeMinutes": 120
       },
       {
         "title": "• On Her Majesty's Secret Service (1969)",
@@ -5730,7 +5749,8 @@
         "imdbRating": "6.7",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0160-film-6-mvb7p8d7.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/yVzJLLhBwuWJBR9BYEMurShu2WT.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/yVzJLLhBwuWJBR9BYEMurShu2WT.jpg",
+        "runtimeMinutes": 142
       },
       {
         "title": "• Live and Let Die (1973)",
@@ -5746,7 +5766,8 @@
         "imdbRating": "6.7",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0160-film-7-mvb7pc8m.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/39qkrjqMZs6utwNmihVImC3ghas.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/39qkrjqMZs6utwNmihVImC3ghas.jpg",
+        "runtimeMinutes": 121
       },
       {
         "title": "• The Man with the Golden Gun (1974)",
@@ -5762,7 +5783,8 @@
         "imdbRating": "6.7",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0160-film-8-mvb7pfpi.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/xVkbKwGnBVNQ122GN5bCTMyPbWz.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/xVkbKwGnBVNQ122GN5bCTMyPbWz.jpg",
+        "runtimeMinutes": 125
       },
       {
         "title": "• The Spy Who Loved Me (1977)",
@@ -5778,7 +5800,8 @@
         "imdbRating": "7.0",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0160-film-9-mvb7pjf2.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/3ZxHKFxMYvAko680DsRgAZKWcLi.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/3ZxHKFxMYvAko680DsRgAZKWcLi.jpg",
+        "runtimeMinutes": 125
       },
       {
         "title": "• Moonraker (1979)",
@@ -5794,7 +5817,8 @@
         "imdbRating": "6.3",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0160-film-10-mvb7pne1.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/6LrJdXNmu5uHOVALZxVYd44Lva0.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/6LrJdXNmu5uHOVALZxVYd44Lva0.jpg",
+        "runtimeMinutes": 126
       },
       {
         "title": "• For Your Eyes Only (1981)",
@@ -5810,7 +5834,8 @@
         "imdbRating": "6.7",
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0160-film-11-mvb7pr3q.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/xV4Nnr6DjjERlqNikqDQX8LUgua.jpg"
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/xV4Nnr6DjjERlqNikqDQX8LUgua.jpg",
+        "runtimeMinutes": 128
       },
       {
         "title": "• Octopussy (1983)",
