@@ -370,16 +370,16 @@
   </header>
 
   <div class="tabs">
-    <div class="tab active" data-view="list">List</div>
-    <div class="tab" data-view="coverflow">Cover Flow</div>
+    <div class="tab" data-view="list">List</div>
+    <div class="tab active" data-view="coverflow">Cover Flow</div>
     <div class="tab" data-view="summary">Summary</div>
     <div class="tab" data-view="manager">Data Manager</div>
     <div class="tab" data-view="history">History</div>
   </div>
 
   <main>
-    <div id="list-view"></div>
-    <div id="coverflow-view">
+    <div id="list-view" style="display:none"></div>
+    <div id="coverflow-view" style="display:flex">
       <div class="cf-scroll" id="cf-scroll"></div>
       <div class="cf-caption" id="cf-caption"></div>
     </div>
@@ -446,6 +446,12 @@
     </div>
     <button onclick="saveSettings()" style="margin-top:16px; padding:10px 16px; border-radius:8px; border:none; background:var(--brass); color:#fff; font-weight:600;">Save</button>
     <span id="settings-saved-msg" style="display:none; color:#1B5E20; font-size:13px; margin-left:10px;">Saved</span>
+    <div style="margin-top:18px;padding:14px;border:1px solid var(--groove);border-radius:12px;background:var(--surface)">
+      <div style="font-size:14px;font-weight:700">Sync collection &amp; watching history</div>
+      <p style="font-size:11px;color:var(--text-muted);line-height:1.5;margin:7px 0 10px">Saves pending movie corrections and watch events to their separate GitHub repositories. Never rematches or refreshes movie metadata.</p>
+      <button type="button" id="sync-everything-btn" class="manager-btn" style="margin-top:0">Sync now</button>
+      <p id="sync-everything-status" role="status" aria-live="polite" style="white-space:pre-line;font-size:12px;color:var(--text-muted);line-height:1.55;margin:9px 0 0"></p>
+    </div>
 
     <hr style="margin:24px 0; border:none; border-top:1px solid var(--groove);">
 
@@ -458,7 +464,7 @@
 <script>
 const DATA_URL = './movies.json';
 let movies = [];
-let currentView = 'list';
+let currentView = 'coverflow';
 let serverMovieBaseline=new Map(); // snapshot from last trusted GitHub load
 
 // GitHub is the source of truth when configured. Pages is a fallback only.
@@ -897,7 +903,7 @@ function renderWatchHistory(){
   const never=films.filter(m=>!counts.has(m.id));
   el.innerHTML=`<div class="history-wrap"><h2 style="font-size:20px;margin:4px 0">Watching History</h2><p class="history-note">Track what you have watched without changing your movie collection data.</p>
   <div class="history-kpis"><div class="history-kpi"><strong>${counts.size}</strong><span>Movies watched</span></div><div class="history-kpi"><strong>${events.length}</strong><span>Total viewings</span></div><div class="history-kpi"><strong>${never.length}</strong><span>Never watched</span></div></div>
-  <section class="history-panel"><div class="random-feature"><div class="random-feature-copy"><span class="random-feature-icon" aria-hidden="true">🎲</span><div><div class="random-feature-title">What should we watch?</div><div class="random-feature-sub">A surprise pick from your movies</div></div></div><button type="button" class="history-random" id="history-random" ${films.length?'':'disabled'} aria-label="Pick a random movie and open it in Cover Flow"><span class="random-shuffle-icon" aria-hidden="true">⤨</span><span class="random-pick-label">Surprise me</span></button></div><p class="history-note">Opens your pick in Cover Flow. Nothing is marked watched until you tap Watched.</p><p class="history-note" id="watch-status" role="status">${escapeHtml(watchStatus)}</p><button class="manager-btn secondary" id="history-sync">Sync history</button> <span class="history-note">${storedWatchEvents(WATCH_PENDING_KEY).length} awaiting GitHub sync</span></section>
+  <section class="history-panel"><div class="random-feature"><div class="random-feature-copy"><span class="random-feature-icon" aria-hidden="true">🎲</span><div><div class="random-feature-title">What should we watch?</div></div></div><button type="button" class="history-random" id="history-random" ${films.length?'':'disabled'} aria-label="Pick a random movie and open it in Cover Flow"><span class="random-shuffle-icon" aria-hidden="true">⤨</span><span class="random-pick-label">Surprise me</span></button></div></section>
   <section class="history-panel"><h3>Recently Watched</h3><div class="history-rows">${recent.map(({m,e})=>watchMovieRow(m,new Date(e.watchedAt).toLocaleDateString()+' · '+counts.get(m.id)+' time(s)')).join('')||'<p class="history-note">No movies watched yet. Use Watched below a poster in Cover Flow.</p>'}</div></section>
   <section class="history-panel"><h3>Most Watched</h3><div class="history-rows">${top.map(([id,n])=>{const m=films.find(f=>f.id===id);return m?watchMovieRow(m,n+' viewing'+(n===1?'':'s')):''}).join('')||'<p class="history-note">No viewing history yet.</p>'}</div></section>
   <details class="history-panel"><summary style="font-size:14px;font-weight:700;cursor:pointer">Never Watched (${never.length})</summary><div class="history-rows" style="max-height:440px;overflow-y:auto;margin-top:12px">${never.map(m=>watchMovieRow(m,'Not watched yet')).join('')||'<p class="history-note">Every movie has been watched!</p>'}</div></details></div>`;
@@ -912,7 +918,6 @@ function renderWatchHistory(){
     // Keep the shuffle moment short; the pick still goes straight to Cover Flow.
     setTimeout(()=>switchMovieView('coverflow',pick.id),430);
   };
-  el.querySelector('#history-sync').onclick=()=>syncMovieWatches().then(setWatchStatus).catch(e=>setWatchStatus(e.message));
   el.querySelectorAll('[data-history-film]').forEach(row=>row.onclick=()=>switchMovieView('coverflow',row.dataset.historyFilm));
 }
 
@@ -1186,7 +1191,7 @@ function renderManager(){
   el.innerHTML=`<h2 style="font-size:20px;margin:0 0 5px">Collection overview</h2>
     <p class="manager-small" style="margin-bottom:14px">Physical collection entries are counted once. Movies inside box sets are not counted as separate entries.</p>
     <div class="manager-stats">${stats.map(([label,n])=>`<div class="manager-stat"><strong>${n}</strong><span>${label}</span></div>`).join('')}</div>
-    <div class="manager-sync" id="sync-status">${Object.keys(pendingEdits()).length} local edits pending · <button class="manager-btn secondary" id="sync-now">Sync with GitHub</button></div>
+    <div class="manager-sync" id="sync-status">${Object.keys(pendingEdits()).length} local movie edits pending · Sync from Settings</div>
     <details class="bulk-language" id="bulk-language-panel" ${bulkLanguageOpen?'open':''}>
       <summary>Bulk language review · ${missingLanguageEntries().length} missing</summary>
       <div id="bulk-language-body"></div>
@@ -1243,7 +1248,6 @@ function renderManager(){
   el.querySelector('#bulk-poster-save').onclick=bulkSavePosters;
   el.querySelector('#bulk-poster-stop').onclick=()=>{bulkPosterStop=true;bulkPosterStatus('Stopping after current poster…');};
   renderBulkPosterResults();
-  el.querySelector('#sync-now').onclick=async()=>{const e=el.querySelector('#sync-status');e.textContent='Syncing…';try{e.textContent=await syncPendingEdits();}catch(err){e.textContent='Not synced: '+err.message;}};
   el.querySelector('#manager-filter').onchange=e=>{managerFilter=e.target.value;renderManager();};
   el.querySelector('#manager-search').oninput=e=>{managerSearch=e.target.value;const pos=e.target.selectionStart;renderManager();const input=document.getElementById('manager-search');input.focus();input.setSelectionRange(pos,pos);};
   el.querySelectorAll('[data-fix]').forEach(b=>b.onclick=()=>openDetail(b.dataset.fix));
@@ -2451,6 +2455,43 @@ document.getElementById('upcmdb-copy-btn').addEventListener('click', async () =>
     status.textContent='Automatic copy blocked. The key is visible: press and hold it, then Copy.';
   }
 });
+
+// One Settings action, two independent repositories and explicit per-part outcomes.
+// Never invoke the movies.json writer if there are no pending movie edits.
+let combinedSyncRunning=false;
+async function syncCollectionAndHistory(){
+  if(combinedSyncRunning)return;
+  const button=document.getElementById('sync-everything-btn');
+  const status=document.getElementById('sync-everything-status');
+  combinedSyncRunning=true;button.disabled=true;
+  const messages=[];
+  const update=()=>{status.textContent=messages.join('\n');};
+  try{
+    if(Object.keys(pendingEdits()).length){
+      status.textContent='Checking and syncing pending movie corrections…';
+      try{await syncPendingEdits();messages.push('Movies: saved and verified.');}
+      catch(e){messages.push('Movies: NOT synced — '+e.message);}
+    }else messages.push('Movies: already up to date (no changes made).');
+    update();
+    const queued=storedWatchEvents(WATCH_PENDING_KEY).length;
+    if(!watchGitHubConfig()){
+      messages.push('Watching history: local only. Configure a separate private repository to sync.');
+    }else{
+      try{
+        if(queued)await syncMovieWatches();
+        await loadWatchHistory();
+        messages.push('Watching history: '+(queued?'saved and verified; ':'')+'latest history loaded.');
+      }catch(e){messages.push('Watching history: NOT synced — '+e.message);}
+    }
+    update();
+  }finally{
+    button.disabled=false;
+    combinedSyncRunning=false;
+    if(currentView==='manager')renderManager();
+    if(currentView==='history')renderWatchHistory();
+  }
+}
+document.getElementById('sync-everything-btn').addEventListener('click',syncCollectionAndHistory);
 
 function openSettings() {
   document.getElementById('upcmdb-key-input').value = localStorage.getItem('upcmdbKey') || '';
