@@ -638,7 +638,7 @@ function buildGenreFilter() {
 // Blu-ray.com encodes 4K releases right in the title itself (e.g. "Dunkirk 4K") --
 // there's no separate format field, so this is the reliable way to detect it.
 function isUHD(movie) {
-  return movie.formatOverride === '4k' || /\b4K\b/i.test(movie.title || '');
+  return movie.formatOverride ? movie.formatOverride === '4k' : (movie.is4k === true || /\b(?:4K|UHD|Ultra[ -]?HD)\b/i.test(movie.title || ''));
 }
 
 // Before TMDB enrichment confirms it, guess movie vs TV from obvious title patterns
@@ -2860,6 +2860,25 @@ async function retryOmdbOnly(item, omdbKey) {
 // Add/Scan: new physical items are always reviewed before being written to GitHub.
 let newItemCandidate=null, addStream=null, addScanTimer=null, addDetector=null, addDecoder=null;
 function barcodeKey(value){const v=String(value||'').replace(/\D/g,'');return v.length===13&&v[0]==='0'?v.slice(1):v;}
+// Physical disc format must come from the exact-barcode product edition, never TMDB film metadata.
+// The provider's fields differ across listings; do not guess Blu-ray when none specify a format.
+function physicalFormatFromBarcode(data){
+ const fields=['title','name','productName','productTitle','format','mediaFormat','productFormat',
+  'edition','editionName','productType','mediaType','media','description','productDescription',
+  'subtitle','variant','category','categories','features','specifications'];
+ const texts=fields.flatMap(key=>{
+   const value=data?.[key];
+   if(typeof value==='string')return [value];
+   if(Array.isArray(value))return value.filter(x=>typeof x==='string');
+   return [];
+ });
+ const evidence=texts.join(' | ');
+ if(/\b(?:4\s*K(?:\s*(?:ultra\s*hd|uhd|blu[ -]?ray))?|ultra[ -]?hd|uhd|2160p)\b/i.test(evidence))return '4k';
+ if(/\bblu[ -]?ray\b|\bbd[- ]?(?:video|rom)\b/i.test(evidence))return 'bluray';
+ if(/\bdvd\b/i.test(evidence))return 'dvd';
+ return null;
+}
+
 function duplicateBarcode(value){const key=barcodeKey(value);return key&&movies.find(m=>[m.upc,m.ean].some(v=>barcodeKey(v)===key));}
 function addMsg(message){const el=document.getElementById('add-message');if(el)el.textContent=message;}
 function openAddMovie(){
@@ -2874,7 +2893,7 @@ function openAddMovie(){
  <div class="add-fields">
  <label class="add-wide">Title on your disc / box<input id="add-title" placeholder="Required"></label>
  <label>Item type<select id="add-type"><option value="movie">Movie</option><option value="tv">TV show</option><option value="boxset">Multi-film box set</option></select></label>
- <label>Format<select id="add-format"><option value="bluray">Blu-ray</option><option value="4k">4K UHD</option><option value="dvd">DVD</option></select></label>
+ <label>Format<select id="add-format"><option value="">Confirm disc format…</option><option value="bluray">Blu-ray</option><option value="4k">4K UHD</option><option value="dvd">DVD</option></select></label>
  <label>Number of discs<input id="add-discs" type="number" min="0" value="1"></label>
  <label>Original language<select id="add-language"><option value="">Not recorded</option><option value="en">English</option><option value="hi">Hindi</option><option value="ta">Tamil</option><option value="te">Telugu</option><option value="pa">Punjabi</option><option value="fr">French</option><option value="es">Spanish</option><option value="ja">Japanese</option><option value="ko">Korean</option><option value="other">Other</option></select></label>
  <label class="add-wide" id="add-films-wrap" style="display:none">Included movie titles (one per line)<textarea id="add-films" rows="3" placeholder="One movie per line, e.g. Movie (2001)"></textarea></label>
@@ -2947,6 +2966,10 @@ async function lookupNewBarcode(){
    if(!d.title){addMsg('No product found for this barcode. Enter title and choose Find on TMDB.');return;}
    // Ignore a late network response if the user changed the barcode mid-search.
    if(document.getElementById('add-barcode').value.replace(/\s/g,'')!==barcode){addMsg('Barcode changed while searching. Please look it up again.');return;}
+   // Set only from the exact barcode's physical-edition evidence. 4K combo packs win over Blu-ray.
+   // Leave uncertain products requiring explicit selection rather than silently saving Blu-ray.
+   const detectedFormat=physicalFormatFromBarcode(d);
+   document.getElementById('add-format').value=detectedFormat||'';
    document.getElementById('add-title').value=d.title;
    if(d.year)document.getElementById('add-year').value=d.year;
    newItemCandidate={tmdbTitle:d.title,posterUrl:d.productImageUrl||null,genre:d.genre||null,overview:d.plot||null,year:d.year?String(d.year):null,imdbId:d.imdbID||null,imdbRating:d.imdbRating||null,runtimeMinutes:runtimeMinutes(d.runtime)||runtimeMinutes(d.Runtime)||null,matchedVia:'upcmdb'};
@@ -2955,7 +2978,7 @@ async function lookupNewBarcode(){
    let tmdbMessage='';
    try{addMsg('Barcode found. Checking TMDB for the movie…');tmdbMessage=await autoFindTmdbFromBarcode(d,d.title);}
    catch(err){tmdbMessage='TMDB lookup unavailable ('+err.message+'). You can find the movie manually.';}
-   addMsg('Barcode found. '+tmdbMessage+' Confirm the physical edition before saving.');
+   addMsg('Barcode found. '+tmdbMessage+(detectedFormat?' Format suggested from barcode: '+({ '4k':'4K UHD','bluray':'Blu-ray','dvd':'DVD' }[detectedFormat])+'. Verify on the case before saving.':' Format not specified in barcode listing; select the format shown on the case before saving.'));
  }catch(e){addMsg('Barcode lookup failed: '+e.message+'. Enter the title manually.');}
  finally{lookupButton.disabled=false;saveButton.disabled=false;}
 }
@@ -2982,12 +3005,14 @@ async function searchNewMovieTmdb(){
 async function saveNewMovie(){
  const title=document.getElementById('add-title').value.trim(),barcode=document.getElementById('add-barcode').value.replace(/\s/g,''),type=document.getElementById('add-type').value,format=document.getElementById('add-format').value;
  if(!title){addMsg('Title is required.');return;}
+ if(!['4k','bluray','dvd'].includes(format)){addMsg('Select the physical disc format (4K UHD, Blu-ray, or DVD) before saving.');return;}
  if(barcode&&!/^\d{8}$|^\d{12,14}$/.test(barcode)){addMsg('Barcode must contain 8, 12, 13 or 14 digits, or be blank.');return;}
  if(showAddDuplicate()){addMsg('Duplicate barcode. This item was not added.');return;}
  const config=githubConfig();if(!config){addMsg('Configure GitHub repository and token in Settings before adding a new movie.');return;}
  const films=document.getElementById('add-films').value.split('\n').map(x=>x.trim()).filter(Boolean);
  const discs=Math.max(0,Number(document.getElementById('add-discs').value)||0),lang=document.getElementById('add-language').value;
  const movie={id:'MOV-NEW-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),title,studio:document.getElementById('add-studio').value.trim(),upc:barcode.length===12?barcode:null,ean:barcode.length!==12?barcode||null:null,mediaType:type==='tv'?'tv':'movie',blurayDiscs:format==='dvd'?0:discs,dvdDiscs:format==='dvd'?discs:0,is4k:format==='4k',formatOverride:format,dateAdded:new Date().toISOString().slice(0,10),releaseDate:null,countryCode:null,isBoxSet:type==='boxset',includedMovies:type==='boxset'?films.map(title=>({title})):[],...((type!=='boxset'&&newItemCandidate)||{})};
+ movie.formatOverride=format;movie.is4k=format==='4k'; // Physical format selection overrides any provider metadata.
  movie.mediaType=type==='tv'?'tv':'movie'; // User's item-type selection is authoritative.
  if(type==='tv'||type==='boxset')delete movie.runtimeMinutes;
  if(type==='boxset'){movie.imdbRating=null;movie.imdbId=null;movie.tmdbId=null;movie.tmdbTitle=null;movie.reviewStatus='collection';}
