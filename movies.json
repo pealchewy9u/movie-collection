@@ -12689,13 +12689,13 @@
     "tmdbId": 346698,
     "tmdbTitle": "Barbie",
     "posterUrl": "https://image.tmdb.org/t/p/w500/iuFNMS8U5cb6xfzi51Dbkovj7vM.jpg",
-    "genre": "Comedy, Adventure, Fantasy",
+    "genre": "Comedy",
     "overview": "Barbie and Ken are having the time of their lives in the colorful and seemingly perfect world of Barbie Land. However, when they get a chance to go to the real world, they soon discover the joys and perils of living among humans.",
     "year": "2023",
     "language": "en",
     "imdbId": "tt1517268",
     "runtimeMinutes": 114,
-    "matchedVia": "tmdb-manual",
+    "matchedVia": "tmdb",
     "reviewStatus": "confirmed",
     "imdbRating": "6.8",
     "omdbNote": null,
@@ -12703,6 +12703,7 @@
     "languageReviewedAt": "2026-11-13T17:34:59.785Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1794591299784-1bj0c-main-mwf9braq-q6hp1g.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/iuFNMS8U5cb6xfzi51Dbkovj7vM.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "enrichNote": null
   }
 ]
