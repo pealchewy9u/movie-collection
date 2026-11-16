@@ -274,13 +274,13 @@
   <div class="filter-row" style="margin-top:8px"><select id="language-select" aria-label="Filter by language"><option value="">All Languages</option></select></div>
  </header>
  <div class="tabs" role="tablist">
-  <div class="tab active" data-view="list" role="tab" tabindex="0">List</div>
-  <div class="tab" data-view="coverflow" role="tab" tabindex="0">Cover Flow</div>
+  <div class="tab" data-view="list" role="tab" tabindex="0">List</div>
+  <div class="tab active" data-view="coverflow" role="tab" tabindex="0" aria-selected="true">Cover Flow</div>
   <div class="tab" data-view="summary" role="tab" tabindex="0">Summary</div>
  </div>
  <main>
-  <div id="list-view"></div>
-  <div id="coverflow-view" style="display:none"><div class="cf-scroll" id="cf-scroll"></div><div class="cf-caption" id="cf-caption"></div></div>
+  <div id="list-view" style="display:none"></div>
+  <div id="coverflow-view" style="display:flex"><div class="cf-scroll" id="cf-scroll"></div><div class="cf-caption" id="cf-caption"></div></div>
   <div id="summary-view" style="display:none"></div>
  </main>
  <div id="status-bar"><span id="status-text">Loading collection…</span><button id="refresh-btn" type="button">Refresh</button></div>
@@ -293,7 +293,7 @@
 const GITHUB_DATA_API='https://api.github.com/repos/pealchewy9u/movie-collection/contents/movies.json?ref=main';
 const DATA_URL='./movies.json';
 let movies=[];
-let currentView='list';
+let currentView='coverflow';
 const $=id=>document.getElementById(id);
 const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 const LANG={en:'English',hi:'Hindi',pa:'Punjabi',ta:'Tamil',te:'Telugu',bn:'Bengali',fr:'French',es:'Spanish',ja:'Japanese',ko:'Korean',zh:'Chinese',de:'German',ml:'Malayalam',mr:'Marathi',ur:'Urdu'};
