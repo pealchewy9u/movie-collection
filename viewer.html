@@ -341,17 +341,65 @@ function filtered(){
  const q=$('search-input').value.trim().toLocaleLowerCase(),g=$('genre-select').value,t=$('type-select').value,l=$('language-select').value;
  return movies.filter(m=>hasGenre(m,g)&&(!t||(t==='boxset'?isSet(m):!isSet(m)&&mediaType(m)===t))&&(!l||(m.languageOverride||m.language)===l)&&(!q||[m.title,m.studio,...(m.includedMovies||[]).map(f=>typeof f==='string'?f:f.title)].join(' ').toLocaleLowerCase().includes(q))).sort((a,b)=>(a.title||'').localeCompare(b.title||''));
 }
+// Each film in a box set is a virtual Cover Flow card, not another physical item.
+function boxFilmKey(boxId,index){return 'box-film:'+encodeURIComponent(boxId)+':'+index;}
+function coverFlowItems(){
+ const q=$('search-input').value.trim().toLocaleLowerCase(),g=$('genre-select').value,t=$('type-select').value,l=$('language-select').value;
+ const groups=[];
+ for(const box of movies){
+  const entries=[];
+  if(hasGenre(box,g)&&(!t||(t==='boxset'?isSet(box):!isSet(box)&&mediaType(box)===t))&&(!l||(box.languageOverride||box.language)===l)&&(!q||[box.title,box.studio].join(' ').toLocaleLowerCase().includes(q)))entries.push(box);
+  if(box.isBoxSet&&t!=='boxset'&&t!=='tv'){
+   (box.includedMovies||[]).forEach((raw,index)=>{
+    const film=typeof raw==='string'?{title:raw}:raw;
+    if(!film||mediaType(film)==='tv')return;
+    const entry={...film,id:boxFilmKey(box.id,index),isBoxSet:false,mediaType:'movie',boxParentId:box.id,boxFilmIndex:index,boxTitle:box.title,formatOverride:film.formatOverride||box.formatOverride,language:film.languageOverride||film.language||box.languageOverride||box.language};
+    if(!hasGenre(entry,g)||(l&&(entry.languageOverride||entry.language)!==l)||(q&&![film.title,film.tmdbTitle,box.title,box.studio].join(' ').toLocaleLowerCase().includes(q)))return;
+    entries.push(entry);
+   });
+  }
+  if(entries.length){
+   // Keep parent first, then individual films in release-year order.
+   entries.sort((a,b)=>{
+    if(!a.boxParentId)return -1;
+    if(!b.boxParentId)return 1;
+    const year=x=>/^(18|19|20)\d{2}$/.test(String(x.year||''))?Number(x.year):null;
+    const ay=year(a),by=year(b);
+    if(ay!==null&&by!==null&&ay!==by)return ay-by;
+    return a.boxFilmIndex-b.boxFilmIndex;
+   });
+   groups.push({title:box.title||'',id:String(box.id),entries});
+  }
+ }
+ groups.sort((a,b)=>a.title.localeCompare(b.title)||a.id.localeCompare(b.id));
+ return groups.flatMap(group=>group.entries);
+}
+function openFlowDetail(id){
+ const parentMovie=movies.find(m=>m.id===id);
+ if(parentMovie){openDetail(id);return;}
+ const child=coverFlowItems().find(m=>m.id===id&&m.boxParentId);
+ if(!child)return;
+ const parent=movies.find(m=>m.id===child.boxParentId);
+ if(!parent)return;
+ const runtime=Number(child.runtimeMinutes);
+ const runtimeText=Number.isFinite(runtime)&&runtime>0?(Math.floor(runtime/60)?Math.floor(runtime/60)+'h'+(runtime%60?' '+runtime%60+'m':''):runtime+'m'):null;
+ const fields=[['Year',child.year],['Runtime',runtimeText],['IMDb Rating',child.imdbRating?'★ '+child.imdbRating:null],['Genre',displayGenre(child)],['Language',lang(child.languageOverride||child.language)],['Format',isUHD(child)?'4K UHD':'Blu-ray']];
+ $('detail-sheet').innerHTML=`<div class="sheet-close"><button id="close-detail" type="button">Close</button></div><div class="detail-hero">${cover(child,'sheet-cover','sheet-cover')}<div class="detail-hero-text"><div class="sheet-title">${esc(child.tmdbTitle||child.title||'Untitled')}</div><div class="detail-chips"><span>Part of box set</span>${child.year?`<span>${esc(child.year)}</span>`:''}${child.imdbRating?`<span>★ ${esc(child.imdbRating)}</span>`:''}</div></div></div><p class="manager-small">Part of: <b>${esc(parent.title||'Box set')}</b></p><div class="sheet-fields">${fields.map(([name,value])=>`<div><div class="field-label">${name}</div><div class="field-value">${esc(value||'—')}</div></div>`).join('')}</div>${child.overview?`<div style="margin-top:16px;font-size:13px;line-height:1.55">${esc(child.overview)}</div>`:''}<button type="button" class="manager-btn secondary" id="show-parent-box">View box set details</button>`;
+ $('detail-overlay').style.display='flex';
+ $('close-detail').onclick=closeDetail;
+ $('show-parent-box').onclick=()=>openDetail(parent.id);
+}
 function render(){if(currentView==='list')renderList();else if(currentView==='coverflow')renderFlow();else renderSummary();}
 function renderList(){const list=$('list-view'),items=filtered();
  list.innerHTML=items.length?items.map(m=>`<div class="movie-row" data-id="${esc(m.id)}">${cover(m,'cover-thumb','cover-placeholder')}<div class="movie-meta"><div class="movie-title">${esc(m.title||'Untitled')}</div></div><div class="badge-stack">${mediaType(m)==='tv'?'<div class="format-badge format-tv">TV</div>':''}<div class="format-badge ${isUHD(m)?'format-4k':'format-bluray'}">${isUHD(m)?'4K UHD':'BLU-RAY'}</div>${m.imdbRating?`<div class="format-badge imdb-badge">★ ${esc(m.imdbRating)}</div>`:m.isBoxSet?'<div class="format-badge collection-badge">COLLECTION</div>':''}${displayGenre(m)?`<div class="movie-genre">${esc(displayGenre(m))}</div>`:''}</div></div>`).join(''):'<div class="empty-state">No movies match.</div>';
  list.querySelectorAll('[data-id]').forEach(el=>el.addEventListener('click',()=>openDetail(el.dataset.id)));
 }
-function renderFlow(){const scroll=$('cf-scroll'),items=filtered();
+function renderFlow(){const scroll=$('cf-scroll'),items=coverFlowItems();
  scroll.innerHTML=items.map(m=>`<div class="cf-card" data-id="${esc(m.id)}">${cover(m,'cf-cover','cf-cover-placeholder')}${cover(m,'cf-reflection','cf-reflection-placeholder')}</div>`).join('');
  function update(){const rect=scroll.getBoundingClientRect(),center=rect.left+rect.width/2;let best=Infinity,bestIndex=0;
  scroll.querySelectorAll('.cf-card').forEach((el,i)=>{const r=el.getBoundingClientRect(),dist=(r.left+r.width/2-center)/170,d=Math.max(-3,Math.min(3,dist));el.style.transform=`scale(${Math.max(.6,1-Math.abs(d)*.18)}) rotateY(${d*-50}deg)`;el.style.opacity=Math.abs(d)>2.6?'0':'1';el.style.zIndex=Math.round(10-Math.abs(d));if(Math.abs(dist)<best){best=Math.abs(dist);bestIndex=i;}});
- const m=items[bestIndex];$('cf-caption').innerHTML=m?`<div class="cf-title">${esc(m.title)}</div>${m.imdbRating?`<div class="cf-studio">★ ${esc(m.imdbRating)} IMDb</div>`:''}`:'';}
- scroll.onscroll=()=>requestAnimationFrame(update);scroll.querySelectorAll('[data-id]').forEach(el=>el.addEventListener('click',()=>openDetail(el.dataset.id)));requestAnimationFrame(update);
+ const m=items[bestIndex];$('cf-caption').innerHTML=m?`<div class="cf-title">${esc(m.title||'Untitled')}</div>${m.boxParentId?`<div class="cf-studio">Part of ${esc(m.boxTitle||'Box set')}</div>`:''}${m.imdbRating?`<div class="cf-studio">★ ${esc(m.imdbRating)} IMDb</div>`:''}`:'';}
+ scroll.onscroll=()=>requestAnimationFrame(update);scroll.querySelectorAll('[data-id]').forEach(el=>el.addEventListener('click',()=>openFlowDetail(el.dataset.id)));requestAnimationFrame(update);
 }
 
 function summaryDashboardMarkup(filmCount, tvCount, itemCount, formatCounts, languageCounts, genreCounts, escFn) {
