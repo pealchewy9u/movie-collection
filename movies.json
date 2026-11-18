@@ -13054,8 +13054,7 @@
         "omdbNote": null,
         "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795042974775-0e4jo-film-0-mwmq91jh-jeufrk.jpg",
         "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/wVYREutTvI2tmxr6ujrHT704wGF.jpg",
-        "posterLocked": true,
-        "matchedVia": "tmdb-manual"
+        "posterLocked": true
       },
       {
         "title": "Annabelle",
@@ -13092,7 +13091,10 @@
         "runtimeMinutes": 110,
         "matchNote": null,
         "imdbRating": "6.5",
-        "omdbNote": null
+        "omdbNote": null,
+        "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795042974775-0e4jo-film-3-mwmq9866-fbdi0t.jpg",
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/tb86j8jVCVsdZnzf8I6cIi65IeM.jpg",
+        "posterLocked": true
       },
       {
         "title": "The nun",
@@ -13111,7 +13113,10 @@
         "runtimeMinutes": 106,
         "matchNote": null,
         "imdbRating": "5.9",
-        "omdbNote": null
+        "omdbNote": null,
+        "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795042974775-0e4jo-film-5-mwmq9bhw-nqukvc.jpg",
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/qWsHMrbg9DsBY3bCMk9jyYCRVRs.jpg",
+        "posterLocked": true
       },
       {
         "title": "The conjuring the devil made me do it",
@@ -13126,7 +13131,10 @@
         "runtimeMinutes": 111,
         "matchNote": null,
         "imdbRating": "6.2",
-        "omdbNote": null
+        "omdbNote": null,
+        "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795042974775-0e4jo-film-6-mwmq9eqc-1pi6t3.jpg",
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/xbSuFiJbbBWCkyCCKIMfuDCA4yV.jpg",
+        "posterLocked": true
       },
       {
         "title": "The nun 2",
