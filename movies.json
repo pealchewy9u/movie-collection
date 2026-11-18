@@ -12975,7 +12975,7 @@
     "language": "en",
     "imdbId": "tt5727208",
     "runtimeMinutes": 136,
-    "matchedVia": "tmdb",
+    "matchedVia": "tmdb-manual",
     "reviewStatus": "confirmed",
     "imdbRating": "7.4",
     "omdbNote": null,
@@ -12984,6 +12984,7 @@
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795042102250-3dh3t-main-mwmpq0v1-v36jjh.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/6XN1vxHc7kUSqNWtaQKN45J5x2v.jpg",
     "posterLocked": true,
-    "enrichNote": null
+    "enrichNote": null,
+    "reviewedAt": "2026-11-18T22:49:25.751Z"
   }
 ]
