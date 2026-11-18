@@ -2879,6 +2879,39 @@ function physicalFormatFromBarcode(data){
  return null;
 }
 
+// Physical-disc label, not the film's production company. Prefer explicit product
+// distributor/publisher fields; inspect labeled product text only as a fallback.
+// Do not derive a label from the barcode prefix or from TMDB production companies.
+function discDistributorFromBarcode(data){
+ const sources=[data,data?.product,data?.item,data?.metadata].filter(x=>x&&typeof x==='object'&&!Array.isArray(x));
+ const fields=['studio','distributor','distributionCompany','distributingCompany','publisher',
+  'label','recordLabel','homeVideoLabel','releaseLabel','manufacturer','brand'];
+ const clean=value=>{
+  const text=typeof value==='string'?value:(value&&typeof value==='object'&&!Array.isArray(value)?value.name||value.title||'':'');
+  if(typeof text!=='string')return '';
+  const result=text.trim().replace(/\s+/g,' ');
+  return result.length<=100 && !/^(unknown|n\/?a|none|various|other)$/i.test(result)?result:'';
+ };
+ for(const source of sources){
+  for(const field of fields){const found=clean(source[field]);if(found)return found;}
+ }
+ // Explicitly tagged text, not free-form mentions of actors or movie studios.
+ for(const source of sources){
+  for(const field of ['description','productDescription','details','specifications']){
+   const values=Array.isArray(source[field])?source[field]:[source[field]];
+   for(const value of values){
+    if(typeof value!=='string')continue;
+    const match=value.match(/(?:^|[\n;|])\s*(?:studio|distributor|publisher|label|manufacturer)\s*:\s*([^\n;|]{2,100})/i);
+    if(match){const found=clean(match[1]);if(found)return found;}
+   }
+  }
+ }
+ // Edition-specific wording identifies this particular home-video imprint.
+ const title=[data?.title,data?.productTitle,data?.productName,data?.edition,data?.editionName].filter(x=>typeof x==='string').join(' ');
+ if(/\b(?:the\s+)?criterion\s+collection\b/i.test(title))return 'Criterion';
+ return '';
+}
+
 function duplicateBarcode(value){const key=barcodeKey(value);return key&&movies.find(m=>[m.upc,m.ean].some(v=>barcodeKey(v)===key));}
 function addMsg(message){const el=document.getElementById('add-message');if(el)el.textContent=message;}
 function openAddMovie(){
@@ -2968,17 +3001,22 @@ async function lookupNewBarcode(){
    if(document.getElementById('add-barcode').value.replace(/\s/g,'')!==barcode){addMsg('Barcode changed while searching. Please look it up again.');return;}
    // Set only from the exact barcode's physical-edition evidence. 4K combo packs win over Blu-ray.
    // Leave uncertain products requiring explicit selection rather than silently saving Blu-ray.
+   const detectedDistributor=discDistributorFromBarcode(d);
    const detectedFormat=physicalFormatFromBarcode(d);
    document.getElementById('add-format').value=detectedFormat||'';
    document.getElementById('add-title').value=d.title;
    if(d.year)document.getElementById('add-year').value=d.year;
+   // Never overwrite a distributor already entered by the owner.
+   const studioInput=document.getElementById('add-studio');
+   if(studioInput && !studioInput.value.trim() && detectedDistributor)studioInput.value=detectedDistributor;
    newItemCandidate={tmdbTitle:d.title,posterUrl:d.productImageUrl||null,genre:d.genre||null,overview:d.plot||null,year:d.year?String(d.year):null,imdbId:d.imdbID||null,imdbRating:d.imdbRating||null,runtimeMinutes:runtimeMinutes(d.runtime)||runtimeMinutes(d.Runtime)||null,matchedVia:'upcmdb'};
    if(newItemCandidate.imdbId&&localStorage.getItem('omdbKey'))newItemCandidate=await retryOmdbOnly({...newItemCandidate,mediaType:'movie'},localStorage.getItem('omdbKey'));
    if(document.getElementById('add-barcode').value.replace(/\s/g,'')!==barcode){newItemCandidate=null;addMsg('Barcode changed while searching. Please look it up again.');return;}
    let tmdbMessage='';
    try{addMsg('Barcode found. Checking TMDB for the movie…');tmdbMessage=await autoFindTmdbFromBarcode(d,d.title);}
    catch(err){tmdbMessage='TMDB lookup unavailable ('+err.message+'). You can find the movie manually.';}
-   addMsg('Barcode found. '+tmdbMessage+(detectedFormat?' Format suggested from barcode: '+({ '4k':'4K UHD','bluray':'Blu-ray','dvd':'DVD' }[detectedFormat])+'. Verify on the case before saving.':' Format not specified in barcode listing; select the format shown on the case before saving.'));
+   const distributorNote=detectedDistributor?' Studio / distributor suggested: '+detectedDistributor+'. Verify on the case.':' Studio / distributor not provided; enter it manually under Additional details if known.';
+   addMsg('Barcode found. '+tmdbMessage+(detectedFormat?' Format suggested from barcode: '+({ '4k':'4K UHD','bluray':'Blu-ray','dvd':'DVD' }[detectedFormat])+'. Verify on the case before saving.':' Format not specified in barcode listing; select the format shown on the case before saving.')+distributorNote);
  }catch(e){addMsg('Barcode lookup failed: '+e.message+'. Enter the title manually.');}
  finally{lookupButton.disabled=false;saveButton.disabled=false;}
 }
@@ -3013,6 +3051,7 @@ async function saveNewMovie(){
  const discs=Math.max(0,Number(document.getElementById('add-discs').value)||0),lang=document.getElementById('add-language').value;
  const movie={id:'MOV-NEW-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),title,studio:document.getElementById('add-studio').value.trim(),upc:barcode.length===12?barcode:null,ean:barcode.length!==12?barcode||null:null,mediaType:type==='tv'?'tv':'movie',blurayDiscs:format==='dvd'?0:discs,dvdDiscs:format==='dvd'?discs:0,is4k:format==='4k',formatOverride:format,dateAdded:new Date().toISOString().slice(0,10),releaseDate:null,countryCode:null,isBoxSet:type==='boxset',includedMovies:type==='boxset'?films.map(title=>({title})):[],...((type!=='boxset'&&newItemCandidate)||{})};
  movie.formatOverride=format;movie.is4k=format==='4k'; // Physical format selection overrides any provider metadata.
+  movie.studio=document.getElementById('add-studio').value.trim(); // Reviewed physical-disc distributor wins.
  movie.mediaType=type==='tv'?'tv':'movie'; // User's item-type selection is authoritative.
  if(type==='tv'||type==='boxset')delete movie.runtimeMinutes;
  if(type==='boxset'){movie.imdbRating=null;movie.imdbId=null;movie.tmdbId=null;movie.tmdbTitle=null;movie.reviewStatus='collection';}
