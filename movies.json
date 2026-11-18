@@ -13039,31 +13039,106 @@
     "isBoxSet": true,
     "includedMovies": [
       {
-        "title": "The conjuring"
+        "title": "The conjuring",
+        "tmdbId": 138843,
+        "tmdbTitle": "The Conjuring",
+        "year": "2013",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/wVYREutTvI2tmxr6ujrHT704wGF.jpg",
+        "language": "en",
+        "genre": "Horror, Thriller",
+        "overview": "Paranormal investigators Ed and Lorraine Warren work to help a family terrorized by a dark presence in their farmhouse. Forced to confront a powerful entity, the Warrens find themselves caught in the most terrifying case of their lives.",
+        "imdbId": "tt1457767",
+        "runtimeMinutes": 112,
+        "matchNote": null,
+        "imdbRating": "7.5",
+        "omdbNote": null
       },
       {
-        "title": "Annabelle"
+        "title": "Annabelle",
+        "matchNote": "Multiple possible movies — choose manually"
       },
       {
-        "title": "The conjuring 2"
+        "title": "The conjuring 2",
+        "tmdbId": 259693,
+        "tmdbTitle": "The Conjuring 2",
+        "year": "2016",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/zEqyD0SBt6HL7W9JQoWwtd5Do1T.jpg",
+        "language": "en",
+        "genre": "Horror",
+        "overview": "Lorraine and Ed Warren travel to north London to help a single mother raising four children alone in a house plagued by malicious spirits.",
+        "imdbId": "tt3065204",
+        "runtimeMinutes": 134,
+        "matchNote": null,
+        "imdbRating": "7.3",
+        "omdbNote": null
       },
       {
-        "title": "Annabelle creation"
+        "title": "Annabelle creation",
+        "tmdbId": 396422,
+        "tmdbTitle": "Annabelle: Creation",
+        "year": "2017",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/tb86j8jVCVsdZnzf8I6cIi65IeM.jpg",
+        "language": "en",
+        "genre": "Horror",
+        "overview": "Several years after the tragic death of their little girl, a doll maker and his wife welcome a nun and several girls from a shuttered orphanage into their home, soon becoming the target of the doll maker's possessed creation—Annabelle.",
+        "imdbId": "tt5140878",
+        "runtimeMinutes": 110,
+        "matchNote": null,
+        "imdbRating": "6.5",
+        "omdbNote": null
       },
       {
-        "title": "The nun"
+        "title": "The nun",
+        "matchNote": "Multiple possible movies — choose manually"
       },
       {
-        "title": "Annabelle comes home"
+        "title": "Annabelle comes home",
+        "tmdbId": 521029,
+        "tmdbTitle": "Annabelle Comes Home",
+        "year": "2019",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/qWsHMrbg9DsBY3bCMk9jyYCRVRs.jpg",
+        "language": "en",
+        "genre": "Horror",
+        "overview": "Determined to keep Annabelle from wreaking more havoc, demonologists Ed and Lorraine Warren bring the possessed doll to the locked artifacts room in their home, placing her “safely” behind sacred glass and enlisting a priest’s holy blessing. But an unholy night of horror awaits as Annabelle awakens the evil spirits in the room, who all set their sights on a new target—the Warrens' ten-year-old daughter, Judy, and her friends.",
+        "imdbId": "tt8350360",
+        "runtimeMinutes": 106,
+        "matchNote": null,
+        "imdbRating": "5.9",
+        "omdbNote": null
       },
       {
-        "title": "The conjuring the devil made me do it"
+        "title": "The conjuring the devil made me do it",
+        "tmdbId": 423108,
+        "tmdbTitle": "The Conjuring: The Devil Made Me Do It",
+        "year": "2021",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/xbSuFiJbbBWCkyCCKIMfuDCA4yV.jpg",
+        "language": "en",
+        "genre": "Horror, Mystery, Thriller",
+        "overview": "Paranormal investigators Ed and Lorraine Warren encounter what would become one of the most sensational cases from their files. The fight for the soul of a young boy takes them beyond anything they'd ever seen before, to mark the first time in U.S. history that a murder suspect would claim demonic possession as a defense.",
+        "imdbId": "tt7069210",
+        "runtimeMinutes": 111,
+        "matchNote": null,
+        "imdbRating": "6.2",
+        "omdbNote": null
       },
       {
-        "title": "The nun 2"
+        "title": "The nun 2",
+        "matchNote": "No matching title on TMDB — review manually"
       },
       {
-        "title": "The conjuring last rites"
+        "title": "The conjuring last rites",
+        "tmdbId": 1038392,
+        "tmdbTitle": "The Conjuring: Last Rites",
+        "year": "2025",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/umvkcIb0XAk486TEmx1V5aVzhbm.jpg",
+        "language": "en",
+        "genre": "Horror",
+        "overview": "Paranormal investigators Ed and Lorraine Warren take on one last terrifying case involving mysterious entities they must confront.",
+        "imdbId": "tt22898462",
+        "runtimeMinutes": 136,
+        "matchNote": null,
+        "imdbRating": "6.2",
+        "omdbNote": null
       }
     ],
     "imdbRating": null,
