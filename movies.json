@@ -13051,7 +13051,10 @@
         "runtimeMinutes": 112,
         "matchNote": null,
         "imdbRating": "7.5",
-        "omdbNote": null
+        "omdbNote": null,
+        "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795042974775-0e4jo-film-0-mwmq91jh-jeufrk.jpg",
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/wVYREutTvI2tmxr6ujrHT704wGF.jpg",
+        "posterLocked": true
       },
       {
         "title": "Annabelle",
