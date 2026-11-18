@@ -12969,13 +12969,13 @@
     "tmdbId": 473033,
     "tmdbTitle": "Uncut Gems",
     "posterUrl": "https://image.tmdb.org/t/p/w500/6XN1vxHc7kUSqNWtaQKN45J5x2v.jpg",
-    "genre": "Drama, Thriller, Crime",
+    "genre": "Drama",
     "overview": "A charismatic New York City jeweler always on the lookout for the next big score makes a series of high-stakes bets that could lead to the windfall of a lifetime. Howard must perform a precarious high-wire act, balancing business, family, and encroaching adversaries on all sides in his relentless pursuit of the ultimate win.",
     "year": "2019",
     "language": "en",
     "imdbId": "tt5727208",
     "runtimeMinutes": 136,
-    "matchedVia": "tmdb-manual",
+    "matchedVia": "tmdb",
     "reviewStatus": "confirmed",
     "imdbRating": "7.4",
     "omdbNote": null,
@@ -12983,6 +12983,7 @@
     "languageReviewedAt": "2026-11-18T22:48:22.250Z",
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795042102250-3dh3t-main-mwmpq0v1-v36jjh.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/6XN1vxHc7kUSqNWtaQKN45J5x2v.jpg",
-    "posterLocked": true
+    "posterLocked": true,
+    "enrichNote": null
   }
 ]
