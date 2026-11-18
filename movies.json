@@ -12875,6 +12875,9 @@
     "imdbRating": "7.6",
     "omdbNote": null,
     "languageOverride": "en",
-    "languageReviewedAt": "2026-11-18T22:45:24.252Z"
+    "languageReviewedAt": "2026-11-18T22:45:24.252Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795041924252-bleue-main-mwmpm726-s6v1tv.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/9PXZIUsSDh4alB80jheWX4fhZmy.jpg",
+    "posterLocked": true
   }
 ]
