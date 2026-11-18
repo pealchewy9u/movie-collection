@@ -13021,5 +13021,55 @@
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795042224885-kax2f-main-mwmpsniq-t5qyzh.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/Ag2B2KHKQPukjH7WutmgnnSNurZ.jpg",
     "posterLocked": true
+  },
+  {
+    "id": "MOV-NEW-1795042974775-0e4jo",
+    "title": "The Conjuring Universe: 9-Film Collection",
+    "studio": "",
+    "upc": "883929846887",
+    "ean": null,
+    "mediaType": "movie",
+    "blurayDiscs": 1,
+    "dvdDiscs": 0,
+    "is4k": false,
+    "formatOverride": "bluray",
+    "dateAdded": "2026-11-18",
+    "releaseDate": null,
+    "countryCode": null,
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "The conjuring"
+      },
+      {
+        "title": "Annabelle"
+      },
+      {
+        "title": "The conjuring 2"
+      },
+      {
+        "title": "Annabelle creation"
+      },
+      {
+        "title": "The nun"
+      },
+      {
+        "title": "Annabelle comes home"
+      },
+      {
+        "title": "The conjuring the devil made me do it"
+      },
+      {
+        "title": "The nun 2"
+      },
+      {
+        "title": "The conjuring last rites"
+      }
+    ],
+    "imdbRating": null,
+    "imdbId": null,
+    "tmdbId": null,
+    "tmdbTitle": null,
+    "reviewStatus": "collection"
   }
 ]
