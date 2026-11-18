@@ -13138,7 +13138,19 @@
       },
       {
         "title": "The nun 2",
-        "matchNote": "No matching title on TMDB — review manually"
+        "matchNote": null,
+        "tmdbId": 968051,
+        "tmdbTitle": "The Nun II",
+        "year": "2023",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/5gzzkR7y3hnY8AD1wXjCnVlHba5.jpg",
+        "language": "en",
+        "genre": "Horror",
+        "overview": "In 1956 France, a priest is violently murdered, and Sister Irene begins to investigate. She once again comes face-to-face with a powerful evil.",
+        "imdbId": "tt10160976",
+        "imdbRating": "5.6",
+        "omdbNote": null,
+        "runtimeMinutes": 110,
+        "matchedVia": "tmdb-manual"
       },
       {
         "title": "The conjuring last rites",
