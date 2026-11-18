@@ -12840,6 +12840,9 @@
     "imdbRating": "7.2",
     "omdbNote": null,
     "languageOverride": "en",
-    "languageReviewedAt": "2026-11-18T22:44:57.446Z"
+    "languageReviewedAt": "2026-11-18T22:44:57.446Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795041897446-08t9c-main-mwmplmro-1eksbz.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/lqoMzCcZYEFK729d6qzt349fB4o.jpg",
+    "posterLocked": true
   }
 ]
