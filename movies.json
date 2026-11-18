@@ -13150,7 +13150,10 @@
         "imdbRating": "5.6",
         "omdbNote": null,
         "runtimeMinutes": 110,
-        "matchedVia": "tmdb-manual"
+        "matchedVia": "tmdb-manual",
+        "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795042974775-0e4jo-film-7-mwmq9xxr-fc2nsy.jpg",
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/5gzzkR7y3hnY8AD1wXjCnVlHba5.jpg",
+        "posterLocked": true
       },
       {
         "title": "The conjuring last rites",
