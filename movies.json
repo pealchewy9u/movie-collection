@@ -13058,7 +13058,19 @@
       },
       {
         "title": "Annabelle",
-        "matchNote": "Multiple possible movies — choose manually"
+        "matchNote": null,
+        "tmdbId": 250546,
+        "tmdbTitle": "Annabelle",
+        "year": "2014",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/uXygZAPNsnCkzpZAa0UpRjgK5Mg.jpg",
+        "language": "en",
+        "genre": "Horror",
+        "overview": "A couple begins to experience terrifying supernatural occurrences involving a vintage doll shortly after their home is invaded by satanic cultists.",
+        "imdbId": "tt3322940",
+        "imdbRating": "5.5",
+        "omdbNote": null,
+        "runtimeMinutes": 99,
+        "matchedVia": "tmdb-manual"
       },
       {
         "title": "The conjuring 2",
