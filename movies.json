@@ -13040,7 +13040,7 @@
     "isBoxSet": false,
     "includedMovies": [],
     "tmdbTitle": "Uncut Gems",
-    "posterUrl": "https://imagestorage.org/715515266512.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/sg0xxJeb3u1C4kAxhSuTwTNpEDt.jpg",
     "genre": "Crime, Drama, Thriller",
     "overview": "With his debts mounting and angry collectors closing in, a fast-talking New York City jeweler risks everything in hope of staying afloat and alive.",
     "year": "2019",
@@ -13052,6 +13052,9 @@
     "tmdbId": 473033,
     "language": "en",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-11-18T23:51:56.812Z"
+    "languageReviewedAt": "2026-11-18T23:51:56.812Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795045916811-8mvwt-main-mwms01gd-q0v9jy.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/sg0xxJeb3u1C4kAxhSuTwTNpEDt.jpg",
+    "posterLocked": true
   }
 ]
