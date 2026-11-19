@@ -13109,7 +13109,7 @@
     "isBoxSet": false,
     "includedMovies": [],
     "tmdbTitle": "Practical Magic",
-    "posterUrl": "https://imagestorage.org/883929842445.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/12fRgZxpcjudyTPucQNkeXuYKQj.jpg",
     "genre": "Comedy, Drama, Fantasy",
     "overview": "Two witch sisters, raised by their eccentric aunts in a small town, face closed-minded prejudice and a curse which threatens to prevent them ever finding lasting love.",
     "year": "1998",
@@ -13121,6 +13121,9 @@
     "tmdbId": 6435,
     "language": "en",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-11-19T19:10:14.024Z"
+    "languageReviewedAt": "2026-11-19T19:10:14.024Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795115414024-6435i-main-mwnxdkn8-0byodd.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/12fRgZxpcjudyTPucQNkeXuYKQj.jpg",
+    "posterLocked": true
   }
 ]
