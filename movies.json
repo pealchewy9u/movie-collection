@@ -13189,6 +13189,9 @@
     "matchedVia": "tmdb-manual",
     "reviewStatus": "confirmed",
     "languageOverride": "ja",
-    "languageReviewedAt": "2026-11-19T19:14:49.876Z"
+    "languageReviewedAt": "2026-11-19T19:14:49.876Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795115689876-l5bb1-main-mwnxj9cb-l7q91c.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/8DQWjKkvg4o0vXsHoFKxwpvT4yp.jpg",
+    "posterLocked": true
   }
 ]
