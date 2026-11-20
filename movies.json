@@ -13284,53 +13284,38 @@
     "isBoxSet": true,
     "includedMovies": [
       {
-        "title": "• American Pie (1999)",
-        "tmdbId": 2105,
-        "tmdbTitle": "American Pie",
-        "year": "1999",
-        "posterUrl": "https://image.tmdb.org/t/p/w500/5P68by2Thn8wHAziyWGEw2O7hco.jpg",
-        "language": "en",
-        "genre": "Comedy, Romance",
-        "overview": "At a high-school party, four friends find that losing their collective virginity isn't as easy as they had thought. But they still believe that they need to do so before college. To motivate themselves, they enter a pact to all \"score\" by their senior prom.",
-        "imdbId": "tt0163651",
-        "imdbRating": "7.0",
-        "omdbNote": null,
-        "runtimeMinutes": 95,
-        "matchNote": null,
-        "matchedVia": "tmdb-manual",
-        "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795132882436-2xw64-film-0-mwo7sfqn-j93dka.jpg",
-        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/5P68by2Thn8wHAziyWGEw2O7hco.jpg",
-        "posterLocked": true
+        "title": "American Pie"
       },
       {
-        "title": "• American Pie 2 (2001)"
+        "title": "American Pie 2"
       },
       {
-        "title": "• American Wedding (2003)"
+        "title": "American Wedding"
       },
       {
-        "title": "• American Reunion (2012)"
+        "title": "American Reunion"
       },
       {
-        "title": "American Pie Presents: Band Camp (2005)"
+        "title": "American Pie Presents: Band Camp"
       },
       {
-        "title": "• American Pie Presents: The Naked Mile (2006)"
+        "title": "American Pie Presents: The Naked Mile"
       },
       {
-        "title": "• American Pie Presents: Beta House (2007)"
+        "title": "American Pie Presents: Beta House"
       },
       {
-        "title": "• American Pie Presents: The Book of Love (2009)"
+        "title": "American Pie Presents: The Book of Love"
       },
       {
-        "title": "• American Pie Presents: Girls' Rules (2020)"
+        "title": "American Pie Presents: Girls' Rules"
       }
     ],
     "imdbRating": null,
     "imdbId": null,
     "tmdbId": null,
     "tmdbTitle": null,
-    "reviewStatus": "collection"
+    "reviewStatus": "collection",
+    "boxCoverUrl": null
   }
 ]
