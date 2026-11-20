@@ -3006,10 +3006,10 @@ function renderWishlist(){
  const root=document.getElementById('wishlist-view');if(!root)return;
  const active=wishlistItems.filter(x=>x.status!=='purchased');
  const visible=active.filter(x=>!wishlistQuery||[x.title,x.retailer,x.format].join(' ').toLowerCase().includes(wishlistQuery.toLowerCase()));
- root.innerHTML=`<div class="wishlist-wrap"><div class="wishlist-heading"><div><h2>My Wishlist</h2><p class="manager-small">${active.length} movie${active.length===1?'':'s'} to buy · No prices or retailer links stored</p></div><button type="button" class="manager-btn" id="wishlist-add">＋ Add Movie</button></div>
+ root.innerHTML=`<div class="wishlist-wrap"><div class="wishlist-heading"><div><h2>My Wishlist</h2><p class="manager-small">${active.length} movie${active.length===1?'':'s'} to buy</p></div><button type="button" class="manager-btn" id="wishlist-add">＋ Add Movie</button></div>
  <input id="wishlist-search" class="wishlist-search" type="search" placeholder="Search wishlist" value="${escapeHtml(wishlistQuery)}" aria-label="Search wishlist">
  <p id="wishlist-message" role="status" class="manager-small">${escapeHtml(wishlistLoadError)}</p>
- <div class="wishlist-items">${visible.map(x=>`<div class="wishlist-item"><div class="wishlist-art">${x.posterUrl?`<img loading="lazy" alt="" src="${escapeHtml(x.posterUrl)}">`:'🎬'}</div><div class="wishlist-info"><b>${escapeHtml(x.title||'Untitled')}</b><small>${escapeHtml([x.year||'',wishlistFormatText(x.format),x.retailer||''].filter(Boolean).join(' · '))}</small>${x.edition?`<small>${escapeHtml(x.edition)}</small>`:''}<div class="wishlist-actions"><button type="button" data-wish-move="${escapeHtml(x.id)}">Move to Collection</button><button type="button" data-wish-edit="${escapeHtml(x.id)}">Edit</button><button type="button" data-wish-delete="${escapeHtml(x.id)}">Remove</button></div></div></div>`).join('')||'<p class="empty-state">Your wishlist is empty. Add a movie from a retailer link or by title.</p>'}</div>
+ <div class="wishlist-items">${visible.map(x=>`<div class="wishlist-item"><div class="wishlist-art">${x.posterUrl?`<img loading="lazy" alt="" src="${escapeHtml(x.posterUrl)}">`:'🎬'}</div><div class="wishlist-info"><b>${escapeHtml(x.title||'Untitled')}</b><small>${escapeHtml([x.year||'',wishlistFormatText(x.format)].filter(Boolean).join(' · '))}</small><div class="wishlist-actions"><button type="button" data-wish-move="${escapeHtml(x.id)}">Move to Collection</button><button type="button" data-wish-edit="${escapeHtml(x.id)}">Edit</button><button type="button" data-wish-delete="${escapeHtml(x.id)}">Remove</button></div></div></div>`).join('')||'<p class="empty-state">Your wishlist is empty. Add a movie by title.</p>'}</div>
  ${wishlistEditorOpen?wishlistEditorHtml():''}</div>`;
  root.querySelector('#wishlist-add').onclick=()=>{wishlistDraft={};wishlistEditorOpen=true;wishlistCandidate=null;renderWishlist();};
  root.querySelector('#wishlist-search').oninput=e=>{wishlistQuery=e.target.value;renderWishlist();const input=document.getElementById('wishlist-search');input.focus();input.setSelectionRange(wishlistQuery.length,wishlistQuery.length);};
@@ -3019,27 +3019,13 @@ function renderWishlist(){
  if(wishlistEditorOpen)attachWishlistEditor();
 }
 function wishlistEditorHtml(){const d=wishlistDraft||{};return `<div class="wishlist-editor" id="wishlist-editor"><div class="wishlist-editor-heading"><b>${d.id?'Edit wishlist movie':'Add to Wishlist'}</b><button type="button" id="wishlist-cancel" class="manager-btn secondary">Close</button></div>
- <p class="manager-small">Paste a retailer link to identify the store and suggest a title. Retailer sites may block automatic details; use TMDB to confirm the movie. The original URL is never saved.</p>
- <label>Retailer product link (optional)<input id="wishlist-url" type="url" placeholder="Paste Amazon, Gruv, Best Buy or Target link"></label>
- <button type="button" class="manager-btn secondary" id="wishlist-read-link">Use link</button>
  <label>Movie title<input id="wishlist-title" value="${escapeHtml(d.title||'')}" placeholder="Movie title"></label>
- <div class="wishlist-two"><label>Format<select id="wishlist-format">${[['','Select format'],['4k','4K UHD'],['bluray','Blu-ray'],['dvd','DVD'],['steelbook','Steelbook']].map(([v,t])=>`<option value="${v}" ${d.format===v?'selected':''}>${t}</option>`).join('')}</select></label>
- <label>Retailer<select id="wishlist-retailer">${[['','Select retailer'],['Amazon','Amazon'],['Gruv','Gruv'],['Best Buy','Best Buy'],['Target','Target'],['Other','Other']].map(([v,t])=>`<option value="${v}" ${d.retailer===v?'selected':''}>${t}</option>`).join('')}</select></label></div>
- <div class="wishlist-two"><label>Film year<input id="wishlist-year" inputmode="numeric" maxlength="4" value="${escapeHtml(d.year||'')}" placeholder="Optional"></label><label>Edition / notes<input id="wishlist-edition" value="${escapeHtml(d.edition||'')}" placeholder="Optional"></label></div>
+ <label>Format<select id="wishlist-format">${[['bluray','Blu-ray'],['4k','4K UHD'],['dvd','DVD'],['steelbook','Steelbook']].map(([v,t])=>`<option value="${v}" ${(d.format||'bluray')===v?'selected':''}>${t}</option>`).join('')}</select></label>
  <div class="wishlist-actions"><button type="button" id="wishlist-tmdb" class="manager-btn secondary">Find movie details</button><button type="button" id="wishlist-save" class="manager-btn">Save to Wishlist</button></div>
  <p id="wishlist-form-status" role="status" class="manager-small"></p><div id="wishlist-matches"></div></div>`;}
 function wishlistFormValue(id){return document.getElementById(id)?.value.trim()||'';}
 function attachWishlistEditor(){
  document.getElementById('wishlist-cancel').onclick=()=>{wishlistEditorOpen=false;wishlistDraft=null;renderWishlist();};
- document.getElementById('wishlist-read-link').onclick=()=>{
-   const input=wishlistFormValue('wishlist-url'),info=retailerFromUrl(input),status=document.getElementById('wishlist-form-status');
-   if(!info){status.textContent='Use an HTTPS product link from Amazon, Gruv, Best Buy or Target.';return;}
-   document.getElementById('wishlist-retailer').value=info.retailer;
-   const title=titleFromRetailerUrl(info.url);
-   if(title&&!wishlistFormValue('wishlist-title'))document.getElementById('wishlist-title').value=title;
-   status.textContent=title?'Retailer recognized. Suggested title from URL; verify through TMDB.':'Retailer recognized. This link does not expose a usable title; enter movie title to find details.';
-   document.getElementById('wishlist-url').value=''; // discard URL even from the form
- };
  document.getElementById('wishlist-tmdb').onclick=lookupWishlistTmdb;
  document.getElementById('wishlist-save').onclick=saveWishlistDraft;
 }
@@ -3056,24 +3042,29 @@ async function lookupWishlistTmdb(){
   out.querySelectorAll('[data-wish-pick]').forEach(b=>b.onclick=()=>{
     const m=results[Number(b.dataset.wishPick)];wishlistCandidate={tmdbId:m.id,posterUrl:m.poster_path?'https://image.tmdb.org/t/p/w500'+m.poster_path:null,title:m.title,year:(m.release_date||'').slice(0,4)};
     document.getElementById('wishlist-title').value=m.title;
-    document.getElementById('wishlist-year').value=wishlistCandidate.year;
     out.textContent='Selected: '+m.title+' ('+wishlistCandidate.year+'). Confirm your physical format and save.';
   });
  }catch(e){out.textContent='TMDB lookup unavailable: '+e.message;}
 }
 async function saveWishlistDraft(){
- const title=wishlistFormValue('wishlist-title'),format=wishlistFormValue('wishlist-format'),retailer=wishlistFormValue('wishlist-retailer'),year=wishlistFormValue('wishlist-year'),edition=wishlistFormValue('wishlist-edition');
+ const title=wishlistFormValue('wishlist-title'),format=wishlistFormValue('wishlist-format');
  const status=document.getElementById('wishlist-form-status'),button=document.getElementById('wishlist-save');
- if(!title||!format||!retailer){status.textContent='Title, format and retailer are required.';return;}
- if(year&&!/^(18|19|20)\d{2}$/.test(year)){status.textContent='Enter a valid four-digit film year or leave blank.';return;}
+ if(!title||!format){status.textContent='Enter a movie title and choose a format.';return;}
  const chosen=wishlistCandidate&&normalizeFilmTitle(wishlistCandidate.title)===normalizeFilmTitle(title)?wishlistCandidate:null;
- const entry={id:wishlistDraft?.id||'WISH-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),title,year:year||null,format,retailer,edition:edition||'',tmdbId:chosen?.tmdbId||(wishlistDraft&&normalizeFilmTitle(wishlistDraft.title)===normalizeFilmTitle(title)?wishlistDraft.tmdbId:null)||null,posterUrl:chosen?.posterUrl||(wishlistDraft&&normalizeFilmTitle(wishlistDraft.title)===normalizeFilmTitle(title)?wishlistDraft.posterUrl:null)||null,status:'active'};
+ const prior=wishlistDraft&&normalizeFilmTitle(wishlistDraft.title)===normalizeFilmTitle(title)?wishlistDraft:null;
+ // Retain previously saved metadata when editing, without asking for extra fields.
+ const entry={id:wishlistDraft?.id||'WISH-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),title,
+   year:chosen?.year||prior?.year||null,format,
+   tmdbId:chosen?.tmdbId||prior?.tmdbId||null,
+   posterUrl:chosen?.posterUrl||prior?.posterUrl||null,status:'active'};
+ // Older wishlist entries can have a retailer/edition; keep those untouched on edits.
+ if(wishlistDraft?.id){if(wishlistDraft.retailer)entry.retailer=wishlistDraft.retailer;if(wishlistDraft.edition)entry.edition=wishlistDraft.edition;}
  if(ownedWishlistMatch(entry)){status.textContent='This title appears to be in your collection already. Check the edition before adding.';return;}
  button.disabled=true;status.textContent='Saving wishlist to GitHub…';
  try{await updateWishlist(items=>{
    const dup=items.find(x=>x.id!==entry.id&&x.status!=='purchased'&&((entry.tmdbId&&x.tmdbId===entry.tmdbId)||normalizeFilmTitle(x.title)===normalizeFilmTitle(entry.title))&&x.format===entry.format);
    if(dup)throw Error('This movie and format are already on your wishlist.');
-   const i=items.findIndex(x=>x.id===entry.id);if(i>=0)items[i]=entry;else items.push(entry);return items;
+   const i=items.findIndex(x=>x.id===entry.id);if(i>=0)items[i]={...items[i],...entry};else items.push(entry);return items;
  });wishlistEditorOpen=false;wishlistDraft=null;wishlistCandidate=null;renderWishlist();
  }catch(e){status.textContent=e.message;}finally{button.disabled=false;}
 }
