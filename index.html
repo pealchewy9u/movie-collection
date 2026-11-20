@@ -232,17 +232,18 @@
   .wishlist-heading h2{font-size:19px;margin:0}
   .wishlist-editor input,.wishlist-editor select{width:100%;border:1px solid var(--groove);border-radius:8px;padding:10px;color:var(--text);background:white;font-size:14px}
   /* Compact wishlist: two cards per row with the existing small poster size. */
-  .wishlist-items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:11px}
-  .wishlist-item{display:flex;flex-direction:column;align-items:center;min-width:0;background:var(--surface);border:1px solid var(--groove);border-radius:11px;padding:11px 8px;gap:7px}
+  .wishlist-items{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:9px}
+  .wishlist-item{display:flex;flex-direction:column;align-items:center;min-width:0;background:var(--surface);border:1px solid var(--groove);border-radius:9px;padding:8px 5px;gap:5px}
   .wishlist-art{width:78px;height:117px;flex:none;display:grid;place-items:center;background:var(--surface-raised);border-radius:6px;overflow:hidden;font-size:26px;cursor:pointer}
   .wishlist-art img{width:100%;height:100%;object-fit:cover}
   .wishlist-name{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;min-height:2.7em;width:100%;text-align:center;font-size:12px;line-height:1.35;font-weight:650;overflow-wrap:anywhere;background:none;border:0;color:var(--text);padding:0;cursor:pointer}
-  .wishlist-move{width:100%;margin-top:auto;border:0;border-radius:7px;background:var(--brass);color:white;font-weight:700;font-size:11px;line-height:1.3;min-height:34px;padding:7px 4px;cursor:pointer}
+  .wishlist-move{width:100%;margin-top:auto;border:0;border-radius:6px;background:var(--brass);color:white;font-weight:700;font-size:10px;line-height:1.2;min-height:36px;padding:6px 3px;cursor:pointer;overflow-wrap:normal}
   .wishlist-art:focus-visible,.wishlist-name:focus-visible,.wishlist-move:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
   .wishlist-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.wishlist-actions button{font-size:11px;font-weight:650;border:1px solid var(--groove);border-radius:7px;background:var(--surface-raised);color:var(--text);padding:7px 9px;cursor:pointer}
   .wishlist-actions button:first-child{background:var(--brass);color:white;border-color:var(--brass)}
-  @media(min-width:720px){.wishlist-items{grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}}
-  @media(min-width:1000px){.wishlist-items{grid-template-columns:repeat(4,minmax(0,1fr))}}
+  @media(max-width:359px){.wishlist-items{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(min-width:720px){.wishlist-items{grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}}
+  @media(min-width:1000px){.wishlist-items{grid-template-columns:repeat(5,minmax(0,1fr))}}
   /* Keep Add/Edit above the wishlist rather than after a long scrolling list. */
   .wishlist-modal-backdrop{position:fixed;inset:0;z-index:100;background:rgba(32,22,15,.57);display:flex;align-items:center;justify-content:center;padding:16px;overscroll-behavior:contain}
   .wishlist-editor{background:var(--surface);border:1px solid var(--groove);padding:18px;border-radius:14px;width:min(460px,100%);max-height:min(88dvh,720px);overflow-y:auto;box-shadow:0 18px 54px rgba(34,22,14,.3);-webkit-overflow-scrolling:touch}
@@ -252,7 +253,7 @@
   .wishlist-two{display:grid;grid-template-columns:1fr 1fr;gap:9px}
   .wishlist-tmdb-result{display:flex;align-items:center;gap:10px;width:100%;border:1px solid var(--groove);background:white;border-radius:8px;padding:7px;text-align:left;margin:6px 0;color:var(--text)}
   .wishlist-tmdb-result img{width:36px;height:53px;object-fit:cover}.wishlist-tmdb-result small{display:block;color:var(--text-muted)}
-  @media(max-width:420px){.wishlist-items{gap:8px}.wishlist-item{padding:7px}.wishlist-two{grid-template-columns:1fr 1fr}}
+  @media(max-width:420px){.wishlist-items{gap:7px}.wishlist-item{padding:7px 4px}.wishlist-two{grid-template-columns:1fr 1fr}}
 
   /* ---- Data Manager ---- */
   #manager-view { height:auto; overflow:visible; padding: 4px 0 35px; display:block; max-width:920px; margin:0 auto; }
