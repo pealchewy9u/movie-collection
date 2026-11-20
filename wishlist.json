@@ -83,5 +83,14 @@
     "tmdbId": 467244,
     "posterUrl": "https://image.tmdb.org/t/p/w500/hUu9zyZmDd8VZegKi1iK1Vk0RYS.jpg",
     "status": "active"
+  },
+  {
+    "id": "WISH-1795144780052-bp99t8",
+    "title": "The Brutalist",
+    "year": "2024",
+    "format": "bluray",
+    "tmdbId": 549509,
+    "posterUrl": "https://image.tmdb.org/t/p/w500/vP7Yd6couiAaw9jgMd5cjMRj3hQ.jpg",
+    "status": "active"
   }
 ]
