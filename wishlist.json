@@ -74,5 +74,14 @@
     "tmdbId": 1136867,
     "posterUrl": "https://image.tmdb.org/t/p/w500/eDo0pNruy0Qgj6BdTyHIR4cxHY8.jpg",
     "status": "active"
+  },
+  {
+    "id": "WISH-1795144722486-vy5hky",
+    "title": "The Zone of Interest",
+    "year": "2023",
+    "format": "bluray",
+    "tmdbId": 467244,
+    "posterUrl": "https://image.tmdb.org/t/p/w500/hUu9zyZmDd8VZegKi1iK1Vk0RYS.jpg",
+    "status": "active"
   }
 ]
