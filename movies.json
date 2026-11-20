@@ -13426,7 +13426,10 @@
         "runtimeMinutes": 95,
         "matchNote": null,
         "imdbRating": "3.8",
-        "omdbNote": null
+        "omdbNote": null,
+        "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795132882436-2xw64-film-8-mwo7usqd-ga9jmm.jpg",
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/xqvX5A24dbIWaeYsMTxxKX5qOfz.jpg",
+        "posterLocked": true
       }
     ],
     "imdbRating": null,
