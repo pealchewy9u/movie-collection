@@ -225,6 +225,27 @@
   #manager-view > details.overview-accordion[open] > summary::after { content:''; }
 
   @media(max-width:380px) { .overview-breakdown {font-size:10px;} .overview-breakdown .sep{padding:0 3px;} .overview-genre-grid{gap:5px;} .overview-genre-tile{padding:10px 2px;} .overview-genre-tile strong{font-size:17px;} .overview-genre-tile span{font-size:9px;} }
+
+  #wishlist-view{height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 16px 45px;display:none}
+  .wishlist-wrap{max-width:900px;margin:auto}
+  .wishlist-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+  .wishlist-heading h2{font-size:19px;margin:0}
+  .wishlist-search,.wishlist-editor input,.wishlist-editor select{width:100%;border:1px solid var(--groove);border-radius:8px;padding:10px;color:var(--text);background:white;font-size:14px}
+  .wishlist-items{display:grid;gap:8px;margin-top:14px}
+  .wishlist-item{display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--groove);border-radius:12px;padding:10px}
+  .wishlist-art{flex:0 0 65px;width:65px;height:95px;display:grid;place-items:center;background:var(--surface-raised);border-radius:6px;overflow:hidden}
+  .wishlist-art img{width:100%;height:100%;object-fit:cover}
+  .wishlist-info{flex:1;min-width:0}.wishlist-info b{display:block;font-size:14px}.wishlist-info small{display:block;color:var(--text-muted);font-size:11px;margin-top:5px}
+  .wishlist-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.wishlist-actions button{font-size:11px;font-weight:650;border:1px solid var(--groove);border-radius:7px;background:var(--surface-raised);color:var(--text);padding:7px 9px;cursor:pointer}
+  .wishlist-actions button:first-child{background:var(--brass);color:white;border-color:var(--brass)}
+  .wishlist-editor{margin-top:18px;background:var(--surface);border:1px solid var(--groove);padding:15px;border-radius:12px}
+  .wishlist-editor-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.wishlist-editor label{display:block;font-size:12px;font-weight:650;color:var(--text-muted);margin:10px 0}
+  .wishlist-editor label input,.wishlist-editor label select{display:block;margin-top:5px}
+  .wishlist-two{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .wishlist-tmdb-result{display:flex;align-items:center;gap:10px;width:100%;border:1px solid var(--groove);background:white;border-radius:8px;padding:7px;text-align:left;margin:6px 0;color:var(--text)}
+  .wishlist-tmdb-result img{width:36px;height:53px;object-fit:cover}.wishlist-tmdb-result small{display:block;color:var(--text-muted)}
+  @media(max-width:420px){.wishlist-item{gap:9px}.wishlist-art{flex-basis:52px;width:52px;height:78px}.wishlist-two{grid-template-columns:1fr 1fr}}
+
   /* ---- Data Manager ---- */
   #manager-view { height:auto; overflow:visible; padding: 4px 0 35px; display:block; max-width:920px; margin:0 auto; }
   .manager-stats { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; margin-bottom:14px; }
@@ -432,6 +453,7 @@
     <div class="tab active" data-view="coverflow">Cover Flow</div>
     <div class="tab" data-view="overview">Overview</div>
     <div class="tab" data-view="history">History</div>
+    <div class="tab" data-view="wishlist">Wishlist</div>
   </div>
 
   <main>
@@ -442,6 +464,7 @@
     </div>
     <div id="overview-view" style="display:none"><div id="summary-view"></div><div id="manager-view"></div></div>
     <div id="history-view" style="display:none"></div>
+    <div id="wishlist-view" style="display:none"></div>
   </main>
 
   <div id="status-bar">
@@ -570,6 +593,7 @@ async function loadData() {
   // Check GitHub for previously downloaded posters without blocking startup.
   void recoverExistingPosterLinks();
   void loadWatchHistory();
+  void loadWishlist();
 }
 
 // Recover older GitHub poster backups whose URLs were not recorded in movies.json.
@@ -860,6 +884,7 @@ function render() {
   else if (currentView === 'coverflow') renderCoverFlow();
   else if (currentView === 'overview') { renderSummary(); renderManager(); }
   else if(currentView === 'history') renderWatchHistory();
+  else if(currentView === 'wishlist') renderWishlist();
   else renderManager();
 }
 
@@ -1372,10 +1397,12 @@ function renderManager(){
     </details>
     <details class="overview-accordion" id="overview-sync" ${expanded.has('overview-sync')?'open':''}>
       <summary>GitHub Sync Status · ${Object.keys(pendingEdits()).length} pending</summary>
-      <div class="overview-tool-body"><div class="manager-sync" id="sync-status">${Object.keys(pendingEdits()).length} local movie edits pending · Sync from Settings</div>
-      <p class="manager-small">Use Settings → Sync now to save pending movie changes and watching history.</p></div>
+      <div class="overview-tool-body"><div class="manager-sync" id="sync-status">${Object.keys(pendingEdits()).length} local movie edits pending</div>
+      <button type="button" class="manager-btn" id="overview-sync-now">Sync now</button>
+      <p class="manager-small" id="overview-sync-result" role="status" aria-live="polite">${escapeHtml(overviewSyncResult)}</p></div>
     </details>`;
   el.dataset.initialized='1';
+  el.querySelector('#overview-sync-now').onclick=syncCollectionAndHistory;
   // Restore the previous open states of nested backup/language/runtime sections.
   for(const id of expanded){const node=el.querySelector('[id="'+id+'"]');if(node?.tagName==='DETAILS')node.open=true;}
   renderBulkLanguageReview();
@@ -2572,7 +2599,7 @@ function escapeHtml(str) {
 function switchMovieView(view, movieId=null){
   currentView=view;
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===view));
-  for(const name of ['list','coverflow','overview','history']){
+  for(const name of ['list','coverflow','overview','history','wishlist']){
     const el=document.getElementById(name+'-view');
     el.style.display=name===view?(name==='coverflow'?'flex':'block'):'none';
   }
@@ -2629,17 +2656,17 @@ document.getElementById('upcmdb-copy-btn').addEventListener('click', async () =>
 
 // One Settings action, two independent repositories and explicit per-part outcomes.
 // Never invoke the movies.json writer if there are no pending movie edits.
-let combinedSyncRunning=false;
+let combinedSyncRunning=false,overviewSyncResult='';
 async function syncCollectionAndHistory(){
   if(combinedSyncRunning)return;
-  const button=document.getElementById('sync-everything-btn');
-  const status=document.getElementById('sync-everything-status');
-  combinedSyncRunning=true;button.disabled=true;
+  const buttons=[document.getElementById('sync-everything-btn'),document.getElementById('overview-sync-now')].filter(Boolean);
+  const statuses=[document.getElementById('sync-everything-status'),document.getElementById('overview-sync-result')].filter(Boolean);
+  combinedSyncRunning=true;buttons.forEach(b=>b.disabled=true);
   const messages=[];
-  const update=()=>{status.textContent=messages.join('\n');};
+  const update=()=>{overviewSyncResult=messages.join('\n');statuses.forEach(el=>el.textContent=overviewSyncResult);};
   try{
     if(Object.keys(pendingEdits()).length){
-      status.textContent='Checking and syncing pending movie corrections…';
+      statuses.forEach(el=>el.textContent='Checking and syncing pending movie corrections…');
       try{await syncPendingEdits();messages.push('Movies: saved and verified.');}
       catch(e){messages.push('Movies: NOT synced — '+e.message);}
     }else messages.push('Movies: already up to date (no changes made).');
@@ -2656,7 +2683,7 @@ async function syncCollectionAndHistory(){
     }
     update();
   }finally{
-    button.disabled=false;
+    buttons.forEach(b=>b.disabled=false);
     combinedSyncRunning=false;
     if(currentView==='overview')renderManager();
     if(currentView==='history')renderWatchHistory();
@@ -2909,6 +2936,162 @@ async function retryOmdbOnly(item, omdbKey) {
 // avoids the installed-PWA stale-cache headaches while this is still being built out.
 
 
+
+// WISHLIST: independent GitHub file. Product URLs and prices are never persisted.
+const WISHLIST_PATH='wishlist.json';
+let wishlistItems=[],wishlistLoadError='',wishlistMoveId=null,wishlistEditorOpen=false;
+let wishlistDraft=null,wishlistBusy=false,wishlistQuery='',wishlistCandidate=null;
+const wishlistUrlPattern=/^https:\/\//i;
+function wishlistRepoUrl(c){return `https://api.github.com/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/contents/${WISHLIST_PATH}`;}
+function wishlistNormalize(s){return normalizeFilmTitle(s).replace(/\b(4k|uhd|ultra hd|blu ray|bluray|dvd|steelbook|criterion|edition|limited|collector|collectors|the)\b/g,'').replace(/\s+/g,' ').trim();}
+function retailerFromUrl(value){
+ let u;try{u=new URL(value.trim());}catch{return null;}
+ if(u.protocol!=='https:'||u.username||u.password)return null;
+ const h=u.hostname.toLowerCase();let retailer='';
+ if(h==='amazon.com'||h.endsWith('.amazon.com')||/^amazon\.[a-z.]+$/.test(h)||h==='www.amzn.com'||h==='amzn.com'||h==='a.co')retailer='Amazon';
+ else if(h==='gruv.com'||h.endsWith('.gruv.com'))retailer='Gruv';
+ else if(h==='bestbuy.com'||h.endsWith('.bestbuy.com'))retailer='Best Buy';
+ else if(h==='target.com'||h.endsWith('.target.com'))retailer='Target';
+ return retailer?{retailer,url:u}:null;
+}
+function titleFromRetailerUrl(url){
+ const paths=url.pathname.split('/').filter(Boolean);
+ let segment='';
+ if(paths[0]==='products'||paths[0]==='product'||paths[0]==='p')segment=paths[1]||'';
+ else if(paths.includes('dp'))segment=paths[0]==='dp'?'':paths.slice(0,paths.indexOf('dp')).pop()||'';
+ else if(paths.includes('gp')&&paths.includes('product'))segment='';
+ else segment=paths.find(p=>p.includes('-')&&!/^\d+$/.test(p))||'';
+ segment=decodeURIComponent(segment).replace(/\.html?$/i,'').replace(/[-_]+/g,' ').replace(/\b(4k|ultra hd|bluray|blu ray|dvd|steelbook|digital|movie|film|disc)\b/gi,' ').replace(/\s+/g,' ').trim();
+ return segment.length>2 && !/^[a-z0-9]{10}$/i.test(segment)?segment:'';
+}
+function wishlistFormatText(f){return ({'4k':'4K UHD','bluray':'Blu-ray','dvd':'DVD','steelbook':'Steelbook'})[f]||'Format not specified';}
+function ownedWishlistMatch(item){const normalized=normalizeFilmTitle(item.title||'');return movies.find(m=>!m.isBoxSet&&normalizeFilmTitle(m.tmdbTitle||m.title)===normalized)||(item.tmdbId?movies.find(m=>m.tmdbId&&String(m.tmdbId)===String(item.tmdbId)):null);}
+async function readWishlistRemote(c){
+ const res=await fetch(wishlistRepoUrl(c)+'?ref=main',{headers:{Authorization:`Bearer ${c.token}`,Accept:'application/vnd.github+json'},cache:'no-store'});
+ if(res.status===404)return {items:[],sha:null};
+ if(!res.ok)throw Error('Wishlist read HTTP '+res.status);
+ const raw=await res.json(),items=decodeGitHubContent(raw);
+ if(!Array.isArray(items))throw Error('Wishlist file must contain a JSON array; no changes made.');
+ return {items,sha:raw.sha};
+}
+async function loadWishlist(){
+ const c=githubConfig();wishlistLoadError='';
+ try{
+   if(c){const remote=await readWishlistRemote(c);wishlistItems=remote.items;localStorage.setItem('movie-wishlist-cache',JSON.stringify(wishlistItems));}
+   else{const res=await fetch('./wishlist.json?t='+Date.now(),{cache:'no-store'});wishlistItems=res.ok?await res.json():[];if(!Array.isArray(wishlistItems))throw Error('Invalid wishlist file');}
+ }catch(e){wishlistLoadError='Showing cached wishlist: '+e.message;try{wishlistItems=JSON.parse(localStorage.getItem('movie-wishlist-cache')||'[]');}catch{wishlistItems=[];}}
+ if(currentView==='wishlist')renderWishlist();
+}
+// Retry fresh GitHub read and compare SHA before every write; conflicts are not silently overwritten.
+async function updateWishlist(mutator){
+ const c=githubConfig();if(!c)throw Error('Configure GitHub in Settings before saving wishlist items.');
+ for(let attempt=0;attempt<2;attempt++){
+   const remote=await readWishlistRemote(c);
+   const next=mutator(structuredClone(remote.items));
+   if(!Array.isArray(next))throw Error('Wishlist update failed validation');
+   const payload={message:'Update movie wishlist',content:btoa(unescape(encodeURIComponent(JSON.stringify(next,null,2)))),branch:'main'};
+   if(remote.sha)payload.sha=remote.sha;
+   const resp=await fetch(wishlistRepoUrl(c),{method:'PUT',headers:{Authorization:`Bearer ${c.token}`,Accept:'application/vnd.github+json','Content-Type':'application/json'},body:JSON.stringify(payload)});
+   if((resp.status===409||resp.status===422)&&attempt===0)continue;
+   if(!resp.ok)throw Error('Wishlist save HTTP '+resp.status+': '+(await resp.text()).slice(0,130));
+   const checked=await readWishlistRemote(c);
+   if(JSON.stringify(checked.items)!==JSON.stringify(next))throw Error('Wishlist save could not be verified; refresh before editing.');
+   wishlistItems=checked.items;localStorage.setItem('movie-wishlist-cache',JSON.stringify(wishlistItems));
+   renderWishlist();return;
+ }
+ throw Error('Wishlist changed on GitHub. Refresh and retry.');
+}
+function setWishlistMessage(message){const el=document.getElementById('wishlist-message');if(el)el.textContent=message;}
+function renderWishlist(){
+ const root=document.getElementById('wishlist-view');if(!root)return;
+ const active=wishlistItems.filter(x=>x.status!=='purchased');
+ const visible=active.filter(x=>!wishlistQuery||[x.title,x.retailer,x.format].join(' ').toLowerCase().includes(wishlistQuery.toLowerCase()));
+ root.innerHTML=`<div class="wishlist-wrap"><div class="wishlist-heading"><div><h2>My Wishlist</h2><p class="manager-small">${active.length} movie${active.length===1?'':'s'} to buy · No prices or retailer links stored</p></div><button type="button" class="manager-btn" id="wishlist-add">＋ Add Movie</button></div>
+ <input id="wishlist-search" class="wishlist-search" type="search" placeholder="Search wishlist" value="${escapeHtml(wishlistQuery)}" aria-label="Search wishlist">
+ <p id="wishlist-message" role="status" class="manager-small">${escapeHtml(wishlistLoadError)}</p>
+ <div class="wishlist-items">${visible.map(x=>`<div class="wishlist-item"><div class="wishlist-art">${x.posterUrl?`<img loading="lazy" alt="" src="${escapeHtml(x.posterUrl)}">`:'🎬'}</div><div class="wishlist-info"><b>${escapeHtml(x.title||'Untitled')}</b><small>${escapeHtml([x.year||'',wishlistFormatText(x.format),x.retailer||''].filter(Boolean).join(' · '))}</small>${x.edition?`<small>${escapeHtml(x.edition)}</small>`:''}<div class="wishlist-actions"><button type="button" data-wish-move="${escapeHtml(x.id)}">Move to Collection</button><button type="button" data-wish-edit="${escapeHtml(x.id)}">Edit</button><button type="button" data-wish-delete="${escapeHtml(x.id)}">Remove</button></div></div></div>`).join('')||'<p class="empty-state">Your wishlist is empty. Add a movie from a retailer link or by title.</p>'}</div>
+ ${wishlistEditorOpen?wishlistEditorHtml():''}</div>`;
+ root.querySelector('#wishlist-add').onclick=()=>{wishlistDraft={};wishlistEditorOpen=true;wishlistCandidate=null;renderWishlist();};
+ root.querySelector('#wishlist-search').oninput=e=>{wishlistQuery=e.target.value;renderWishlist();const input=document.getElementById('wishlist-search');input.focus();input.setSelectionRange(wishlistQuery.length,wishlistQuery.length);};
+ root.querySelectorAll('[data-wish-move]').forEach(b=>b.onclick=()=>moveWishlistToCollection(b.dataset.wishMove));
+ root.querySelectorAll('[data-wish-edit]').forEach(b=>b.onclick=()=>{wishlistDraft={...wishlistItems.find(x=>x.id===b.dataset.wishEdit)};wishlistEditorOpen=true;wishlistCandidate=null;renderWishlist();});
+ root.querySelectorAll('[data-wish-delete]').forEach(b=>b.onclick=async()=>{const id=b.dataset.wishDelete;if(!confirm('Remove this movie from your wishlist?'))return;try{await updateWishlist(items=>items.filter(x=>x.id!==id));}catch(e){setWishlistMessage(e.message);}});
+ if(wishlistEditorOpen)attachWishlistEditor();
+}
+function wishlistEditorHtml(){const d=wishlistDraft||{};return `<div class="wishlist-editor" id="wishlist-editor"><div class="wishlist-editor-heading"><b>${d.id?'Edit wishlist movie':'Add to Wishlist'}</b><button type="button" id="wishlist-cancel" class="manager-btn secondary">Close</button></div>
+ <p class="manager-small">Paste a retailer link to identify the store and suggest a title. Retailer sites may block automatic details; use TMDB to confirm the movie. The original URL is never saved.</p>
+ <label>Retailer product link (optional)<input id="wishlist-url" type="url" placeholder="Paste Amazon, Gruv, Best Buy or Target link"></label>
+ <button type="button" class="manager-btn secondary" id="wishlist-read-link">Use link</button>
+ <label>Movie title<input id="wishlist-title" value="${escapeHtml(d.title||'')}" placeholder="Movie title"></label>
+ <div class="wishlist-two"><label>Format<select id="wishlist-format">${[['','Select format'],['4k','4K UHD'],['bluray','Blu-ray'],['dvd','DVD'],['steelbook','Steelbook']].map(([v,t])=>`<option value="${v}" ${d.format===v?'selected':''}>${t}</option>`).join('')}</select></label>
+ <label>Retailer<select id="wishlist-retailer">${[['','Select retailer'],['Amazon','Amazon'],['Gruv','Gruv'],['Best Buy','Best Buy'],['Target','Target'],['Other','Other']].map(([v,t])=>`<option value="${v}" ${d.retailer===v?'selected':''}>${t}</option>`).join('')}</select></label></div>
+ <div class="wishlist-two"><label>Film year<input id="wishlist-year" inputmode="numeric" maxlength="4" value="${escapeHtml(d.year||'')}" placeholder="Optional"></label><label>Edition / notes<input id="wishlist-edition" value="${escapeHtml(d.edition||'')}" placeholder="Optional"></label></div>
+ <div class="wishlist-actions"><button type="button" id="wishlist-tmdb" class="manager-btn secondary">Find movie details</button><button type="button" id="wishlist-save" class="manager-btn">Save to Wishlist</button></div>
+ <p id="wishlist-form-status" role="status" class="manager-small"></p><div id="wishlist-matches"></div></div>`;}
+function wishlistFormValue(id){return document.getElementById(id)?.value.trim()||'';}
+function attachWishlistEditor(){
+ document.getElementById('wishlist-cancel').onclick=()=>{wishlistEditorOpen=false;wishlistDraft=null;renderWishlist();};
+ document.getElementById('wishlist-read-link').onclick=()=>{
+   const input=wishlistFormValue('wishlist-url'),info=retailerFromUrl(input),status=document.getElementById('wishlist-form-status');
+   if(!info){status.textContent='Use an HTTPS product link from Amazon, Gruv, Best Buy or Target.';return;}
+   document.getElementById('wishlist-retailer').value=info.retailer;
+   const title=titleFromRetailerUrl(info.url);
+   if(title&&!wishlistFormValue('wishlist-title'))document.getElementById('wishlist-title').value=title;
+   status.textContent=title?'Retailer recognized. Suggested title from URL; verify through TMDB.':'Retailer recognized. This link does not expose a usable title; enter movie title to find details.';
+   document.getElementById('wishlist-url').value=''; // discard URL even from the form
+ };
+ document.getElementById('wishlist-tmdb').onclick=lookupWishlistTmdb;
+ document.getElementById('wishlist-save').onclick=saveWishlistDraft;
+}
+async function lookupWishlistTmdb(){
+ const key=localStorage.getItem('tmdbKey'),title=wishlistFormValue('wishlist-title'),status=document.getElementById('wishlist-form-status'),out=document.getElementById('wishlist-matches');
+ if(!key){status.textContent='Add a TMDB API key in Settings to fetch film details.';return;}
+ if(!title){status.textContent='Enter a movie title first.';return;}
+ out.textContent='Searching TMDB…';wishlistCandidate=null;
+ try{
+  const r=await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${encodeURIComponent(key)}&query=${encodeURIComponent(title)}`,{cache:'no-store'});
+  if(!r.ok)throw Error('TMDB HTTP '+r.status);
+  const results=(await r.json()).results||[];
+  out.innerHTML=results.slice(0,10).map((m,i)=>`<button class="wishlist-tmdb-result" type="button" data-wish-pick="${i}">${m.poster_path?`<img alt="" src="https://image.tmdb.org/t/p/w92${escapeHtml(m.poster_path)}">`:''}<span>${escapeHtml(m.title)} <small>${escapeHtml((m.release_date||'').slice(0,4))}</small></span></button>`).join('')||'<p class="manager-small">No results. You may save the title manually.</p>';
+  out.querySelectorAll('[data-wish-pick]').forEach(b=>b.onclick=()=>{
+    const m=results[Number(b.dataset.wishPick)];wishlistCandidate={tmdbId:m.id,posterUrl:m.poster_path?'https://image.tmdb.org/t/p/w500'+m.poster_path:null,title:m.title,year:(m.release_date||'').slice(0,4)};
+    document.getElementById('wishlist-title').value=m.title;
+    document.getElementById('wishlist-year').value=wishlistCandidate.year;
+    out.textContent='Selected: '+m.title+' ('+wishlistCandidate.year+'). Confirm your physical format and save.';
+  });
+ }catch(e){out.textContent='TMDB lookup unavailable: '+e.message;}
+}
+async function saveWishlistDraft(){
+ const title=wishlistFormValue('wishlist-title'),format=wishlistFormValue('wishlist-format'),retailer=wishlistFormValue('wishlist-retailer'),year=wishlistFormValue('wishlist-year'),edition=wishlistFormValue('wishlist-edition');
+ const status=document.getElementById('wishlist-form-status'),button=document.getElementById('wishlist-save');
+ if(!title||!format||!retailer){status.textContent='Title, format and retailer are required.';return;}
+ if(year&&!/^(18|19|20)\d{2}$/.test(year)){status.textContent='Enter a valid four-digit film year or leave blank.';return;}
+ const chosen=wishlistCandidate&&normalizeFilmTitle(wishlistCandidate.title)===normalizeFilmTitle(title)?wishlistCandidate:null;
+ const entry={id:wishlistDraft?.id||'WISH-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),title,year:year||null,format,retailer,edition:edition||'',tmdbId:chosen?.tmdbId||(wishlistDraft&&normalizeFilmTitle(wishlistDraft.title)===normalizeFilmTitle(title)?wishlistDraft.tmdbId:null)||null,posterUrl:chosen?.posterUrl||(wishlistDraft&&normalizeFilmTitle(wishlistDraft.title)===normalizeFilmTitle(title)?wishlistDraft.posterUrl:null)||null,status:'active'};
+ if(ownedWishlistMatch(entry)){status.textContent='This title appears to be in your collection already. Check the edition before adding.';return;}
+ button.disabled=true;status.textContent='Saving wishlist to GitHub…';
+ try{await updateWishlist(items=>{
+   const dup=items.find(x=>x.id!==entry.id&&x.status!=='purchased'&&((entry.tmdbId&&x.tmdbId===entry.tmdbId)||normalizeFilmTitle(x.title)===normalizeFilmTitle(entry.title))&&x.format===entry.format);
+   if(dup)throw Error('This movie and format are already on your wishlist.');
+   const i=items.findIndex(x=>x.id===entry.id);if(i>=0)items[i]=entry;else items.push(entry);return items;
+ });wishlistEditorOpen=false;wishlistDraft=null;wishlistCandidate=null;renderWishlist();
+ }catch(e){status.textContent=e.message;}finally{button.disabled=false;}
+}
+function moveWishlistToCollection(id){
+ const item=wishlistItems.find(x=>x.id===id);if(!item)return;
+ const owned=ownedWishlistMatch(item);if(owned){setWishlistMessage('This movie already appears in your collection: '+owned.title+'. Confirm the edition before continuing.');return;}
+ openAddMovie();wishlistMoveId=id;
+ document.getElementById('add-title').value=item.title||'';
+ document.getElementById('add-format').value=item.format==='steelbook'?'':item.format||'';
+ if(item.year)document.getElementById('add-year').value=item.year;
+ // TMDB film posters are useful for review; the owned edition still needs confirmation.
+ newItemCandidate=item.tmdbId?{tmdbId:item.tmdbId,tmdbTitle:item.title,posterUrl:item.posterUrl||null,year:item.year||null,matchedVia:'wishlist'}:null;
+ addMsg('From wishlist ('+item.retailer+'). Confirm the exact disc barcode, physical format and studio before saving. Only after GitHub verifies the movie will the wishlist be marked purchased.');
+}
+async function markWishlistPurchased(id,movieId){
+ await updateWishlist(items=>{const item=items.find(x=>x.id===id);if(!item)throw Error('Wishlist record was not found.');item.status='purchased';item.collectionId=movieId;return items;});
+}
+
 // Add/Scan: new physical items are always reviewed before being written to GitHub.
 let newItemCandidate=null, addStream=null, addScanTimer=null, addDetector=null, addDecoder=null;
 function barcodeKey(value){const v=String(value||'').replace(/\D/g,'');return v.length===13&&v[0]==='0'?v.slice(1):v;}
@@ -3006,7 +3189,7 @@ function openAddMovie(){
  document.getElementById('add-barcode').oninput=()=>{showAddDuplicate();newItemCandidate=null;};
  document.getElementById('add-title').oninput=()=>{newItemCandidate=null;document.getElementById('add-matches').innerHTML='';};
 }
-function closeAddMovie(){stopAddCamera();document.getElementById('add-overlay').style.display='none';}
+function closeAddMovie(){wishlistMoveId=null;stopAddCamera();document.getElementById('add-overlay').style.display='none';}
 function showAddDuplicate(){const barcode=document.getElementById('add-barcode').value;const existing=duplicateBarcode(barcode);const el=document.getElementById('add-duplicate');el.style.display=existing?'block':'none';if(existing){el.textContent='Already in your collection: '+existing.title+' ('+existing.id+'). This barcode cannot be added again.';}return existing;}
 // Add-barcode enrichment never replaces an existing collection record. The UPCMDB
 // physical-edition artwork and source details remain in the draft until Save.
@@ -3120,13 +3303,14 @@ async function saveNewMovie(){
  try{const remote=(await readGitHubMovies(config)).data;if(barcode){const key=barcodeKey(barcode),already=remote.find(m=>[m.upc,m.ean].some(x=>barcodeKey(x)===key));if(already)throw new Error('Already exists on GitHub: '+already.title);}
  movies.push(movie);markPending(movie);buildGenreFilter();buildLanguageFilter();render();addMsg('Saving and verifying on GitHub…');
  const msg=await syncPendingEdits();
+ if(wishlistMoveId && msg.startsWith('Saved and verified')){const completedId=wishlistMoveId;wishlistMoveId=null;try{await markWishlistPurchased(completedId,movie.id);}catch(err){addMsg('Movie saved in collection; wishlist update pending: '+err.message);}}
  let posterMsg='';
  if(!movie.isBoxSet && tmdbPosterSource(movie)){
    addMsg('Collection item saved. Archiving and locking its 780px poster…');
    try { await archiveSelectedPoster(movie,null);posterMsg=' Poster backed up and locked.'; }
    catch(e) {posterMsg=' Poster backup needs retry in Data Manager: '+e.message;}
  }
- addMsg(msg+' Added '+movie.title+'.'+posterMsg);button.textContent='Saved';
+ addMsg(msg+' Added '+movie.title+'.'+posterMsg+wishlistMoveNote);button.textContent='Saved';
  stopAddCamera();setTimeout(()=>{if(document.getElementById('add-overlay').style.display==='flex'){closeAddMovie();openDetail(movie.id);}},600);
  }catch(e){addMsg('Saved locally if added, but GitHub verification failed: '+e.message+'. Use Data Manager → Sync with GitHub.');button.disabled=false;}
 }
