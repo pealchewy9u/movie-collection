@@ -142,7 +142,8 @@
   .history-note{color:var(--text-muted);font-size:11px;line-height:1.5}
 
   /* ---- Summary view ---- */
-  #summary-view { height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 4px 16px 30px; display: none; }
+  #overview-view { height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch; padding: 5px 16px 35px; display:none; }
+  #summary-view { height:auto; overflow:visible; padding: 0; display:block; }
   .summary-total { font-size: 13px; color: var(--text-muted); margin-bottom: 18px; }
   .summary-section-title { font-size: 15px; font-weight: 700; margin-bottom: 10px; margin-top: 20px; }
   .cat-row { margin-bottom: 12px; }
@@ -182,8 +183,27 @@
   @media (min-width: 660px) { .summary-dashboard { padding-top: 8px; } .summary-card { padding: 18px; } .summary-kpi { padding: 18px 9px; } }
   @media (max-width: 350px) { .summary-card { padding: 10px 8px; } .summary-compare-label { font-size: 10px; } }
 
+  /* Overview: lightweight collection breakdown and four-across genre tiles. */
+  .overview-breakdown { margin:-4px 0 13px; border-radius:8px; background:var(--surface-raised); padding:9px 6px; text-align:center; font-size:11px; color:var(--text-muted); line-height:1.5; }
+  .overview-breakdown b { color:var(--text); font-size:12px; }
+  .overview-breakdown .sep { padding:0 6px; opacity:.5; }
+  .overview-genre-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:7px; }
+  .overview-genre-tile { background:var(--surface-raised); border:1px solid var(--groove); border-radius:9px; text-align:center; padding:12px 3px 10px; min-width:0; }
+  .overview-genre-tile strong { display:block; font-size:19px; line-height:1.15; color:var(--brass); font-variant-numeric:tabular-nums; }
+  .overview-genre-tile span { display:block; color:var(--text); font-size:10px; margin-top:5px; overflow-wrap:anywhere; }
+  .overview-genre-note { font-size:10px; color:var(--text-muted); margin:10px 0 0; }
+  .overview-health-heading { font-size:15px; font-weight:750; margin:17px 0 10px; }
+  .overview-accordion { margin:8px 0; border:1px solid var(--groove); border-radius:11px; background:var(--surface); padding:0; }
+  .overview-accordion > summary { padding:13px 14px; cursor:pointer; font-size:13px; font-weight:700; list-style:none; }
+  .overview-accordion > summary::-webkit-details-marker { display:none; }
+  .overview-accordion > summary:after { content:'⌄'; float:right; color:var(--text-muted); }
+  .overview-accordion[open] > summary:after { content:'⌃'; }
+  .overview-accordion[open] > summary { border-bottom:1px solid var(--groove); }
+  .overview-tool-body { padding:12px 13px; }
+  #manager-view .bulk-language { margin:8px 0; }
+  @media(max-width:380px) { .overview-breakdown {font-size:10px;} .overview-breakdown .sep{padding:0 3px;} .overview-genre-grid{gap:5px;} .overview-genre-tile{padding:10px 2px;} .overview-genre-tile strong{font-size:17px;} .overview-genre-tile span{font-size:9px;} }
   /* ---- Data Manager ---- */
-  #manager-view { height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px 16px 40px; display:none; }
+  #manager-view { height:auto; overflow:visible; padding: 4px 0 35px; display:block; max-width:920px; margin:0 auto; }
   .manager-stats { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; margin-bottom:14px; }
   .manager-stat { background:var(--surface); border:1px solid var(--groove); padding:12px; border-radius:11px; }
   .manager-stat strong { display:block; font-size:24px; color:var(--brass); }
@@ -351,7 +371,7 @@
     .cf-title { font-size: 23px; line-height: 1.2; }
     .cf-studio { font-size: 13px; margin-top: 3px; }
     #status-bar { padding-bottom: 8px; }
-    #summary-view, #manager-view { max-width: 1100px; margin: 0 auto; width: 100%; }
+    #overview-view { width:100%; } #summary-view, #manager-view { max-width: 920px; margin: 0 auto; width:100%; }
     #detail-sheet { max-width: 900px; }
   }
   @media (min-width: 900px) and (max-height: 740px) and (hover: hover) and (pointer: fine) {
@@ -387,8 +407,7 @@
   <div class="tabs">
     <div class="tab" data-view="list">List</div>
     <div class="tab active" data-view="coverflow">Cover Flow</div>
-    <div class="tab" data-view="summary">Summary</div>
-    <div class="tab" data-view="manager">Data Manager</div>
+    <div class="tab" data-view="overview">Overview</div>
     <div class="tab" data-view="history">History</div>
   </div>
 
@@ -398,8 +417,7 @@
       <div class="cf-scroll" id="cf-scroll"></div>
       <div class="cf-caption" id="cf-caption"></div>
     </div>
-    <div id="summary-view"></div>
-    <div id="manager-view"></div>
+    <div id="overview-view" style="display:none"><div id="summary-view"></div><div id="manager-view"></div></div>
     <div id="history-view" style="display:none"></div>
   </main>
 
@@ -817,7 +835,7 @@ function coverHtml(movie, cls, placeholderCls) {
 function render() {
   if (currentView === 'list') renderList();
   else if (currentView === 'coverflow') renderCoverFlow();
-  else if (currentView === 'summary') renderSummary();
+  else if (currentView === 'overview') { renderSummary(); renderManager(); }
   else if(currentView === 'history') renderWatchHistory();
   else renderManager();
 }
@@ -1012,37 +1030,26 @@ function renderWatchHistory(){
   el.querySelectorAll('[data-history-film]').forEach(row=>row.onclick=()=>switchMovieView('coverflow',row.dataset.historyFilm));
 }
 
-function summaryDashboardMarkup(filmCount, tvCount, itemCount, formatCounts, languageCounts, genreCounts, escFn) {
-  const safe = value => escFn(String(value));
-  const totals = [['Collection Items', itemCount], ['Movies', filmCount], ['TV Shows', tvCount]];
-  const compareCard = (heading, counts) => {
-    const entries = Object.entries(counts).sort((a,b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-    const max = Math.max(1, ...entries.map(([, n]) => n));
+function summaryDashboardMarkup(filmCount, tvCount, itemCount, formatCounts, languageCounts, genreCounts, escFn, breakdown) {
+  const safe=value=>escFn(String(value));
+  const totals=[['Collection Items',itemCount],['Movies',filmCount],['TV Shows',tvCount]];
+  const compareCard=(heading,counts)=>{
+    const entries=Object.entries(counts).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]));
+    const max=Math.max(1,...entries.map(([,n])=>n));
     return `<section class="summary-card"><h3 class="summary-card-title">${safe(heading)}</h3>
-      ${entries.map(([label, count]) => `<div class="summary-compare-row"><div class="summary-compare-label"><span>${safe(label)}</span><strong>${count}</strong></div><div class="summary-compare-track"><div class="summary-compare-fill" style="width:${(count / max * 100).toFixed(2)}%"></div></div></div>`).join('')}
+      ${entries.map(([label,count])=>`<div class="summary-compare-row"><div class="summary-compare-label"><span>${safe(label)}</span><strong>${count}</strong></div><div class="summary-compare-track"><div class="summary-compare-fill" style="width:${(count/max*100).toFixed(2)}%"></div></div></div>`).join('')}
     </section>`;
   };
-  const genreEntries = Object.entries(genreCounts).sort((a,b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-  const genreMax = Math.max(1, ...genreEntries.map(([,n]) => n));
-  const genreRows = genreEntries.map(([label, count], index) => `<div class="cat-row"${index >= 5 ? ' hidden' : ''} data-genre-extra="${index >= 5 ? '1' : '0'}"><div class="cat-row-top"><span>${safe(label)}</span><strong>${count}</strong></div><div class="cat-bar-track"><div class="cat-bar-fill" style="width:${(count / genreMax * 100).toFixed(2)}%"></div></div></div>`).join('');
-  return `<div class="summary-dashboard"><div class="summary-heading">Your Collection at a Glance</div><div class="summary-subheading">A snapshot of your physical movie library</div>
-    <div class="summary-kpis">${totals.map(([label, number]) => `<div class="summary-kpi"><strong>${number}</strong><span>${safe(label)}</span></div>`).join('')}</div>
-    <div class="summary-duo">${compareCard('Collection Format', formatCounts)}${compareCard('Language', languageCounts)}</div>
-    <section class="summary-card summary-genre-card"><h3 class="summary-card-title">Most Popular Genres</h3>${genreRows}
-      ${genreEntries.length > 5 ? `<button type="button" class="summary-genre-toggle" data-summary-expand>Show all genres (${genreEntries.length})</button>` : ''}
+  const genreEntries=Object.entries(genreCounts).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]));
+  return `<div class="summary-dashboard"><div class="summary-heading">Collection Overview</div><div class="summary-subheading">Your physical movie library at a glance</div>
+    <div class="summary-kpis">${totals.map(([label,n])=>`<div class="summary-kpi"><strong>${n}</strong><span>${safe(label)}</span></div>`).join('')}</div>
+    <div class="overview-breakdown"><b>${breakdown.individual}</b> Individual <span class="sep">·</span> <b>${breakdown.boxSets}</b> Box Sets <span class="sep">·</span> <b>${breakdown.tv}</b> TV Shows</div>
+    <div class="summary-duo">${compareCard('Disc Format',formatCounts)}${compareCard('Language',languageCounts)}</div>
+    <section class="summary-card summary-genre-card"><h3 class="summary-card-title">Genres</h3>
+      <div class="overview-genre-grid">${genreEntries.map(([name,count])=>`<div class="overview-genre-tile"><strong>${count}</strong><span>${safe(name)}</span></div>`).join('')}</div>
+      <p class="overview-genre-note">Each movie counts in every genre it belongs to, including films inside box sets.</p>
     </section></div>`;
 }
-function attachSummaryGenreToggle(container) {
-  const button = container.querySelector('[data-summary-expand]');
-  if (!button) return;
-  button.addEventListener('click', () => {
-    const expand = button.getAttribute('aria-expanded') !== 'true';
-    container.querySelectorAll('[data-genre-extra="1"]').forEach(row => { row.hidden = !expand; });
-    button.setAttribute('aria-expanded', String(expand));
-    button.textContent = expand ? 'Show top 5 genres' : `Show all genres (${container.querySelectorAll('.summary-genre-card .cat-row').length})`;
-  });
-}
-
 function renderSummary() {
   const container = document.getElementById('summary-view');
   if (movies.length === 0) {
@@ -1094,14 +1101,24 @@ function renderSummary() {
     formatCounts[f] = (formatCounts[f] || 0) + 1;
   });
 
+  // Count individual films, including every included movie, once per distinct genre.
   const genreCounts = {};
-  movies.forEach(m => {
-    const g = displayGenre(m) || 'Genre not recorded';
-    genreCounts[g] = (genreCounts[g] || 0) + 1;
-  });
+  const countGenres=film=>{
+    const parts=genreParts(film.genre);
+    const seen=new Set();
+    for(const name of (parts.length?parts:['Genre not recorded'])){
+      const key=name.toLocaleLowerCase();
+      if(seen.has(key))continue;
+      seen.add(key);
+      genreCounts[name]=(genreCounts[name]||0)+1;
+    }
+  };
+  singles.forEach(countGenres);
+  included.forEach(countGenres);
 
-  container.innerHTML = summaryDashboardMarkup(filmCount, tvCount, movies.length, formatCounts, languageCounts, genreCounts, escapeHtml);
-  attachSummaryGenreToggle(container);
+  const individual=singles.filter(m=>effectiveMediaType(m)!=='tv').length;
+  const ownTv=singles.filter(m=>effectiveMediaType(m)==='tv').length;
+  container.innerHTML = summaryDashboardMarkup(filmCount,tvCount,movies.length,formatCounts,languageCounts,genreCounts,escapeHtml,{individual,boxSets:boxSets.length,tv:ownTv});
 }
 
 // Old provider failures are historical once usable metadata has been matched.
@@ -1240,7 +1257,7 @@ async function backfillMovieRuntimes() {
     } else runtimeBackfillMessage=`No runtimes added; ${unavailable} unavailable, ${failed} lookup errors. Existing data unchanged.`;
   } finally {
     runtimeBackfillBusy=false;runtimeBackfillStop=false;
-    if (currentView==='manager') renderManager();
+    if (currentView==='overview') renderManager();
     runtimeBackfillStatus(runtimeBackfillMessage);
   }
 }
@@ -1279,14 +1296,21 @@ function renderManager(){
     return !managerSearch||[m.title,m.tmdbTitle,m.studio].join(' ').toLowerCase().includes(managerSearch.toLowerCase());
   }).sort((a,b)=>dataIssues(b).length-dataIssues(a).length||(a.title||'').localeCompare(b.title||''));
   const stats=[['Collection entries',movies.length],['Individual movies',films.length],['TV shows',tv.length],['Box sets',collections.length],['Need attention',attention.length],['IMDb ratings',movies.filter(m=>m.imdbRating).length]];
-  el.innerHTML=`<h2 style="font-size:20px;margin:0 0 5px">Collection overview</h2>
-    <p class="manager-small" style="margin-bottom:14px">Physical collection entries are counted once. Movies inside box sets are not counted as separate entries.</p>
-    <div class="manager-stats">${stats.map(([label,n])=>`<div class="manager-stat"><strong>${n}</strong><span>${label}</span></div>`).join('')}</div>
-    <div class="manager-sync" id="sync-status">${Object.keys(pendingEdits()).length} local movie edits pending · Sync from Settings</div>
-    <details class="bulk-language" id="bulk-language-panel" ${bulkLanguageOpen?'open':''}>
-      <summary>Bulk language review · ${missingLanguageEntries().length} missing</summary>
-      <div id="bulk-language-body"></div>
-    </details>
+  // Preserve expanded tools when a search, save or backup refreshes this section.
+  const expanded=new Set([...el.querySelectorAll('details[open]')].map(x=>x.id).filter(Boolean));
+  el.innerHTML=`<h3 class="overview-health-heading">Collection Health &amp; Tools</h3>
+    <details class="overview-accordion" id="overview-attention" ${expanded.has('overview-attention')?'open':''}>
+      <summary>Needs Attention · ${attention.length}</summary><div class="overview-tool-body">
+
+    <p class="manager-small">Only items with missing or suspicious information appear here. An API match does not automatically mean a verified match.</p>
+    <div class="manager-controls"><select id="manager-filter">${[['attention','Needs attention'],['movie','Individual movies'],['tv','TV shows'],['collection','Box sets'],['confirmed','Manually confirmed'],['all','All entries']].map(([v,l])=>`<option value="${v}" ${managerFilter===v?'selected':''}>${l}</option>`).join('')}</select></div>
+    <div class="search-row"><span>🔍</span><input id="manager-search" placeholder="Search your collection" value="${escapeHtml(managerSearch)}"></div>
+    <p class="manager-small">Showing ${shown.length} entries</p>
+    <div id="manager-items">${shown.map(m=>{
+      const issues=dataIssues(m);
+      return `<div class="manager-item manager-clean"><div class="manager-item-head"><div style="min-width:0;flex:1"><div class="manager-item-title">${escapeHtml(m.title||'Untitled')}</div><div class="manager-small">${escapeHtml(m.tmdbTitle||'No matched title')} · ${escapeHtml(m.year||'Year unknown')} · ${escapeHtml(m.language?languageName(m.language):'Language unknown')}</div>
+      ${issues.length?`<div class="issue-list">${issues.map(x=>`<span>${escapeHtml(x)}</span>`).join('')}</div>`:'<div class="manager-small">No current data-quality warnings</div>'}</div><button class="manager-btn" data-fix="${escapeHtml(m.id)}">${issues.length?'Fix':'View'}</button></div></div>`;
+    }).join('')||'<p class="empty-state">Nothing needs attention in this view.</p>'}</div>    </div></details>
     <details class="bulk-language" id="poster-backup-panel" ${posterBackupOpen?'open':''}>
       <summary>Backup all movie posters · ${posterBackupStats().done} / ${posterBackupStats().eligible} archived</summary>
       <div style="padding:12px 3px">
@@ -1309,6 +1333,10 @@ function renderManager(){
         <p class="manager-small" id="poster-backup-status" role="status">${escapeHtml(posterBackupMessage||'No upload in progress.')}</p>
       </div>
     </details>
+    <details class="bulk-language" id="bulk-language-panel" ${bulkLanguageOpen?'open':''}>
+      <summary>Bulk language review · ${missingLanguageEntries().length} missing</summary>
+      <div id="bulk-language-body"></div>
+    </details>
     <details class="bulk-language" id="runtime-backfill-panel">
       <summary>Movie runtimes · <span id="runtime-covered-count">${runtimeCoverage().complete} / ${runtimeCoverage().total}</span> recorded</summary>
       <p class="manager-small">Add missing film runtimes from existing verified TMDB IDs, with OMDb fallback by IMDb ID. TV shows are skipped, and box sets are processed film by film. This does not rematch titles or modify posters.</p>
@@ -1316,16 +1344,14 @@ function renderManager(){
       <button class="manager-btn secondary" id="runtime-backfill-stop" ${runtimeBackfillBusy?'':'disabled'}>Stop after current movie</button>
       <p id="runtime-backfill-status" class="manager-small" role="status">${escapeHtml(runtimeBackfillMessage || 'No changes have been made.')}</p>
     </details>
-    <h3 style="font-size:17px;margin:24px 0 6px">Needs attention</h3>
-    <p class="manager-small">Only items with missing or suspicious information appear here. An API match does not automatically mean a verified match.</p>
-    <div class="manager-controls"><select id="manager-filter">${[['attention','Needs attention'],['movie','Individual movies'],['tv','TV shows'],['collection','Box sets'],['confirmed','Manually confirmed'],['all','All entries']].map(([v,l])=>`<option value="${v}" ${managerFilter===v?'selected':''}>${l}</option>`).join('')}</select></div>
-    <div class="search-row"><span>🔍</span><input id="manager-search" placeholder="Search your collection" value="${escapeHtml(managerSearch)}"></div>
-    <p class="manager-small">Showing ${shown.length} entries</p>
-    <div id="manager-items">${shown.map(m=>{
-      const issues=dataIssues(m);
-      return `<div class="manager-item manager-clean"><div class="manager-item-head"><div style="min-width:0;flex:1"><div class="manager-item-title">${escapeHtml(m.title||'Untitled')}</div><div class="manager-small">${escapeHtml(m.tmdbTitle||'No matched title')} · ${escapeHtml(m.year||'Year unknown')} · ${escapeHtml(m.language?languageName(m.language):'Language unknown')}</div>
-      ${issues.length?`<div class="issue-list">${issues.map(x=>`<span>${escapeHtml(x)}</span>`).join('')}</div>`:'<div class="manager-small">No current data-quality warnings</div>'}</div><button class="manager-btn" data-fix="${escapeHtml(m.id)}">${issues.length?'Fix':'View'}</button></div></div>`;
-    }).join('')||'<p class="empty-state">Nothing needs attention in this view.</p>'}</div>`;
+    <details class="overview-accordion" id="overview-sync" ${expanded.has('overview-sync')?'open':''}>
+      <summary>GitHub Sync Status · ${Object.keys(pendingEdits()).length} pending</summary>
+      <div class="overview-tool-body"><div class="manager-sync" id="sync-status">${Object.keys(pendingEdits()).length} local movie edits pending · Sync from Settings</div>
+      <p class="manager-small">Use Settings → Sync now to save pending movie changes and watching history.</p></div>
+    </details>`;
+  el.dataset.initialized='1';
+  // Restore the previous open states of nested backup/language/runtime sections.
+  for(const id of expanded){const node=el.querySelector('[id="'+id+'"]');if(node?.tagName==='DETAILS')node.open=true;}
   renderBulkLanguageReview();
   el.querySelector('#runtime-backfill-start').onclick=backfillMovieRuntimes;
   el.querySelector('#runtime-backfill-stop').onclick=()=>{runtimeBackfillStop=true;runtimeBackfillStatus('Stopping after current movie…');};
@@ -1596,7 +1622,7 @@ async function backupNextPosters(){
     setPosterBackupMessage(`${completed} saved this run, ${errors} failed. ${st.done}/${st.eligible} posters archived, ${st.missing} remaining. ${posterBackupFailures.size?'Review failure list for blocked images. ':''}${posterBackupStop?'Stopped. ':''}${st.missing?'Run next batch or retry failed downloads.':'All available posters archived.'}`);
   }finally{
     posterBackupRunning=false;posterBackupStop=false;
-    if(currentView==='manager')renderManager();
+    if(currentView==='overview')renderManager();
   }
 }
 
@@ -2520,7 +2546,7 @@ function escapeHtml(str) {
 function switchMovieView(view, movieId=null){
   currentView=view;
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===view));
-  for(const name of ['list','coverflow','summary','manager','history']){
+  for(const name of ['list','coverflow','overview','history']){
     const el=document.getElementById(name+'-view');
     el.style.display=name===view?(name==='coverflow'?'flex':'block'):'none';
   }
@@ -2606,7 +2632,7 @@ async function syncCollectionAndHistory(){
   }finally{
     button.disabled=false;
     combinedSyncRunning=false;
-    if(currentView==='manager')renderManager();
+    if(currentView==='overview')renderManager();
     if(currentView==='history')renderWatchHistory();
   }
 }
