@@ -13266,5 +13266,55 @@
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795115817694-2fssg-main-mwnxm0h1-vow36p.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/xStmzLprgzqjzfvpBI7uTbcRpwQ.jpg",
     "posterLocked": true
+  },
+  {
+    "id": "MOV-NEW-1795132882436-2xw64",
+    "title": "American Pie 9-Movie Collection",
+    "studio": "",
+    "upc": "191329163290",
+    "ean": null,
+    "mediaType": "movie",
+    "blurayDiscs": 0,
+    "dvdDiscs": 1,
+    "is4k": false,
+    "formatOverride": "dvd",
+    "dateAdded": "2026-11-20",
+    "releaseDate": null,
+    "countryCode": null,
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "• American Pie (1999)"
+      },
+      {
+        "title": "• American Pie 2 (2001)"
+      },
+      {
+        "title": "• American Wedding (2003)"
+      },
+      {
+        "title": "• American Reunion (2012)"
+      },
+      {
+        "title": "American Pie Presents: Band Camp (2005)"
+      },
+      {
+        "title": "• American Pie Presents: The Naked Mile (2006)"
+      },
+      {
+        "title": "• American Pie Presents: Beta House (2007)"
+      },
+      {
+        "title": "• American Pie Presents: The Book of Love (2009)"
+      },
+      {
+        "title": "• American Pie Presents: Girls' Rules (2020)"
+      }
+    ],
+    "imdbRating": null,
+    "imdbId": null,
+    "tmdbId": null,
+    "tmdbTitle": null,
+    "reviewStatus": "collection"
   }
 ]
