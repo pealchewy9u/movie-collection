@@ -13284,7 +13284,20 @@
     "isBoxSet": true,
     "includedMovies": [
       {
-        "title": "• American Pie (1999)"
+        "title": "• American Pie (1999)",
+        "tmdbId": 2105,
+        "tmdbTitle": "American Pie",
+        "year": "1999",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/5P68by2Thn8wHAziyWGEw2O7hco.jpg",
+        "language": "en",
+        "genre": "Comedy, Romance",
+        "overview": "At a high-school party, four friends find that losing their collective virginity isn't as easy as they had thought. But they still believe that they need to do so before college. To motivate themselves, they enter a pact to all \"score\" by their senior prom.",
+        "imdbId": "tt0163651",
+        "imdbRating": "7.0",
+        "omdbNote": null,
+        "runtimeMinutes": 95,
+        "matchNote": null,
+        "matchedVia": "tmdb-manual"
       },
       {
         "title": "• American Pie 2 (2001)"
