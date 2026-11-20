@@ -65,5 +65,14 @@
     "tmdbId": 1317288,
     "posterUrl": "https://image.tmdb.org/t/p/w500/lYWEXbQgRTR4ZQleSXAgRbxAjvq.jpg",
     "status": "active"
+  },
+  {
+    "id": "WISH-1795144704748-dm9igz",
+    "title": "Materialists",
+    "year": "2025",
+    "format": "bluray",
+    "tmdbId": 1136867,
+    "posterUrl": "https://image.tmdb.org/t/p/w500/eDo0pNruy0Qgj6BdTyHIR4cxHY8.jpg",
+    "status": "active"
   }
 ]
