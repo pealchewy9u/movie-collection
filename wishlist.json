@@ -38,5 +38,14 @@
     "tmdbId": 950028,
     "posterUrl": "https://image.tmdb.org/t/p/w500/b7Dr8Chzse8VagexAporUu2RtLx.jpg",
     "status": "active"
+  },
+  {
+    "id": "WISH-1795142879639-n3xmiq",
+    "title": "Heart of the Beast",
+    "year": "2026",
+    "format": "4k",
+    "tmdbId": 1263337,
+    "posterUrl": "https://image.tmdb.org/t/p/w500/6sYemVUn79UPKz1ZsSG6kPU4RVy.jpg",
+    "status": "active"
   }
 ]
