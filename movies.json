@@ -13297,7 +13297,10 @@
         "imdbRating": "7.0",
         "omdbNote": null,
         "runtimeMinutes": 95,
-        "matchedVia": "tmdb-manual"
+        "matchedVia": "tmdb-manual",
+        "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795132882436-2xw64-film-0-mwo7v43d-8hzle6.jpg",
+        "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/5P68by2Thn8wHAziyWGEw2O7hco.jpg",
+        "posterLocked": true
       },
       {
         "title": "American Pie 2",
