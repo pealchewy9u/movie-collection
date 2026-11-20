@@ -188,19 +188,42 @@
   .overview-breakdown b { color:var(--text); font-size:12px; }
   .overview-breakdown .sep { padding:0 6px; opacity:.5; }
   .overview-genre-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:7px; }
-  .overview-genre-tile { background:var(--surface-raised); border:1px solid var(--groove); border-radius:9px; text-align:center; padding:12px 3px 10px; min-width:0; }
+  .overview-genre-tile { background:#fffaf1; border:1px solid #e8d5b7; border-radius:9px; text-align:center; padding:12px 3px 10px; min-width:0; }
   .overview-genre-tile strong { display:block; font-size:19px; line-height:1.15; color:var(--brass); font-variant-numeric:tabular-nums; }
   .overview-genre-tile span { display:block; color:var(--text); font-size:10px; margin-top:5px; overflow-wrap:anywhere; }
+  .overview-genre-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:11px; }
+  .overview-genre-heading .summary-card-title { margin:0; }
+  .overview-genre-expand { display:inline-flex; align-items:center; justify-content:center; gap:6px; border:1px solid var(--groove); background:#fffaf1; color:var(--text); border-radius:8px; min-height:30px; padding:5px 10px; font-size:11px; font-weight:700; cursor:pointer; }
+  .overview-genre-expand:focus-visible { outline:2px solid var(--brass); outline-offset:2px; }
+  .overview-genre-tile[hidden] { display:none; }
+  .summary-duo .summary-compare-row { margin-bottom:10px; }
+  .summary-duo .summary-card-title { margin-bottom:11px; }
+  .summary-duo .summary-compare-label { margin-bottom:4px; }
+  .summary-duo .summary-compare-track { height:9px; }
   .overview-genre-note { font-size:10px; color:var(--text-muted); margin:10px 0 0; }
   .overview-health-heading { font-size:15px; font-weight:750; margin:17px 0 10px; }
   .overview-accordion { margin:8px 0; border:1px solid var(--groove); border-radius:11px; background:var(--surface); padding:0; }
   .overview-accordion > summary { padding:13px 14px; cursor:pointer; font-size:13px; font-weight:700; list-style:none; }
   .overview-accordion > summary::-webkit-details-marker { display:none; }
-  .overview-accordion > summary:after { content:'⌄'; float:right; color:var(--text-muted); }
-  .overview-accordion[open] > summary:after { content:'⌃'; }
+
+
   .overview-accordion[open] > summary { border-bottom:1px solid var(--groove); }
   .overview-tool-body { padding:12px 13px; }
-  #manager-view .bulk-language { margin:8px 0; }
+  #manager-view .bulk-language { margin:8px 0; padding:0; border-radius:11px; }
+  #manager-view > details.bulk-language, #manager-view > details.overview-accordion { background:var(--surface); border:1px solid var(--groove); }
+  #manager-view > details.bulk-language > summary, #manager-view > details.overview-accordion > summary { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:13px 14px; cursor:pointer; font-size:13px; font-weight:700; list-style:none; }
+  #manager-view > details.bulk-language > summary::-webkit-details-marker, #manager-view > details.overview-accordion > summary::-webkit-details-marker { display:none; }
+  #manager-view > details.bulk-language > summary::after, #manager-view > details.overview-accordion > summary::after { content:''; flex:0 0 7px; width:7px; height:7px; border-right:2px solid var(--text-muted); border-bottom:2px solid var(--text-muted); transform:rotate(45deg); transition:transform .15s ease; margin-right:3px; }
+  #manager-view > details.bulk-language[open] > summary::after, #manager-view > details.overview-accordion[open] > summary::after { transform:rotate(225deg); }
+  #manager-view > details.bulk-language[open] > summary, #manager-view > details.overview-accordion[open] > summary { border-bottom:1px solid var(--groove); }
+  #manager-view > details.bulk-language > :not(summary) { margin-left:13px; margin-right:13px; }
+  #manager-view > details.bulk-language > .manager-small { margin-top:12px; }
+  #manager-view > details.bulk-language > #bulk-language-body { margin-top:10px; margin-bottom:12px; }
+  #manager-view > details.bulk-language > #runtime-backfill-status { margin-bottom:12px; }
+  #manager-view > details.bulk-language > button { margin-bottom:12px; }
+  #manager-view > details.overview-accordion > summary::after { float:none; }
+  #manager-view > details.overview-accordion[open] > summary::after { content:''; }
+
   @media(max-width:380px) { .overview-breakdown {font-size:10px;} .overview-breakdown .sep{padding:0 3px;} .overview-genre-grid{gap:5px;} .overview-genre-tile{padding:10px 2px;} .overview-genre-tile strong{font-size:17px;} .overview-genre-tile span{font-size:9px;} }
   /* ---- Data Manager ---- */
   #manager-view { height:auto; overflow:visible; padding: 4px 0 35px; display:block; max-width:920px; margin:0 auto; }
@@ -1030,6 +1053,7 @@ function renderWatchHistory(){
   el.querySelectorAll('[data-history-film]').forEach(row=>row.onclick=()=>switchMovieView('coverflow',row.dataset.historyFilm));
 }
 
+let overviewGenresExpanded=false;
 function summaryDashboardMarkup(filmCount, tvCount, itemCount, formatCounts, languageCounts, genreCounts, escFn, breakdown) {
   const safe=value=>escFn(String(value));
   const totals=[['Collection Items',itemCount],['Movies',filmCount],['TV Shows',tvCount]];
@@ -1045,8 +1069,8 @@ function summaryDashboardMarkup(filmCount, tvCount, itemCount, formatCounts, lan
     <div class="summary-kpis">${totals.map(([label,n])=>`<div class="summary-kpi"><strong>${n}</strong><span>${safe(label)}</span></div>`).join('')}</div>
     <div class="overview-breakdown"><b>${breakdown.individual}</b> Individual <span class="sep">·</span> <b>${breakdown.boxSets}</b> Box Sets <span class="sep">·</span> <b>${breakdown.tv}</b> TV Shows</div>
     <div class="summary-duo">${compareCard('Disc Format',formatCounts)}${compareCard('Language',languageCounts)}</div>
-    <section class="summary-card summary-genre-card"><h3 class="summary-card-title">Genres</h3>
-      <div class="overview-genre-grid">${genreEntries.map(([name,count])=>`<div class="overview-genre-tile"><strong>${count}</strong><span>${safe(name)}</span></div>`).join('')}</div>
+    <section class="summary-card summary-genre-card"><div class="overview-genre-heading"><h3 class="summary-card-title">Genres</h3>${genreEntries.length>4?`<button type="button" class="overview-genre-expand" aria-controls="overview-genre-grid" aria-expanded="${overviewGenresExpanded}">${overviewGenresExpanded?'Show less':'Show all '+genreEntries.length} <span aria-hidden="true">${overviewGenresExpanded?'⌃':'⌄'}</span></button>`:''}</div>
+      <div class="overview-genre-grid" id="overview-genre-grid">${genreEntries.map(([name,count],index)=>`<div class="overview-genre-tile" ${index>=4&&!overviewGenresExpanded?'hidden':''}><strong>${count}</strong><span>${safe(name)}</span></div>`).join('')}</div>
       <p class="overview-genre-note">Each movie counts in every genre it belongs to, including films inside box sets.</p>
     </section></div>`;
 }
@@ -1119,6 +1143,8 @@ function renderSummary() {
   const individual=singles.filter(m=>effectiveMediaType(m)!=='tv').length;
   const ownTv=singles.filter(m=>effectiveMediaType(m)==='tv').length;
   container.innerHTML = summaryDashboardMarkup(filmCount,tvCount,movies.length,formatCounts,languageCounts,genreCounts,escapeHtml,{individual,boxSets:boxSets.length,tv:ownTv});
+  const genreToggle=container.querySelector('.overview-genre-expand');
+  if(genreToggle)genreToggle.onclick=()=>{overviewGenresExpanded=!overviewGenresExpanded;renderSummary();};
 }
 
 // Old provider failures are historical once usable metadata has been matched.
