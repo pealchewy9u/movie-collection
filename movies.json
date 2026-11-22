@@ -13453,5 +13453,26 @@
     "tmdbTitle": null,
     "reviewStatus": "collection",
     "boxCoverUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/box-covers/MOV-NEW-1795132882436-2xw64-mwo7yz61-xrkowa6v.jpg"
+  },
+  {
+    "id": "MOV-NEW-1795320141515-dcagu",
+    "title": "Salaam Bombay!",
+    "studio": "Criterion Collection",
+    "upc": "715515326117",
+    "ean": null,
+    "mediaType": "movie",
+    "blurayDiscs": 1,
+    "dvdDiscs": 0,
+    "is4k": true,
+    "formatOverride": "4k",
+    "dateAdded": "2026-11-22",
+    "releaseDate": null,
+    "countryCode": null,
+    "isBoxSet": false,
+    "includedMovies": [],
+    "year": "1988",
+    "language": "hi",
+    "languageOverride": "hi",
+    "languageReviewedAt": "2026-11-22T04:02:21.515Z"
   }
 ]
