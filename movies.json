@@ -13473,6 +13473,10 @@
     "year": "1988",
     "language": "hi",
     "languageOverride": "hi",
-    "languageReviewedAt": "2026-11-22T04:02:21.515Z"
+    "languageReviewedAt": "2026-11-22T04:02:21.515Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795320141515-dcagu-main-mwrbakp5-wq2l2e.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/tMu4cWHULsAMxgY4AAWOEh5GnWE.jpg",
+    "posterLocked": true,
+    "posterUrl": "https://image.tmdb.org/t/p/w500/tMu4cWHULsAMxgY4AAWOEh5GnWE.jpg"
   }
 ]
