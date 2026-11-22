@@ -13477,7 +13477,17 @@
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795320141515-dcagu-main-mwrbakp5-wq2l2e.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/tMu4cWHULsAMxgY4AAWOEh5GnWE.jpg",
     "posterLocked": true,
-    "posterUrl": "https://image.tmdb.org/t/p/w500/tMu4cWHULsAMxgY4AAWOEh5GnWE.jpg"
+    "posterUrl": "https://image.tmdb.org/t/p/w500/405GFXA7NKwVxqP9WHD5RaKZ84C.jpg",
+    "genre": "Crime",
+    "overview": "When a revengeful Krishna destroys his brother's motorbike, his mother asks him to return home only when he earns INR 500 to repair it. In a turn of events, he finds himself in a Bombay slum.",
+    "imdbId": "tt0096028",
+    "imdbRating": "7.9",
+    "omdbNote": null,
+    "runtimeMinutes": 113,
+    "tmdbTitle": "Salaam Bombay!",
+    "tmdbId": 45129,
+    "matchedVia": "tmdb",
+    "enrichNote": null
   },
   {
     "id": "MOV-NEW-1795371325927-tz4m5",
