@@ -14249,7 +14249,7 @@
     "studio": "Universal Studios",
     "upc": "191329126479",
     "ean": null,
-    "mediaType": "movie",
+    "mediaType": null,
     "blurayDiscs": 1,
     "dvdDiscs": 0,
     "is4k": false,
@@ -14259,9 +14259,17 @@
     "countryCode": null,
     "isBoxSet": false,
     "includedMovies": [],
-    "year": "2022",
+    "year": null,
     "language": "en",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-11-23T21:26:36.148Z"
+    "languageReviewedAt": "2026-11-23T21:26:36.148Z",
+    "genre": null,
+    "posterUrl": null,
+    "overview": null,
+    "imdbId": null,
+    "imdbRating": null,
+    "omdbNote": null,
+    "runtimeMinutes": null,
+    "enrichNote": "No TMDB match found"
   }
 ]
