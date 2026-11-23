@@ -5955,7 +5955,8 @@
     "enrichNote": null,
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-0162-main-mvb6z9i3.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/hXWBc0ioZP3cN4zCu6SN3YHXZVO.jpg",
-    "runtimeMinutes": 122
+    "runtimeMinutes": 122,
+    "posterLocked": true
   },
   {
     "id": "MOV-0163",
