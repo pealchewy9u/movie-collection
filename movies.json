@@ -13943,5 +13943,47 @@
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795371599763-pkkyt-main-mws5wpcv-8l0mun.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/9mCih2ldB4dRQyUQvl7DBM3tYRo.jpg",
     "posterLocked": true
+  },
+  {
+    "id": "MOV-NEW-1795449366328-u7vvt",
+    "title": "The Bourne Complete Collection",
+    "studio": "Universal Studios",
+    "upc": "191329232095",
+    "ean": null,
+    "mediaType": "movie",
+    "blurayDiscs": 1,
+    "dvdDiscs": 0,
+    "is4k": false,
+    "formatOverride": "bluray",
+    "dateAdded": "2026-11-23",
+    "releaseDate": null,
+    "countryCode": null,
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "The Bourne Identity"
+      },
+      {
+        "title": "The Bourne Supremacy"
+      },
+      {
+        "title": "The Bourne Ultimatum"
+      },
+      {
+        "title": "The Bourne Legacy"
+      },
+      {
+        "title": "Jason Bourne"
+      }
+    ],
+    "imdbRating": null,
+    "imdbId": null,
+    "tmdbId": null,
+    "tmdbTitle": null,
+    "reviewStatus": "collection",
+    "year": "2007",
+    "language": "en",
+    "languageOverride": "en",
+    "languageReviewedAt": "2026-11-23T15:56:06.328Z"
   }
 ]
