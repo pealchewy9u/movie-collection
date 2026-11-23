@@ -14098,6 +14098,9 @@
     "imdbRating": "8.0",
     "omdbNote": null,
     "languageOverride": "en",
-    "languageReviewedAt": "2026-11-23T21:21:36.536Z"
+    "languageReviewedAt": "2026-11-23T21:21:36.536Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795468896535-lefko-main-mwtrtpjo-srmz70.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/v1tRXZ4JtD2Iv6fjkPvT4GiwslV.jpg",
+    "posterLocked": true
   }
 ]
