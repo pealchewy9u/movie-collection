@@ -14242,5 +14242,26 @@
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795469093950-cz5na-main-mwtrxxgb-c8f92c.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/wWba3TaojhK7NdycRhoQpsG0FaH.jpg",
     "posterLocked": true
+  },
+  {
+    "id": "MOV-NEW-1795469196148-mel3o",
+    "title": "Minions: the rise of gry",
+    "studio": "Universal Studios",
+    "upc": "191329126479",
+    "ean": null,
+    "mediaType": "movie",
+    "blurayDiscs": 1,
+    "dvdDiscs": 0,
+    "is4k": false,
+    "formatOverride": "bluray",
+    "dateAdded": "2026-11-23",
+    "releaseDate": null,
+    "countryCode": null,
+    "isBoxSet": false,
+    "includedMovies": [],
+    "year": "2022",
+    "language": "en",
+    "languageOverride": "en",
+    "languageReviewedAt": "2026-11-23T21:26:36.148Z"
   }
 ]
