@@ -359,6 +359,7 @@
   .add-fields input,.add-fields select,.add-fields textarea{display:block;width:100%;margin-top:4px;padding:10px;border:1px solid var(--groove);border-radius:8px;background:white;color:var(--text);font-size:14px}
   .add-wide{grid-column:1/-1}.add-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.add-actions button{border:0;border-radius:8px;background:var(--surface-raised);padding:10px 13px;font-weight:700;color:var(--text)}.add-actions button.primary{background:var(--brass);color:white}
   #add-camera{width:100%;max-height:250px;object-fit:cover;border-radius:10px;background:#2b2929}#add-message{font-size:12px;color:var(--text-muted);line-height:1.5;min-height:18px}
+  #add-message:empty{display:none}
   @media(max-width:470px){.add-fields{grid-template-columns:1fr}.add-wide{grid-column:auto}#add-sheet{padding:14px}}
   /* Compact Add / Scan form; save action remains visible when choosing a match. */
   #add-sheet .add-intro{margin:5px 0 10px}
@@ -3192,11 +3193,10 @@ function addMsg(message){const el=document.getElementById('add-message');if(el)e
 function openAddMovie(){
  stopAddCamera();newItemCandidate=null;
  document.getElementById('add-sheet').innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0;font-size:20px">Add to collection</h2><button class="manager-btn secondary" id="add-close">Close</button></div>
- <p class="manager-small add-intro">Enter or photograph the barcode, then review the details before saving.</p>
  <div class="add-actions"><button id="add-capture-photo">Take barcode photo</button><button id="add-photo">Choose photo</button><input type="file" id="add-capture-input" accept="image/*" capture="environment" style="display:none"><input type="file" id="add-photo-input" accept="image/*" style="display:none"></div>
  <div class="add-fields"><label class="add-wide">Barcode (UPC / EAN)<input id="add-barcode" inputmode="numeric" placeholder="Enter or scan barcode"></label></div>
  <div class="add-actions"><button class="primary" id="add-lookup">Look up barcode + movie</button><button id="add-clear">Clear</button></div>
- <p id="add-message" aria-live="polite">Barcode lookup will also check TMDB when a reliable movie match is available.</p>
+ <p id="add-message" aria-live="polite"></p>
  <div id="add-duplicate" style="display:none;padding:10px;background:#FFF0D0;border-radius:8px;margin:8px 0"></div>
  <div class="add-fields">
  <label class="add-wide">Title on your disc / box<input id="add-title" placeholder="Required"></label>
