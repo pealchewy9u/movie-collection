@@ -14586,7 +14586,19 @@
     "includedMovies": [
       {
         "title": "Twilight",
-        "matchNote": "Multiple possible movies — choose manually"
+        "matchNote": null,
+        "tmdbId": 8966,
+        "tmdbTitle": "Twilight",
+        "year": "2008",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/3Gkb6jm6962ADUPaCBqzz9CTbn9.jpg",
+        "language": "en",
+        "genre": "Fantasy, Drama, Romance",
+        "overview": "When Bella Swan moves to a small town in the Pacific Northwest, she falls in love with Edward Cullen, a mysterious classmate who reveals himself to be a 108-year-old vampire. Despite Edward's repeated cautions, Bella can't stay away from him, a fatal move that endangers her own life.",
+        "imdbId": "tt1099212",
+        "imdbRating": "5.4",
+        "omdbNote": null,
+        "runtimeMinutes": 122,
+        "matchedVia": "tmdb-manual"
       },
       {
         "title": "The twilight saga: new moon",
