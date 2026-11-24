@@ -372,8 +372,21 @@
   #add-sheet .add-footer{position:sticky;bottom:-28px;z-index:4;display:flex;gap:8px;align-items:center;padding:12px 0 calc(10px + env(safe-area-inset-bottom));margin-top:8px;background:var(--background);border-top:1px solid var(--groove)}
   #add-sheet .add-footer button{margin:0;border:0;border-radius:9px;padding:12px 9px;font-weight:700;font-size:12px;cursor:pointer}
   #add-sheet .add-footer #add-search-tmdb{flex:1;background:var(--surface-raised);color:var(--text)}
-  #add-sheet .add-footer #add-save{flex:1.15;background:var(--brass);color:white}
+  /* Keep both save actions side by side in the existing single-row footer. */
+  #add-sheet .add-footer{flex-wrap:nowrap}
+  #add-sheet .add-footer #add-search-tmdb{flex:.85;min-width:0}
+  #add-sheet .add-footer #add-save-close,
+  #add-sheet .add-footer #add-save-new{flex:1;min-width:0;background:var(--brass);color:white}
+  #add-sheet .add-footer button{white-space:nowrap}
   #add-sheet .add-footer button:disabled{opacity:.55;cursor:wait}
+  @media(max-width:470px){#add-sheet .add-footer button{font-size:11px;padding-left:4px;padding-right:4px}}
+  /* iPhone Safari zooms into text controls whose font size is below 16px.
+     This changes only the editable text size on iOS; no form widths, grid,
+     field padding, outer spacing or modal dimensions are changed. */
+  @supports (-webkit-touch-callout: none){
+    input:not([type=checkbox]):not([type=radio]):not([type=file]),
+    select,textarea{font-size:16px!important}
+  }
 
 
 
@@ -3196,7 +3209,7 @@ function openAddMovie(){
  <div class="add-fields"><label class="add-wide">Studio / distributor <span style="font-weight:400">(verify on disc case)</span><input id="add-studio" placeholder="Will suggest when the barcode identifies a distributor"></label></div>
  <details class="add-optional"><summary>Additional details · Film year (optional)</summary><div class="add-fields"><label>Film year<input id="add-year" inputmode="numeric" maxlength="4" placeholder="Optional"></label></div></details>
  <div id="add-matches"></div><div id="add-preview" class="manager-small"></div>
- <div class="add-footer"><button id="add-search-tmdb" type="button">Find on TMDB</button><button id="add-save" type="button">Save movie</button></div>`;
+  <div class="add-footer"><button id="add-search-tmdb" type="button">Find on TMDB</button><button id="add-save-close" type="button">Save &amp; Close</button><button id="add-save-new" type="button">Save &amp; Add New</button></div>`;
  document.getElementById('add-overlay').style.display='flex';
  document.getElementById('add-close').onclick=closeAddMovie;
  document.getElementById('add-capture-photo').onclick=()=>document.getElementById('add-capture-input').click();
@@ -3206,7 +3219,8 @@ function openAddMovie(){
  document.getElementById('add-lookup').onclick=lookupNewBarcode;
  document.getElementById('add-clear').onclick=()=>{stopAddCamera();openAddMovie();};
  document.getElementById('add-search-tmdb').onclick=searchNewMovieTmdb;
- document.getElementById('add-save').onclick=saveNewMovie;
+  document.getElementById('add-save-close').onclick=()=>saveNewMovie('close');
+  document.getElementById('add-save-new').onclick=()=>saveNewMovie('new');
  document.getElementById('add-type').onchange=()=>{newItemCandidate=null;document.getElementById('add-matches').innerHTML='';document.getElementById('add-films-wrap').style.display=document.getElementById('add-type').value==='boxset'?'block':'none';};
  document.getElementById('add-barcode').oninput=()=>{showAddDuplicate();newItemCandidate=null;};
  document.getElementById('add-title').oninput=()=>{newItemCandidate=null;document.getElementById('add-matches').innerHTML='';};
@@ -3253,8 +3267,9 @@ async function lookupNewBarcode(){
  if(!/^\d{8}$|^\d{12,14}$/.test(barcode)){addMsg('Enter a valid 8, 12, 13, or 14 digit barcode.');return;}
  if(showAddDuplicate()){addMsg('Duplicate barcode detected. Nothing has been added.');return;}
  const key=localStorage.getItem('upcmdbKey');if(!key){addMsg('UPCMDB key not configured. Enter the title and choose Find on TMDB.');return;}
- const lookupButton=document.getElementById('add-lookup'),saveButton=document.getElementById('add-save');
- lookupButton.disabled=true;saveButton.disabled=true;addMsg('Looking up barcode…');
+ const lookupButton=document.getElementById('add-lookup');
+ const saveButtons=[document.getElementById('add-save-close'),document.getElementById('add-save-new')];
+ lookupButton.disabled=true;saveButtons.forEach(button=>button.disabled=true);addMsg('Looking up barcode…');
  try{
    const response=await fetch(`https://us-central1-upcmdb-cbae5.cloudfunctions.net/api/v1/lookup/${encodeURIComponent(barcode)}`,{headers:{'x-api-key':key},cache:'no-store'});
    if(!response.ok){addMsg(`Barcode service returned HTTP ${response.status}. Enter title and choose Find on TMDB instead.`);return;}
@@ -3281,7 +3296,7 @@ async function lookupNewBarcode(){
    const distributorNote=detectedDistributor?' Studio / distributor suggested: '+detectedDistributor+'. Verify on the case.':' Studio / distributor not provided; enter it manually under Additional details if known.';
    addMsg('Barcode found. '+tmdbMessage+(detectedFormat?' Format suggested from barcode: '+({ '4k':'4K UHD','bluray':'Blu-ray','dvd':'DVD' }[detectedFormat])+'. Verify on the case before saving.':' Format not specified in barcode listing; select the format shown on the case before saving.')+distributorNote);
  }catch(e){addMsg('Barcode lookup failed: '+e.message+'. Enter the title manually.');}
- finally{lookupButton.disabled=false;saveButton.disabled=false;}
+ finally{lookupButton.disabled=false;saveButtons.forEach(button=>{if(button.isConnected)button.disabled=false;});}
 }
 async function searchNewMovieTmdb(){
  const title=document.getElementById('add-title').value.trim(),kind=document.getElementById('add-type').value;
@@ -3303,7 +3318,9 @@ async function searchNewMovieTmdb(){
  }catch(e){out.textContent='Could not load selected title: '+e.message;}});
  }catch(e){out.textContent='TMDB search failed: '+e.message;}
 }
-async function saveNewMovie(){
+let addSaveInProgress=false;
+async function saveNewMovie(action='close'){
+ if(addSaveInProgress)return;
  const title=document.getElementById('add-title').value.trim(),barcode=document.getElementById('add-barcode').value.replace(/\s/g,''),type=document.getElementById('add-type').value,format=document.getElementById('add-format').value;
  if(!title){addMsg('Title is required.');return;}
  if(!['4k','bluray','dvd'].includes(format)){addMsg('Select the physical disc format (4K UHD, Blu-ray, or DVD) before saving.');return;}
@@ -3321,20 +3338,44 @@ async function saveNewMovie(){
  if(!movie.year&&/^\d{4}$/.test(document.getElementById('add-year').value.trim()))movie.year=document.getElementById('add-year').value.trim();
  if(lang){movie.language=lang;movie.languageOverride=lang;movie.languageReviewedAt=new Date().toISOString();}
  if(type==='boxset'&&!films.length){addMsg('Enter the included films for this box set before saving.');return;}
- const button=document.getElementById('add-save');button.disabled=true;addMsg('Checking GitHub for existing barcode…');
- try{const remote=(await readGitHubMovies(config)).data;if(barcode){const key=barcodeKey(barcode),already=remote.find(m=>[m.upc,m.ean].some(x=>barcodeKey(x)===key));if(already)throw new Error('Already exists on GitHub: '+already.title);}
- movies.push(movie);markPending(movie);buildGenreFilter();buildLanguageFilter();render();addMsg('Saving and verifying on GitHub…');
- const msg=await syncPendingEdits();
- if(wishlistMoveId && msg.startsWith('Saved and verified')){const completedId=wishlistMoveId;wishlistMoveId=null;try{await markWishlistPurchased(completedId,movie.id);}catch(err){addMsg('Movie saved in collection; wishlist update pending: '+err.message);}}
- let posterMsg='';
- if(!movie.isBoxSet && tmdbPosterSource(movie)){
-   addMsg('Collection item saved. Archiving and locking its 780px poster…');
-   try { await archiveSelectedPoster(movie,null);posterMsg=' Poster backed up and locked.'; }
-   catch(e) {posterMsg=' Poster backup needs retry in Data Manager: '+e.message;}
+ const saveButtons=[document.getElementById('add-save-close'),document.getElementById('add-save-new')];
+ addSaveInProgress=true;
+ saveButtons.forEach(button=>button.disabled=true);
+ addMsg('Checking GitHub for existing barcode…');
+ let queuedLocally=false;
+ try{
+   const remote=(await readGitHubMovies(config)).data;
+   if(barcode){const key=barcodeKey(barcode),already=remote.find(m=>[m.upc,m.ean].some(x=>barcodeKey(x)===key));if(already)throw new Error('Already exists on GitHub: '+already.title);}
+   movies.push(movie);markPending(movie);queuedLocally=true;
+   buildGenreFilter();buildLanguageFilter();render();addMsg('Saving and verifying on GitHub…');
+   const msg=await syncPendingEdits();
+   let wishlistMoveNote='';
+   if(wishlistMoveId && msg.startsWith('Saved and verified')){
+     const completedId=wishlistMoveId;wishlistMoveId=null;
+     try{await markWishlistPurchased(completedId,movie.id);}
+     catch(err){wishlistMoveNote=' Wishlist update pending: '+err.message;}
+   }
+   let posterMsg='';
+   if(!movie.isBoxSet && tmdbPosterSource(movie)){
+     addMsg('Collection item saved. Archiving and locking its 780px poster…');
+     try{await archiveSelectedPoster(movie,null);posterMsg=' Poster backed up and locked.';}
+     catch(e){posterMsg=' Poster backup needs retry in Data Manager: '+e.message;}
+   }
+   stopAddCamera();
+   if(action==='new'){
+     wishlistMoveId=null;
+     openAddMovie(); // Fresh fields, barcode, search results, selection and preview.
+     addMsg('Saved '+movie.title+' to GitHub. Ready to add another movie.'+posterMsg+wishlistMoveNote);
+   }else{
+     closeAddMovie();
+   }
+ }catch(e){
+   addMsg((queuedLocally?'Movie retained locally, but not verified on GitHub: ':'Movie not added: ')+e.message+(queuedLocally?' Use Data Manager → Sync pending changes.':''));
+   // Prevent another tap from creating a second local record after an uncertain write.
+   if(!queuedLocally)saveButtons.forEach(button=>{if(button.isConnected)button.disabled=false;});
+ }finally{
+   addSaveInProgress=false;
  }
- addMsg(msg+' Added '+movie.title+'.'+posterMsg+wishlistMoveNote);button.textContent='Saved';
- stopAddCamera();setTimeout(()=>{if(document.getElementById('add-overlay').style.display==='flex'){closeAddMovie();openDetail(movie.id);}},600);
- }catch(e){addMsg('Saved locally if added, but GitHub verification failed: '+e.message+'. Use Data Manager → Sync with GitHub.');button.disabled=false;}
 }
 async function loadBarcodeDecoder(){
  if('BarcodeDetector' in window){if(!addDetector)addDetector=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e','code_128','itf']});return 'native';}
