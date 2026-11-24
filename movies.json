@@ -14585,19 +14585,68 @@
     "isBoxSet": true,
     "includedMovies": [
       {
-        "title": "Twilight"
+        "title": "Twilight",
+        "matchNote": "Multiple possible movies — choose manually"
       },
       {
-        "title": "The twilight saga: new moon"
+        "title": "The twilight saga: new moon",
+        "tmdbId": 18239,
+        "tmdbTitle": "The Twilight Saga: New Moon",
+        "year": "2009",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/k2qTooPlHffgNABNWxeJdGMglPK.jpg",
+        "language": "en",
+        "genre": "Adventure, Fantasy, Drama, Romance",
+        "overview": "Forks, Washington resident Bella Swan is reeling from the departure of her vampire love, Edward Cullen, and finds comfort in her friendship with Jacob Black, a werewolf. But before she knows it, she's thrust into a centuries-old conflict, and her desire to be with Edward at any cost leads her to take greater and greater risks.",
+        "imdbId": "tt1259571",
+        "runtimeMinutes": 131,
+        "matchNote": null,
+        "imdbRating": "4.8",
+        "omdbNote": null
       },
       {
-        "title": "The twilight saga: Eclipse"
+        "title": "The twilight saga: Eclipse",
+        "tmdbId": 24021,
+        "tmdbTitle": "The Twilight Saga: Eclipse",
+        "year": "2010",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/dK4Gi1UdMiHzHc7r7CZQG4IQ9Sr.jpg",
+        "language": "en",
+        "genre": "Adventure, Fantasy, Drama, Romance",
+        "overview": "Bella once again finds herself surrounded by danger as Seattle is ravaged by a string of mysterious killings and a malicious vampire continues her quest for revenge. In the midst of it all, she is forced to choose between her love for Edward and her friendship with Jacob, knowing that her decision has the potential to ignite the ageless struggle between vampire and werewolf. With her graduation quickly approaching, Bella is confronted with the most important decision of her life.",
+        "imdbId": "tt1325004",
+        "runtimeMinutes": 124,
+        "matchNote": null,
+        "imdbRating": "5.1",
+        "omdbNote": null
       },
       {
-        "title": "The twilight saga: Breaking dawn - part 1"
+        "title": "The twilight saga: Breaking dawn - part 1",
+        "tmdbId": 50619,
+        "tmdbTitle": "The Twilight Saga: Breaking Dawn - Part 1",
+        "year": "2011",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/qs8LsHKYlVRmJbFUiSUhhRAygwj.jpg",
+        "language": "en",
+        "genre": "Adventure, Fantasy, Romance",
+        "overview": "Bella Swan and Edward Cullen's honeymoon phase is abruptly disrupted by betrayals and unforeseen tragedies that endanger their world.",
+        "imdbId": "tt1324999",
+        "runtimeMinutes": 117,
+        "matchNote": null,
+        "imdbRating": "5.0",
+        "omdbNote": null
       },
       {
-        "title": "The twilight saga: Breaking dawn - part 2"
+        "title": "The twilight saga: Breaking dawn - part 2",
+        "tmdbId": 50620,
+        "tmdbTitle": "The Twilight Saga: Breaking Dawn - Part 2",
+        "year": "2012",
+        "posterUrl": "https://image.tmdb.org/t/p/w500/7IGdPaKujv0BjI0Zd0m0a4CzEjJ.jpg",
+        "language": "en",
+        "genre": "Fantasy, Drama, Romance",
+        "overview": "After the birth of Renesmee, the Cullens gather other vampire clans in order to protect the child from a false allegation that puts the family in front of the Volturi.",
+        "imdbId": "tt1673434",
+        "runtimeMinutes": 115,
+        "matchNote": null,
+        "imdbRating": "5.6",
+        "omdbNote": null
       }
     ],
     "imdbRating": null,
