@@ -14493,6 +14493,9 @@
     "imdbRating": "7.5",
     "omdbNote": null,
     "languageOverride": "hi",
-    "languageReviewedAt": "2026-11-24T03:09:27.291Z"
+    "languageReviewedAt": "2026-11-24T03:09:27.291Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795489767291-alvza-main-mwu4923z-qyvajb.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/1XN3TiUuZW6buP5E0VgyVn81qtX.jpg",
+    "posterLocked": true
   }
 ]
