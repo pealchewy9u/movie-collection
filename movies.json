@@ -14567,5 +14567,47 @@
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795542958233-aauoe-main-mwuzx46r-usujlu.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/dr02BdCNAUPVU07aOodwPYv6HCf.jpg",
     "posterLocked": true
+  },
+  {
+    "id": "MOV-NEW-1795543050935-pngde",
+    "title": "The Twilight Saga: 5-Movie Collection",
+    "studio": "Summit Inc/Lionsgate",
+    "upc": "031398285151",
+    "ean": null,
+    "mediaType": "movie",
+    "blurayDiscs": 1,
+    "dvdDiscs": 0,
+    "is4k": false,
+    "formatOverride": "bluray",
+    "dateAdded": "2026-11-24",
+    "releaseDate": null,
+    "countryCode": null,
+    "isBoxSet": true,
+    "includedMovies": [
+      {
+        "title": "Twilight"
+      },
+      {
+        "title": "The twilight saga: new moon"
+      },
+      {
+        "title": "The twilight saga: Eclipse"
+      },
+      {
+        "title": "The twilight saga: Breaking dawn - part 1"
+      },
+      {
+        "title": "The twilight saga: Breaking dawn - part 2"
+      }
+    ],
+    "imdbRating": null,
+    "imdbId": null,
+    "tmdbId": null,
+    "tmdbTitle": null,
+    "reviewStatus": "collection",
+    "year": "2013",
+    "language": "en",
+    "languageOverride": "en",
+    "languageReviewedAt": "2026-11-24T17:57:30.935Z"
   }
 ]
