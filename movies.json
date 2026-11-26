@@ -14756,5 +14756,26 @@
     "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795555300898-o2xcj-main-mwv7ag5z-w4nnp6.jpg",
     "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/9EWi4vwwmsSBB8uRgnuKXvtVDfC.jpg",
     "posterLocked": true
+  },
+  {
+    "id": "MOV-NEW-1795656812789-d0czb",
+    "title": "Mad Men: Season Seven Part 2",
+    "studio": "Lions Gate",
+    "upc": "031398228639",
+    "ean": null,
+    "mediaType": "tv",
+    "blurayDiscs": 1,
+    "dvdDiscs": 0,
+    "is4k": false,
+    "formatOverride": "bluray",
+    "dateAdded": "2026-11-26",
+    "releaseDate": null,
+    "countryCode": null,
+    "isBoxSet": false,
+    "includedMovies": [],
+    "year": "2015",
+    "language": "en",
+    "languageOverride": "en",
+    "languageReviewedAt": "2026-11-26T01:33:32.789Z"
   }
 ]
