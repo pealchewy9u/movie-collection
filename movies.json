@@ -14780,7 +14780,7 @@
     "tmdbId": 1104,
     "tmdbTitle": "Mad Men",
     "genre": "Drama",
-    "posterUrl": "https://image.tmdb.org/t/p/w500/5jOedTeytYzlJZwU66MFjmLHhHX.jpg",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/7v8iCNzKFpdlrCMcqCoJyn74Nsa.jpg",
     "overview": "Set in 1960-1970 New York, this sexy, stylized and provocative drama follows the lives of the ruthlessly competitive men and women of Madison Avenue advertising.",
     "imdbId": "tt0804503",
     "imdbRating": "8.7",
@@ -14789,6 +14789,9 @@
     "runtimeMinutes": null,
     "matchedVia": "tmdb-manual",
     "reviewStatus": "confirmed",
-    "reviewedAt": "2026-11-26T01:35:09.749Z"
+    "reviewedAt": "2026-11-26T01:35:09.749Z",
+    "archivedPosterUrl": "https://raw.githubusercontent.com/pealchewy9u/movie-collection/main/posters/MOV-NEW-1795656812789-d0czb-main-mwwvs935-93gzz7.jpg",
+    "archivedSourcePosterUrl": "https://image.tmdb.org/t/p/w500/7v8iCNzKFpdlrCMcqCoJyn74Nsa.jpg",
+    "posterLocked": true
   }
 ]
