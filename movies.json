@@ -14773,9 +14773,22 @@
     "countryCode": null,
     "isBoxSet": false,
     "includedMovies": [],
-    "year": "2015",
+    "year": "2007",
     "language": "en",
     "languageOverride": "en",
-    "languageReviewedAt": "2026-11-26T01:33:32.789Z"
+    "languageReviewedAt": "2026-11-26T01:33:32.789Z",
+    "tmdbId": 1104,
+    "tmdbTitle": "Mad Men",
+    "genre": "Drama",
+    "posterUrl": "https://image.tmdb.org/t/p/w500/5jOedTeytYzlJZwU66MFjmLHhHX.jpg",
+    "overview": "Set in 1960-1970 New York, this sexy, stylized and provocative drama follows the lives of the ruthlessly competitive men and women of Madison Avenue advertising.",
+    "imdbId": "tt0804503",
+    "imdbRating": "8.7",
+    "omdbNote": null,
+    "enrichNote": null,
+    "runtimeMinutes": null,
+    "matchedVia": "tmdb-manual",
+    "reviewStatus": "confirmed",
+    "reviewedAt": "2026-11-26T01:35:09.749Z"
   }
 ]
